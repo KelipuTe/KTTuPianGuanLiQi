@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>图片管理器</title>
+    <script>
+        console.log('Node:' + process.versions.node);
+        console.log('Chrome:' + process.versions.chrome);
+        console.log('Electron:' + process.versions.electron);
+    </script>
+    <script src="vue.min.js"></script>
+</head>
+<body>
+<div id="article-list" class="col-md-9">
+    <article-list></article-list>
+</div>
+<template id="template-article-list">
+    <div>
+        <ul>
+            <li v-for="article in articleList"
+                style="border:2px solid #007bff;border-radius: 25px 50px;margin: 10px 0; padding: 10px 30px">
+                {{article}}
+            </li>
+        </ul>
+    </div>
+</template>
+<script>
+    const fs = require('fs');
+    Vue.component("article-list", {
+        template: "#template-article-list",
+        data: function () {
+            return {
+                articleList: [],
+            }
+        },
+        created: function () {
+            this.getFileList('./').catch(console.error);
+        },
+        methods: {
+            getFileList: async function (path) {
+                const dir = await fs.promises.opendir(path);
+                for await (const dirent of dir) {
+                    this.articleList.push(dirent)
+                }
+            }
+        }
+    });
+    new Vue({el: "#article-list"});
+</script>
+<script src="you_ji_cai_dan.js"></script>
+</body>
+</html>

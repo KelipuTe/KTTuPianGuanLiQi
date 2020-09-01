@@ -2,7 +2,7 @@
   "name": "tupianguanliqi",
   "version": "0.1.0",
   "description": "",
-  "main": "main.js",
+  "main": "zhu_jin_cheng.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
