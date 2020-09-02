@@ -1,12 +1,9 @@
-// 引用electron
 const Electron = require('electron');
-// 引用app
 const App = Electron.app;
-// 引用窗口
 const BrowserWindow = Electron.BrowserWindow;
-// 主窗口
-let zhuChuangKou = null;
 const Menu = Electron.Menu;
+const IpcMain = Electron.ipcMain;
+
 // 顶部菜单
 const caiDanMuBan = [
     {
@@ -14,7 +11,7 @@ const caiDanMuBan = [
         submenu: [
             {
                 label: '打开调试',
-                accelerator: 'ctrl+t',
+                accelerator: 'F12',
                 click: function () {
                     zhuChuangKou.webContents.openDevTools();
                 }
@@ -24,13 +21,24 @@ const caiDanMuBan = [
 ];
 let caiDan = Menu.buildFromTemplate(caiDanMuBan);
 
+// 监听渲染进行发送的消息
+IpcMain.on('da-kai-tiao-shi', function(event, arg)  {
+    zhuChuangKou.webContents.openDevTools();
+})
+
+// 主窗口
+let zhuChuangKou = null;
 function chuangJianChuangKou() {
     // 创建浏览器窗口
     zhuChuangKou = new BrowserWindow({
-        width: 1600,
-        height: 900,
+        width: 1660,
+        height: 860,
+        // 不允许改变窗口大小
+        // resizable: false,
         webPreferences: {
+            // 默认false，不开node integration不能用
             nodeIntegration: true,
+            // 默认false，不开remote不能用
             enableRemoteModule: true,
         }
     });
@@ -42,7 +50,8 @@ function chuangJianChuangKou() {
         zhuChuangKou = null;
     });
     // 打开调试
-    zhuChuangKou.webContents.openDevTools();
+    // zhuChuangKou.webContents.openDevTools();
 }
+
 
 App.whenReady().then(chuangJianChuangKou)

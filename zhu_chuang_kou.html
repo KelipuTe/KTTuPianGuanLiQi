@@ -2,51 +2,179 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>图片管理器</title>
+    <title>KT图片管理器</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-grid.min.css">
+    <link rel="stylesheet" href="bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="font-awesome.min.css">
+    <link rel="stylesheet" href="zhu_chuang_kou.css">
+    <script src="jquery.min.js"></script>
     <script>
-        console.log('Node:' + process.versions.node);
-        console.log('Chrome:' + process.versions.chrome);
-        console.log('Electron:' + process.versions.electron);
+        <!--处理Electron和jQuery的冲突-->
+        if (typeof module === 'object') {
+            window.jQuery = window.$ = module.exports;
+        }
     </script>
+    <script src="bootstrap.min.js"></script>
+    <script src="bootstrap.bundle.min.js"></script>
     <script src="vue.min.js"></script>
+    <script src="quan_ju_chang_liang.js"></script>
+    <script src="you_ji_cai_dan.js"></script>
 </head>
 <body>
-<div id="article-list" class="col-md-9">
-    <article-list></article-list>
+<div id="tu-pian-guan-li" class="container zhu-rong-qi">
+    <tu-pian-guan-li></tu-pian-guan-li>
 </div>
-<template id="template-article-list">
-    <div>
-        <ul>
-            <li v-for="article in articleList"
-                style="border:2px solid #007bff;border-radius: 25px 50px;margin: 10px 0; padding: 10px 30px">
-                {{article}}
-            </li>
-        </ul>
+<template id="template-tu-pian-guan-li">
+    <div class="row">
+        <div class="col-md-2 zheng-ti-cuo-ce">
+            <div class="row">
+                <div id="xuan-ze-mu-lu" class="btn btn-primary btn-block" v-on:click="xuanZeMuLu">选择目录</div>
+            </div>
+            <div>
+                <ol class="row breadcrumb">
+                    <li class="breadcrumb-item">当前目录：{{tuPianMuLu}}</li>
+                </ol>
+            </div>
+            <div class="row btn-group-vertical" role="group">
+                <button type="button" class="btn btn-secondary tu-pian-an-niu" v-bind:title="tuPianMing"
+                        v-for="tuPianMing in tuPianLieBiao" v-on:click="daKaiTuPian(tuPianMing)">
+                    {{tuPianMing}}
+                </button>
+            </div>
+        </div>
+        <div class="col-md-7 zheng-ti-zhong-jian">
+            <img id="tu-pian-zhan-shi" src="" v-bind:src="tuPianLuJing" v-if="zhanShiTuPian"/>
+        </div>
+        <div class="col-md-3 zheng-ti-you-ce">
+            <div class="row card you-ce-ka-pian">
+                <div class="card-header">一级标签</div>
+                <div class="card-body">
+                    <div v-for="(valueBiaoQianMing,keyBiaoQianId) in yiJiBiaoQian">
+                        <button type="button" v-on:click="xuanZhongBiaoQian(1,keyBiaoQianId)">{{valueBiaoQianMing}}</button>
+                    </div>
+                </div>
+                <div class="card-footer biao-qian-di-bu">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="标签ID" v-model="yiJiBiaoQianId">
+                        <input type="text" class="form-control" placeholder="标签名" v-model="yiJiBiaoQianMing">
+                        <div class="input-group-prepend">
+                            <button type="button" class="btn btn-primary" v-on:click="tianJiaBiaoQian(1)">
+                                添加标签
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row card you-ce-ka-pian">
+                <div class="card-header">一级标签</div>
+                <div class="card-body">
+                    <div v-for="(valueBiaoQianMing,keyBiaoQianId) in erJiBiaoQian">
+                        <button type="button" v-on:click="xuanZhongBiaoQian(2,keyBiaoQianId)">
+                            {{valueBiaoQianMing}}
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer biao-qian-di-bu">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="标签ID" v-model="erJiBiaoQianId">
+                        <input type="text" class="form-control" placeholder="标签名" v-model="erJiBiaoQianMing">
+                        <div class="input-group-prepend">
+                            <button type="button" class="btn btn-primary" v-on:click="tianJiaBiaoQian(2)">
+                                添加标签
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row card">
+                <div class="card-header">标记图片</div>
+                <div class="card-body">
+                    <div v-for="(valueBiaoQianMing,keyBiaoQianId) in erJiBiaoQian">
+                        <button type="button" v-on:click="xuanZhongBiaoQian(2,keyBiaoQianId)">
+                            {{valueBiaoQianMing}}
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer biao-qian-di-bu">
+                    <button type="button" class="btn btn-primary" v-on:click="biaoJiTuPian()">确认移动</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
-    const fs = require('fs');
-    Vue.component("article-list", {
-        template: "#template-article-list",
+    Vue.component("tu-pian-guan-li", {
+        template: "#template-tu-pian-guan-li",
         data: function () {
             return {
-                articleList: [],
+                tuPianMuLu: '',
+                tuPianLieBiao: [],
+                tuPianLuJing: '',
+                zhanShiTuPian: false,
+                yiJiBiaoQian: {},
+                yiJiBiaoQianId: '',
+                yiJiBiaoQianMing: '',
+                erJiBiaoQian: {},
+                erJiBiaoQianId: '',
+                erJiBiaoQianMing: '',
             }
         },
         created: function () {
-            this.getFileList('./').catch(console.error);
         },
         methods: {
-            getFileList: async function (path) {
-                const dir = await fs.promises.opendir(path);
-                for await (const dirent of dir) {
-                    this.articleList.push(dirent)
+            xuanZeMuLu: function () {
+                let thisVue = this;
+                Dialog.showOpenDialog({
+                    'title': '请选择文件目录',
+                    'properties': ['openDirectory']
+                }).then(function (result) {
+                    thisVue.tuPianMuLu = result.filePaths[0];
+                    thisVue.huoQuTuPianLieBiao(result.filePaths[0]);
+                });
+            },
+            huoQuTuPianLieBiao: async function (luJing) {
+                let jiShu = 1;
+                let shuLiang = 20;
+                let muLu = await fs.promises.opendir(luJing);
+                for await (let wenJian of muLu) {
+                    if (jiShu > shuLiang) {
+                        break;
+                    }
+                    this.tuPianLieBiao.push(wenJian.name);
+                    ++jiShu;
+                }
+            },
+            daKaiTuPian: function (tuPianMing) {
+                this.zhanShiTuPian = true;
+                this.tuPianLuJing = this.tuPianMuLu + '\\' + tuPianMing;
+                let img = new Image();
+                img.onload = function () {
+                    this.zhanShiTuPian = true;
+                    console.log(img.width);
+                    console.log(img.height);
+                };
+                img.src = this.tuPianLuJing;
+            },
+            xuanZhongBiaoQian: function (jiBie, biaoQianMing) {
+
+            },
+            tianJiaBiaoQian: function (jiBie) {
+                if (jiBie === 1) {
+                    this.yiJiBiaoQian[this.yiJiBiaoQianId] = this.yiJiBiaoQianMing;
+                    this.yiJiBiaoQianId = '';
+                    this.yiJiBiaoQianMing = '';
+                    fs.writeFileSync(this.tuPianMuLu + '\\yi_ji_biao_qian.txt', JSON.stringify(this.yiJiBiaoQian));
+                } else if (jiBie === 2) {
+                    this.erJiBiaoQian[this.erJiBiaoQianId] = this.erJiBiaoQianMing;
+                    this.erJiBiaoQianId = '';
+                    this.erJiBiaoQianMing = '';
+                    fs.writeFileSync(this.tuPianMuLu + '\\er_ji_biao_qian.txt', JSON.stringify(this.yiJiBiaoQian));
                 }
             }
         }
     });
-    new Vue({el: "#article-list"});
+    new Vue({el: "#tu-pian-guan-li"});
 </script>
-<script src="you_ji_cai_dan.js"></script>
 </body>
 </html>

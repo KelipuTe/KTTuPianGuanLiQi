@@ -1,14 +1,12 @@
-const Remote = require('electron').remote;
-const Menu = Remote.Menu;
 // 右击菜单
 const youJiCaiDanMuBan = [
     {
-        label: '复制',
-        accelerator: 'ctrl+c',
-    },
-    {
-        label: '粘贴',
-        accelerator: 'ctrl+v',
+        label: '打开调试',
+        accelerator: 'F12',
+        click: function () {
+            // 给主进程发送消息
+            IpcRenderer.send('da-kai-tiao-shi', '申请打开调试');
+        }
     }
 ]
 let youJiCaiDan = Menu.buildFromTemplate(youJiCaiDanMuBan);
@@ -21,4 +19,3 @@ window.addEventListener('contextmenu', function (event) {
         window: Remote.getCurrentWindow()
     });
 }, false);
-
