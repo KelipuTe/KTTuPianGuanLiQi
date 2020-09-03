@@ -1,3 +1,4 @@
+/*全局样式*/
 img {
     max-width: 900px;
     max-height: 800px;
@@ -8,15 +9,17 @@ img {
     min-height: 800px;
 }
 
-.zheng-ti-cuo-ce{
-    min-height: 800px;
+/*通用样式*/
+.ka-pian-di-bu {
+    font-size: 12px;
 }
 
-.zheng-ti-zhong-jian {
-    min-height: 800px;
-    background-color: gray;
+.kuan-du-100{
+    width: 100%;
 }
-.zheng-ti-you-ce{
+
+/*左侧样式*/
+.zheng-ti-cuo-ce {
     min-height: 800px;
 }
 
@@ -26,12 +29,22 @@ img {
     text-overflow: ellipsis;
 }
 
+/*中间样式*/
+.zheng-ti-zhong-jian {
+    min-height: 800px;
+    background-color: gray;
+}
 
+/*右侧样式*/
+.zheng-ti-you-ce {
+    min-height: 800px;
+}
 
-.you-ce-ka-pian{
+.you-ce-ka-pian {
     margin-bottom: 20px;
 }
 
-.biao-qian-di-bu{
-    font-size: 12px;
+.you-ce-xiao-an-niu {
+    margin: 0 5px;
+    float: left;
 }

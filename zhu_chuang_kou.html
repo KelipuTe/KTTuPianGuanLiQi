@@ -29,75 +29,111 @@
     <div class="row">
         <div class="col-md-2 zheng-ti-cuo-ce">
             <div class="row">
-                <div id="xuan-ze-mu-lu" class="btn btn-primary btn-block" v-on:click="xuanZeMuLu">选择目录</div>
+                <div id="xuan-ze-mu-lu" class="btn btn-lg btn-primary btn-block" v-on:click="xuanZeMuLu">选择目录</div>
             </div>
-            <div>
-                <ol class="row breadcrumb">
-                    <li class="breadcrumb-item">当前目录：{{tuPianMuLu}}</li>
-                </ol>
+            <div class="row">
+                <ul class="list-group kuan-du-100">
+                    <li class="list-group-item">操作目录：{{caoZuoMuLu}}</li>
+                </ul>
             </div>
             <div class="row btn-group-vertical" role="group">
                 <button type="button" class="btn btn-secondary tu-pian-an-niu" v-bind:title="tuPianMing"
-                        v-for="tuPianMing in tuPianLieBiao" v-on:click="daKaiTuPian(tuPianMing)">
-                    {{tuPianMing}}
+                        v-for="tuPianMing in tuPianLieBiao" v-on:click="daKaiTuPian(tuPianMing)">{{tuPianMing}}
                 </button>
             </div>
         </div>
         <div class="col-md-7 zheng-ti-zhong-jian">
-            <img id="tu-pian-zhan-shi" src="" v-bind:src="tuPianLuJing" v-if="zhanShiTuPian"/>
+            <div>
+                <img id="tu-pian-zhan-shi" src="" v-bind:src="tuPianLuJing" v-if="zhanShiTuPian"/>
+            </div>
         </div>
         <div class="col-md-3 zheng-ti-you-ce">
             <div class="row card you-ce-ka-pian">
-                <div class="card-header">一级标签</div>
-                <div class="card-body">
-                    <div v-for="(valueBiaoQianMing,keyBiaoQianId) in yiJiBiaoQian">
-                        <button type="button" v-on:click="xuanZhongBiaoQian(1,keyBiaoQianId)">{{valueBiaoQianMing}}</button>
-                    </div>
-                </div>
-                <div class="card-footer biao-qian-di-bu">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="标签ID" v-model="yiJiBiaoQianId">
-                        <input type="text" class="form-control" placeholder="标签名" v-model="yiJiBiaoQianMing">
-                        <div class="input-group-prepend">
-                            <button type="button" class="btn btn-primary" v-on:click="tianJiaBiaoQian(1)">
-                                添加标签
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row card you-ce-ka-pian">
-                <div class="card-header">一级标签</div>
-                <div class="card-body">
-                    <div v-for="(valueBiaoQianMing,keyBiaoQianId) in erJiBiaoQian">
-                        <button type="button" v-on:click="xuanZhongBiaoQian(2,keyBiaoQianId)">
-                            {{valueBiaoQianMing}}
-                        </button>
-                    </div>
-                </div>
-                <div class="card-footer biao-qian-di-bu">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="标签ID" v-model="erJiBiaoQianId">
-                        <input type="text" class="form-control" placeholder="标签名" v-model="erJiBiaoQianMing">
-                        <div class="input-group-prepend">
-                            <button type="button" class="btn btn-primary" v-on:click="tianJiaBiaoQian(2)">
-                                添加标签
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row card">
                 <div class="card-header">标记图片</div>
                 <div class="card-body">
-                    <div v-for="(valueBiaoQianMing,keyBiaoQianId) in erJiBiaoQian">
-                        <button type="button" v-on:click="xuanZhongBiaoQian(2,keyBiaoQianId)">
-                            {{valueBiaoQianMing}}
-                        </button>
+
+                </div>
+                <div class="card-footer ka-pian-di-bu">
+                    <button type="button" class="btn btn-primary" v-on:click="biaoJiTuPian()">确认移动</button>
+                </div>
+            </div>
+            <!--标签选择-->
+            <nav class="row">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="yi-ji-biao-qian-tab" data-toggle="tab"
+                       href="#yi-ji-biao-qian" role="tab" aria-controls="yi-ji-biao-qian" aria-selected="true">一级标签</a>
+                    <a class="nav-item nav-link" id="er-ji-biao-qian-tab" data-toggle="tab"
+                       href="#er-ji-biao-qian" role="tab" aria-controls="er-ji-biao-qian" aria-selected="false">二级标签</a>
+                    <a class="nav-item nav-link" id="san-ji-biao-qian-tab" data-toggle="tab"
+                       href="#san-ji-biao-qian" role="tab" aria-controls="san-ji-biao-qian" aria-selected="false">额外标签</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="yi-ji-biao-qian" role="tabpanel">
+                    <div class="row card">
+                        <div class="card-header">一级标签</div>
+                        <div class="card-body">
+                            <div v-for="(valueBiaoQianMing,keyBiaoQianId) in yiJiBiaoQian">
+                                <button type="button" v-bind:class="yiJiBiaoQianYangShi(1,keyBiaoQianId)"
+                                        v-on:click="xuanZhongBiaoQian(1,keyBiaoQianId)">{{valueBiaoQianMing}}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-footer ka-pian-di-bu">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="一级标签ID" v-model="yiJiBiaoQianId">
+                                <input type="text" class="form-control" placeholder="一级标签名" v-model="yiJiBiaoQianMing">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-primary" v-on:click="tianJiaBiaoQian(1)">添加标签
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="card-footer biao-qian-di-bu">
-                    <button type="button" class="btn btn-primary" v-on:click="biaoJiTuPian()">确认移动</button>
+                <div class="tab-pane fade" id="er-ji-biao-qian" role="tabpanel">
+                    <div class="row card">
+                        <div class="card-header">二级标签</div>
+                        <div class="card-body">
+                            <div v-for="(valueBiaoQianMing,keyBiaoQianId) in erJiBiaoQian">
+                                <button type="button" v-bind:class="yiJiBiaoQianYangShi(2,keyBiaoQianId)"
+                                        v-on:click="xuanZhongBiaoQian(2,keyBiaoQianId)">{{valueBiaoQianMing}}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-footer ka-pian-di-bu">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="二级标签ID" v-model="erJiBiaoQianId">
+                                <input type="text" class="form-control" placeholder="二级标签名" v-model="erJiBiaoQianMing">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-primary" v-on:click="tianJiaBiaoQian(2)">添加标签
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="san-ji-biao-qian" role="tabpanel">
+                    <div class="row card">
+                        <div class="card-header">额外标签</div>
+                        <div class="card-body">
+                            <div v-for="(valueBiaoQianMing,keyBiaoQianId) in sanJiBiaoQian">
+                                <button type="button" v-bind:class="yiJiBiaoQianYangShi(3,keyBiaoQianId)"
+                                        v-on:click="xuanZhongBiaoQian(3,keyBiaoQianId)">{{valueBiaoQianMing}}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-footer ka-pian-di-bu">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="额外标签ID" v-model="sanJiBiaoQianId">
+                                <input type="text" class="form-control" placeholder="额外标签名" v-model="sanJiBiaoQianMing">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-primary" v-on:click="tianJiaBiaoQian(3)">添加标签
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,16 +144,12 @@
         template: "#template-tu-pian-guan-li",
         data: function () {
             return {
-                tuPianMuLu: '',
-                tuPianLieBiao: [],
-                tuPianLuJing: '',
-                zhanShiTuPian: false,
-                yiJiBiaoQian: {},
-                yiJiBiaoQianId: '',
-                yiJiBiaoQianMing: '',
-                erJiBiaoQian: {},
-                erJiBiaoQianId: '',
-                erJiBiaoQianMing: '',
+                caoZuoMuLu: '', tuPianMuLu: '', biaoQianMuLu: '',
+                tuPianShuLiang: 20, tuPianLieBiao: [],
+                zhanShiTuPian: true, tuPianLuJing: '',
+                yiJiBiaoQian: {}, yiJiBiaoQianId: '', yiJiBiaoQianMing: '', yiJiXuanZhongId: '',
+                erJiBiaoQian: {}, erJiBiaoQianId: '', erJiBiaoQianMing: '', erJiXuanZhongId: '',
+                sanJiBiaoQian: {}, sanJiBiaoQianId: '', sanJiBiaoQianMing: '', sanJiXuanZhongLieBiao: []
             }
         },
         created: function () {
@@ -126,50 +158,180 @@
             xuanZeMuLu: function () {
                 let thisVue = this;
                 Dialog.showOpenDialog({
-                    'title': '请选择文件目录',
+                    'title': '请选择操作目录',
                     'properties': ['openDirectory']
                 }).then(function (result) {
-                    thisVue.tuPianMuLu = result.filePaths[0];
-                    thisVue.huoQuTuPianLieBiao(result.filePaths[0]);
+                    thisVue.caoZuoMuLu = result.filePaths[0];
+                    thisVue.tuPianMuLu = thisVue.caoZuoMuLu + '\\' + WeiFenLeiMuLu;
+                    thisVue.biaoQianMuLu = thisVue.caoZuoMuLu + '\\' + BiaoQianMuLu;
+                    thisVue.huoQuTuPianLieBiao();
+                    thisVue.huoqQuBiaoQian();
                 });
             },
-            huoQuTuPianLieBiao: async function (luJing) {
+            huoQuTuPianLieBiao: function () {
                 let jiShu = 1;
-                let shuLiang = 20;
-                let muLu = await fs.promises.opendir(luJing);
-                for await (let wenJian of muLu) {
-                    if (jiShu > shuLiang) {
-                        break;
+                let thisVue = this;
+                Fs.readdir(this.tuPianMuLu, function (yiChang, wenJianLieBiao) {
+                    if (yiChang === null) {
+                        for (let wenJianMing of wenJianLieBiao) {
+                            if (jiShu > thisVue.tuPianShuLiang) {
+                                break;
+                            }
+                            thisVue.tuPianLieBiao.push(wenJianMing);
+                            ++jiShu;
+                        }
                     }
-                    this.tuPianLieBiao.push(wenJian.name);
-                    ++jiShu;
-                }
+                });
             },
             daKaiTuPian: function (tuPianMing) {
-                this.zhanShiTuPian = true;
-                this.tuPianLuJing = this.tuPianMuLu + '\\' + tuPianMing;
+                let tuPianLuJing = this.tuPianMuLu + '\\' + tuPianMing;
+                if (this.tuPianLuJing === tuPianLuJing) {
+                    return;
+                }
                 let img = new Image();
+                // 图片加载的时候计算偏移量，让图片居中
                 img.onload = function () {
-                    this.zhanShiTuPian = true;
-                    console.log(img.width);
-                    console.log(img.height);
+                    let imgWidth = img.width;
+                    let imgHeight = img.height;
+                    let imgMarginLeft = 0;
+                    let imgMarginTop = 0;
+                    if (imgWidth <= ImgMaxWidth && imgHeight <= ImgMaxHeight) {
+                        console.log(11);
+                        imgMarginLeft = Math.round((ImgMaxWidth - imgWidth) / 2 * 100) / 100;
+                        imgMarginTop = Math.round((ImgMaxHeight - imgHeight) / 2 * 100) / 100;
+                    } else if (imgWidth <= ImgMaxWidth && imgHeight > ImgMaxHeight) {
+                        console.log(12);
+                        imgWidth = Math.round(imgWidth * (ImgMaxHeight / imgHeight));
+                        imgMarginLeft = Math.round((ImgMaxWidth - imgWidth) / 2 * 100) / 100;
+                    } else if (imgWidth > ImgMaxWidth && imgHeight <= ImgMaxHeight) {
+                        console.log(13);
+                        imgHeight = Math.round(imgHeight * (ImgMaxWidth / imgWidth));
+                        imgMarginTop = Math.round((ImgMaxHeight - imgHeight) / 2 * 100) / 100;
+                    } else if (imgWidth > ImgMaxWidth && imgHeight > ImgMaxHeight) {
+                        if ((imgWidth / ImgMaxWidth) >= (imgHeight / ImgMaxHeight)) {
+                            console.log(14);
+                            imgHeight = Math.round(imgHeight * (ImgMaxWidth / imgWidth));
+                            imgMarginTop = Math.round((ImgMaxHeight - imgHeight) / 2 * 100) / 100;
+                        } else {
+                            console.log(15);
+                            imgWidth = Math.round(imgWidth * (ImgMaxHeight / imgHeight));
+                            imgMarginLeft = Math.round((ImgMaxWidth - imgWidth) / 2 * 100) / 100;
+                        }
+                    }
+                    let eleTuPianZhanShi = document.getElementById('tu-pian-zhan-shi');
+                    eleTuPianZhanShi.setAttribute('style', 'margin-left: ' + imgMarginLeft + 'px; margin-top: ' + imgMarginTop + 'px');
                 };
+                this.tuPianLuJing = tuPianLuJing;
                 img.src = this.tuPianLuJing;
             },
-            xuanZhongBiaoQian: function (jiBie, biaoQianMing) {
-
-            },
             tianJiaBiaoQian: function (jiBie) {
+                let thisVue = this;
                 if (jiBie === 1) {
                     this.yiJiBiaoQian[this.yiJiBiaoQianId] = this.yiJiBiaoQianMing;
-                    this.yiJiBiaoQianId = '';
-                    this.yiJiBiaoQianMing = '';
-                    fs.writeFileSync(this.tuPianMuLu + '\\yi_ji_biao_qian.txt', JSON.stringify(this.yiJiBiaoQian));
+                    Fs.opendir(this.biaoQianMuLu, function (yiChang, muLu) {
+                        if (yiChang !== null) {
+                            Fs.mkdirSync(thisVue.biaoQianMuLu);
+                        } else {
+                            muLu.close();
+                        }
+                        Fs.writeFileSync(thisVue.biaoQianMuLu + 'yiJiBiaoQian.json', JSON.stringify(thisVue.yiJiBiaoQian), 'utf8');
+                        thisVue.yiJiBiaoQianId = '';
+                        thisVue.yiJiBiaoQianMing = '';
+                    });
                 } else if (jiBie === 2) {
                     this.erJiBiaoQian[this.erJiBiaoQianId] = this.erJiBiaoQianMing;
-                    this.erJiBiaoQianId = '';
-                    this.erJiBiaoQianMing = '';
-                    fs.writeFileSync(this.tuPianMuLu + '\\er_ji_biao_qian.txt', JSON.stringify(this.yiJiBiaoQian));
+                    Fs.opendir(this.biaoQianMuLu, function (yiChang, muLu) {
+                        if (yiChang !== null) {
+                            Fs.mkdirSync(thisVue.biaoQianMuLu);
+                        } else {
+                            muLu.close();
+                        }
+                        Fs.writeFileSync(thisVue.biaoQianMuLu + 'yiJiBiaoQian.json', JSON.stringify(thisVue.erJiBiaoQian), 'utf8');
+                        thisVue.erJiBiaoQianId = '';
+                        thisVue.erJiBiaoQianMing = '';
+                    });
+                } else if (jiBie === 3) {
+                    this.sanJiBiaoQian[this.sanJiBiaoQianId] = this.sanJiBiaoQianMing;
+                    Fs.opendir(this.biaoQianMuLu, function (yiChang, muLu) {
+                        if (yiChang !== null) {
+                            Fs.mkdirSync(thisVue.biaoQianMuLu);
+                        } else {
+                            muLu.close();
+                        }
+                        Fs.writeFileSync(thisVue.biaoQianMuLu + 'sanJiBiaoQian.json', JSON.stringify(thisVue.sanJiBiaoQian), 'utf8');
+                        thisVue.sanJiBiaoQianId = '';
+                        thisVue.sanJiBiaoQianMing = '';
+                    });
+                }
+            },
+            huoqQuBiaoQian: function () {
+                let thisVue = this;
+                Fs.readFile(this.biaoQianMuLu + 'yiJiBiaoQian.json', 'utf8', function (yiChang, yiJiBiaoQian) {
+                    if (yiChang === null) {
+                        thisVue.yiJiBiaoQian = JSON.parse(yiJiBiaoQian);
+                    }
+                });
+                Fs.readFile(this.biaoQianMuLu + 'erJiBiaoQian.json', 'utf8', function (yiChang, erJiBiaoQian) {
+                    if (yiChang === null) {
+                        thisVue.erJiBiaoQian = JSON.parse(erJiBiaoQian);
+                    }
+                });
+                Fs.readFile(this.biaoQianMuLu + 'sanJiBiaoQian.json', 'utf8', function (yiChang, sanJiBiaoQian) {
+                    if (yiChang === null) {
+                        thisVue.sanJiBiaoQian = JSON.parse(sanJiBiaoQian);
+                    }
+                });
+            },
+            xuanZhongBiaoQian: function (jiBie, biaoQianId) {
+                if (jiBie === 1) {
+                    if (this.yiJiXuanZhongId === biaoQianId) {
+                        this.yiJiXuanZhongId = '';
+                    } else {
+                        this.yiJiXuanZhongId = biaoQianId;
+                    }
+                } else if (jiBie === 2) {
+                    if (this.erJiXuanZhongId === biaoQianId) {
+                        this.erJiXuanZhongId = '';
+                    } else {
+                        this.erJiXuanZhongId = biaoQianId;
+                    }
+                } else if (jiBie === 3) {
+                    let xiaBiao = this.sanJiXuanZhongLieBiao.indexOf(biaoQianId)
+                    console.log(biaoQianId,xiaBiao);
+                    if (xiaBiao === -1) {
+                        this.sanJiXuanZhongLieBiao.push(biaoQianId);
+                    } else {
+                        console.log(this.sanJiXuanZhongLieBiao);
+                        console.log(xiaBiao);
+                        this.sanJiXuanZhongLieBiao.splice(xiaBiao,1);
+                        console.log(this.sanJiXuanZhongLieBiao);
+                    }
+
+                }
+            }
+        },
+        computed: {
+            yiJiBiaoQianYangShi: function () {
+                return function (jiBie, biaoQianId) {
+                    if (jiBie === 1) {
+                        if (biaoQianId === this.yiJiXuanZhongId) {
+                            return 'btn btn-sm btn-success you-ce-xiao-an-niu';
+                        } else {
+                            return 'btn btn-sm btn-primary you-ce-xiao-an-niu';
+                        }
+                    } else if (jiBie === 2) {
+                        if (biaoQianId === this.erJiXuanZhongId) {
+                            return 'btn btn-sm btn-success you-ce-xiao-an-niu';
+                        } else {
+                            return 'btn btn-sm btn-primary you-ce-xiao-an-niu';
+                        }
+                    } else if (jiBie === 3) {
+                        if (this.sanJiXuanZhongLieBiao.indexOf(biaoQianId) !== -1) {
+                            return 'btn btn-sm btn-success you-ce-xiao-an-niu';
+                        } else {
+                            return 'btn btn-sm btn-primary you-ce-xiao-an-niu';
+                        }
+                    }
                 }
             }
         }
