@@ -1,11 +1,12 @@
-const Electron = require('electron');
-const App = Electron.app;
-const BrowserWindow = Electron.BrowserWindow;
-const Menu = Electron.Menu;
-const IpcMain = Electron.ipcMain;
-
+const GElectron = require('electron');
+const GApp = GElectron.app;
+const GBrowserWindow = GElectron.BrowserWindow;
+const GMenu = GElectron.Menu;
+const GIpcMain = GElectron.ipcMain;
+// 主窗口
+let zhuChuangKou = null;
 // 顶部菜单
-const caiDanMuBan = [
+const GCaiDanMuBan = [
     {
         label: '帮助',
         submenu: [
@@ -19,18 +20,15 @@ const caiDanMuBan = [
         ]
     }
 ];
-let caiDan = Menu.buildFromTemplate(caiDanMuBan);
 
 // 监听渲染进行发送的消息
-IpcMain.on('da-kai-tiao-shi', function(event, arg)  {
+GIpcMain.on('da-kai-tiao-shi', function (event, arg) {
     zhuChuangKou.webContents.openDevTools();
 })
 
-// 主窗口
-let zhuChuangKou = null;
 function chuangJianChuangKou() {
     // 创建浏览器窗口
-    zhuChuangKou = new BrowserWindow({
+    zhuChuangKou = new GBrowserWindow({
         width: 1660,
         height: 860,
         // 不允许改变窗口大小
@@ -42,7 +40,8 @@ function chuangJianChuangKou() {
             enableRemoteModule: true,
         }
     });
-    Menu.setApplicationMenu(caiDan);
+    let caiDan = GMenu.buildFromTemplate(GCaiDanMuBan);
+    GMenu.setApplicationMenu(caiDan);
     // 加载主窗口
     zhuChuangKou.loadFile('zhu_chuang_kou.html');
     // 窗口关闭事件
@@ -53,5 +52,4 @@ function chuangJianChuangKou() {
     // zhuChuangKou.webContents.openDevTools();
 }
 
-
-App.whenReady().then(chuangJianChuangKou)
+GApp.whenReady().then(chuangJianChuangKou)

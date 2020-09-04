@@ -2,14 +2,14 @@ console.log('Node:' + process.versions.node);
 console.log('Chrome:' + process.versions.chrome);
 console.log('Electron:' + process.versions.electron);
 
-const Electron = require('electron');
-const Remote = Electron.remote;
-const Menu = Remote.Menu;
-const Dialog = Remote.dialog;
-const IpcRenderer = Electron.ipcRenderer;
-const Fs = require('fs');
+const GElectron = require('electron');
+const GRemote = GElectron.remote;
+const GMenu = GRemote.Menu;
+const GDialog = GRemote.dialog;
+const GIpcRenderer = GElectron.ipcRenderer;
+const GFs = require('fs');
 
-const WeiFenLeiMuLu = 'WeiFenLei\\';
-const BiaoQianMuLu = 'BiaoQian\\';
-const ImgMaxWidth = 900;
-const ImgMaxHeight = 800;
+const GWeiFenLeiMuLu = 'WeiFenLei\\';
+const GBiaoQianMuLu = 'BiaoQian\\';
+const GImgMaxWidth = 900;
+const GImgMaxHeight = 800;
