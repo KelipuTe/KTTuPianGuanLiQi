@@ -12,7 +12,7 @@
 <div class="zhu-rong-qi">
     <div class="zheng-ti-zuo">
         <div>
-            <div id="xuan-ze-mu-lu" class="button-lan">选择目录</div>
+            <div id="xuan-ze-mu-lu" class="an-niu-zhong an-niu-lan">选择目录</div>
             <div id="mu-lu-lu-jing"></div>
         </div>
         <div id="tu-pian-lie-biao"></div>
@@ -21,33 +21,33 @@
         <img id="tu-pian-zhan-shi" src="" alt="图片展示">
     </div>
     <div class="zheng-ti-you">
-        <div id="biao-qian-lie-biao">
+        <div id="biao-qian-lie-biao" class="biao-qian-lie-biao">
             <label class="biao-qian-an-niu">
-                <span>一级二级标签</span>
+                <span>分类标签</span>
             </label>
             <label class="biao-qian-an-niu">
                 <span>额外标签</span>
             </label>
         </div>
-        <div id="biao-qian-yei-lie-biao">
+        <div id="biao-qian-yei-lie-biao" class="biao-qian-yei-lie-biao">
             <div style="display: block">
                 <div style="height: 20px">
-                    一级标签
+                    一级分类标签
                 </div>
-                <div style="height: 300px">
+                <div id="yi-ji-biao-qian" style="height: 250px">
 
                 </div>
-                <div style="height: 20px">
-                    添加一级标签
+                <div style="height: 30px">
+                    <div id="tian-jia-yi-ji" class="an-niu-zhong button-lan">添加一级标签</div>
                 </div>
                 <div style="height: 20px">
-                    二级标签
+                    二级分类标签
                 </div>
-                <div style="height: 300px">
+                <div id="er-ji-biao-qian" style="height: 250px">
 
                 </div>
-                <div style="height: 20px">
-                    添加二级标签
+                <div style="height: 30px">
+                    <div id="tian-jia-er-ji" class="an-niu-zhong button-lan">添加二级标签</div>
                 </div>
             </div>
             <div style="display: none">额外标签</div>
@@ -67,18 +67,22 @@
     let biaoQianLieBiao = [];
     let biaoQianYeLieBiao = [];
 
+    let yiJiBiaoQian = [];
+    let yiJiErJiFenZu = [];
+    let sanJiBiaoQian = [];
+    let eleYiJiBiaoQian = '';
+
     window.onload = function () {
         biaoQianLieBiao = document.getElementById('biao-qian-lie-biao').children;
-        biaoQianYeLieBiao = document.getElementById('biao-qian-ye').children;
+        biaoQianYeLieBiao = document.getElementById('biao-qian-yei-lie-biao').children;
         for (let i = 0; i < biaoQianLieBiao.length; i++) {
             biaoQianLieBiao[i].id = 'biao-qian-' + i;
             biaoQianLieBiao[i].onclick = function () {
                 for (let j = 0; j < biaoQianLieBiao.length; j++) {
-                    biaoQianLieBiao[j].className = '';
+                    biaoQianLieBiao[j].className = 'biao-qian-an-niu';
                     biaoQianYeLieBiao[j].style.display = 'none';
                 }
                 let idIndex = this.id.replace('biao-qian-', '');
-                biaoQianLieBiao[idIndex].className = 'select';
                 biaoQianYeLieBiao[idIndex].style.display = 'block';
             }
         }
@@ -86,6 +90,8 @@
         btnXuanZeMuLu = document.getElementById('xuan-ze-mu-lu');
         btnXuanZeMuLu.onclick = xuanZeMuLu;
         divTuPianLieBiao = document.getElementById('tu-pian-lie-biao');
+
+        eleYiJiBiaoQian=document.getElementById('yi-ji-biao-qian');
     }
 
     function xuanZeMuLu() {
@@ -96,7 +102,7 @@
         }).then(function (result) {
             caoZuoMuLu = result.filePaths[0];
             tuPianMuLu = caoZuoMuLu + '\\' + GWeiFenLeiMuLu;
-            biaoQianMuLu = biaoQianMuLu + '\\' + GBiaoQianMuLu;
+            biaoQianMuLu = caoZuoMuLu + '\\' + GBiaoQianMuLu;
             huoQuTuPianLieBiao();
             huoQuBiaoQian();
         });
@@ -167,105 +173,34 @@
     }
 
     function huoQuBiaoQian() {
-
+        // 获取保存在文件里的标签
+        GFs.readFile(biaoQianMuLu + 'yiJiBiaoQian.json', 'utf8', function (yiChang, yiJiBiaoQianJson) {
+            if (yiChang === null) {
+                yiJiBiaoQian = JSON.parse(yiJiBiaoQianJson);
+                for(let biaoQian in yiJiBiaoQian) {
+                    let tempBtn = document.createElement('div');
+                    tempBtn.id =biaoQian
+                    tempBtn.innerHTML=yiJiBiaoQian[biaoQian];
+                    tempBtn.className = 'an-niu-xiao an-niu-lan';
+                    eleYiJiBiaoQian.appendChild(tempBtn);
+                }
+            }
+        });
+        GFs.readFile(biaoQianMuLu + 'yiJiErJiFenZu.json', 'utf8', function (yiChang, yiJiErJiFenZuJson) {
+            if (yiChang === null) {
+                yiJiErJiFenZu = JSON.parse(yiJiErJiFenZuJson);
+                console.log(yiJiBiaoQian);
+            }
+        });
+        GFs.readFile(biaoQianMuLu + 'sanJiBiaoQian.json', 'utf8', function (yiChang, sanJiBiaoQianJson) {
+            if (yiChang === null) {
+                sanJiBiaoQian = JSON.parse(sanJiBiaoQianJson);
+                console.log(yiJiBiaoQian);
+            }
+        });
     }
 </script>
 <script>
-    // Vue.component("tu-pian-guan-li", {
-    //     template: "#template-tu-pian-guan-li",
-    //     data: function () {
-    //         return {
-    //             caoZuoMuLu: '', tuPianMuLu: '', biaoQianMuLu: '',
-    //             tuPianShuLiang: 20, tuPianLieBiao: [], zhanShiTuPian: true, tuPianLuJing: '', xuanZhongTuPianMing: '',
-    //             yiJiErJiFenZu: {},
-    //             yiJiBiaoQian: {}, yiJiBiaoQianId: '', yiJiBiaoQianMing: '', yiJiXuanZhongId: '',
-    //             erJiBiaoQian: {}, erJiBiaoQianId: '', erJiBiaoQianMing: '', erJiXuanZhongId: '',
-    //             sanJiBiaoQian: {}, sanJiBiaoQianId: '', sanJiBiaoQianMing: '', sanJiXuanZhongLieBiao: [],
-    //             keYiYiDong: false,
-    //             tuPianKuanDu: 0, tuPianGaoDu: 0, muBiaoMuLu: '', tuPianChongMingMing: '',
-    //             shiJianBiaoShi: '', fenLeiSuoYin: {}
-    //         }
-    //     },
-    //     created: function () {
-    //     },
-    //     methods: {
-    //         xuanZeMuLu: function () {
-    //             // 选择操作目录
-    //             let thisVue = this;
-    //             GDialog.showOpenDialog({
-    //                 'title': '请选择操作目录',
-    //                 'properties': ['openDirectory']
-    //             }).then(function (result) {
-    //                 thisVue.caoZuoMuLu = result.filePaths[0];
-    //                 thisVue.tuPianMuLu = thisVue.caoZuoMuLu + '\\' + GWeiFenLeiMuLu;
-    //                 thisVue.biaoQianMuLu = thisVue.caoZuoMuLu + '\\' + GBiaoQianMuLu;
-    //                 thisVue.huoQuTuPianLieBiao();
-    //                 thisVue.huoqQuBiaoQian();
-    //             });
-    //         },
-    //         huoQuTuPianLieBiao: function () {
-    //             // 获取图片列表
-    //             let jiShu = 1;
-    //             let thisVue = this;
-    //             GFs.readdir(this.tuPianMuLu, function (yiChang, wenJianLieBiao) {
-    //                 thisVue.tuPianLieBiao = [];
-    //                 if (yiChang === null) {
-    //                     for (let wenJianMing of wenJianLieBiao) {
-    //                         if (jiShu > thisVue.tuPianShuLiang) {
-    //                             break;
-    //                         }
-    //                         thisVue.tuPianLieBiao.push(wenJianMing);
-    //                         ++jiShu;
-    //                     }
-    //                 }
-    //             });
-    //         },
-    //         daKaiTuPian: function (tuPianMing) {
-    //             // 打开图片
-    //             let thisVue = this;
-    //             let tuPianLuJing = this.tuPianMuLu + '\\' + tuPianMing;
-    //             this.xuanZhongTuPianMing = tuPianMing;
-    //             if (this.tuPianLuJing === tuPianLuJing) {
-    //                 // 重复打开直接跳过
-    //                 return;
-    //             }
-    //             let img = new Image();
-    //             img.onload = function () {
-    //                 // 图片加载的时候计算偏移量，让图片居中
-    //                 let imgWidth = img.width;
-    //                 let imgHeight = img.height;
-    //                 thisVue.tuPianKuanDu = imgWidth;
-    //                 thisVue.tuPianGaoDu = imgHeight;
-    //                 let imgMarginLeft = 0;
-    //                 let imgMarginTop = 0;
-    //                 if (imgWidth <= GImgMaxWidth && imgHeight <= GImgMaxHeight) {
-    //                     // 宽高都小于限制，直接计算偏移量
-    //                     imgMarginLeft = Math.round((GImgMaxWidth - imgWidth) / 2 * 100) / 100;
-    //                     imgMarginTop = Math.round((GImgMaxHeight - imgHeight) / 2 * 100) / 100;
-    //                 } else if (imgWidth <= GImgMaxWidth && imgHeight > GImgMaxHeight) {
-    //                     // 只有宽度超过限制，单独计算高度偏移量
-    //                     imgWidth = Math.round(imgWidth * (GImgMaxHeight / imgHeight));
-    //                     imgMarginLeft = Math.round((GImgMaxWidth - imgWidth) / 2 * 100) / 100;
-    //                 } else if (imgWidth > GImgMaxWidth && imgHeight <= GImgMaxHeight) {
-    //                     // 只有高度超过限制，单独计算宽度偏移量
-    //                     imgHeight = Math.round(imgHeight * (GImgMaxWidth / imgWidth));
-    //                     imgMarginTop = Math.round((GImgMaxHeight - imgHeight) / 2 * 100) / 100;
-    //                 } else if (imgWidth > GImgMaxWidth && imgHeight > GImgMaxHeight) {
-    //                     // 只有宽高都超过限制，判断哪个超的更多，需要同比压缩
-    //                     if ((imgWidth / GImgMaxWidth) >= (imgHeight / GImgMaxHeight)) {
-    //                         imgHeight = Math.round(imgHeight * (GImgMaxWidth / imgWidth));
-    //                         imgMarginTop = Math.round((GImgMaxHeight - imgHeight) / 2 * 100) / 100;
-    //                     } else {
-    //                         imgWidth = Math.round(imgWidth * (GImgMaxHeight / imgHeight));
-    //                         imgMarginLeft = Math.round((GImgMaxWidth - imgWidth) / 2 * 100) / 100;
-    //                     }
-    //                 }
-    //                 let eleTuPianZhanShi = document.getElementById('tu-pian-zhan-shi');
-    //                 eleTuPianZhanShi.setAttribute('style', 'margin-left: ' + imgMarginLeft + 'px; margin-top: ' + imgMarginTop + 'px');
-    //             };
-    //             this.tuPianLuJing = tuPianLuJing;
-    //             img.src = this.tuPianLuJing;
-    //         },
     //         tianJiaBiaoQian: function (jiBie) {
     //             // 添加标签，并写入文件
     //             let thisVue = this;
@@ -344,23 +279,7 @@
     //             }
     //         },
     //         huoqQuBiaoQian: function () {
-    //             // 获取保存在文件里的标签
-    //             let thisVue = this;
-    //             GFs.readFile(this.biaoQianMuLu + 'yiJiBiaoQian.json', 'utf8', function (yiChang, yiJiBiaoQian) {
-    //                 if (yiChang === null) {
-    //                     thisVue.yiJiBiaoQian = JSON.parse(yiJiBiaoQian);
-    //                 }
-    //             });
-    //             GFs.readFile(this.biaoQianMuLu + 'yiJiErJiFenZu.json', 'utf8', function (yiChang, yiJiErJiFenZu) {
-    //                 if (yiChang === null) {
-    //                     thisVue.yiJiErJiFenZu = JSON.parse(yiJiErJiFenZu);
-    //                 }
-    //             });
-    //             GFs.readFile(this.biaoQianMuLu + 'sanJiBiaoQian.json', 'utf8', function (yiChang, sanJiBiaoQian) {
-    //                 if (yiChang === null) {
-    //                     thisVue.sanJiBiaoQian = JSON.parse(sanJiBiaoQian);
-    //                 }
-    //             });
+    //
     //         },
     //         xuanZhongBiaoQian: function (jiBie, biaoQianId) {
     //             // 选中标签
@@ -475,35 +394,7 @@
     //                 });
     //             });
     //         }
-    //     },
-    //     computed: {
-    //         qieHuanBiaoQianYangShi: function () {
-    //             // 标签样式切换
-    //             return function (jiBie, biaoQianId) {
-    //                 if (jiBie === 1) {
-    //                     if (biaoQianId === this.yiJiXuanZhongId) {
-    //                         return 'btn btn-sm btn-success you-ce-xiao-an-niu';
-    //                     } else {
-    //                         return 'btn btn-sm btn-primary you-ce-xiao-an-niu';
-    //                     }
-    //                 } else if (jiBie === 2) {
-    //                     if (biaoQianId === this.erJiXuanZhongId) {
-    //                         return 'btn btn-sm btn-success you-ce-xiao-an-niu';
-    //                     } else {
-    //                         return 'btn btn-sm btn-primary you-ce-xiao-an-niu';
-    //                     }
-    //                 } else if (jiBie === 3) {
-    //                     if (this.sanJiXuanZhongLieBiao.indexOf(biaoQianId) !== -1) {
-    //                         return 'btn btn-sm btn-success you-ce-xiao-an-niu';
-    //                     } else {
-    //                         return 'btn btn-sm btn-primary you-ce-xiao-an-niu';
-    //                     }
-    //                 }
-    //             }
-    //         }
     //     }
-    // });
-    // new Vue({el: "#tu-pian-guan-li"});
 </script>
 </body>
 </html>
