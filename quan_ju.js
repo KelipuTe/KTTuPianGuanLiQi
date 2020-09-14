@@ -13,3 +13,15 @@ const GWeiFenLeiMuLu = 'WeiFenLei\\';
 const GBiaoQianMuLu = 'BiaoQian\\';
 const GImgMaxWidth = 900;
 const GImgMaxHeight = 800;
+
+// 判断空值
+function gEmpty(bianLiang) {
+    if (bianLiang === undefined) {
+        return true;
+    } else if (bianLiang === null) {
+        return true;
+    } else if (bianLiang === '') {
+        return true;
+    }
+    return false;
+}

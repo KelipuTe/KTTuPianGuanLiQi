@@ -29,8 +29,8 @@ GIpcMain.on('da-kai-tiao-shi', function (event, arg) {
 function chuangJianChuangKou() {
     // 创建浏览器窗口
     zhuChuangKou = new GBrowserWindow({
-        width: 1660,
-        height: 860,
+        width: 1800,
+        height: 900,
         // 不允许改变窗口大小
         // resizable: false,
         webPreferences: {
@@ -48,8 +48,7 @@ function chuangJianChuangKou() {
     zhuChuangKou.on('closed', function () {
         zhuChuangKou = null;
     });
-    // 打开调试
-    // zhuChuangKou.webContents.openDevTools();
+    zhuChuangKou.webContents.openDevTools();
 }
 
 GApp.whenReady().then(chuangJianChuangKou)

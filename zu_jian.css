@@ -1,0 +1,47 @@
+/*按钮*/
+.button-100 {
+    width: 100%;
+    height: 50px;
+}
+
+.button-lan {
+    background-color: blue;
+}
+
+.button-lan:active {
+    background-color: #bbb;
+}
+
+/*标签页*/
+.biao-qian-yei {
+    width: 100%;
+}
+
+.biao-qian-an-niu {
+    display: inline-block;
+    width: 50%;
+}
+
+.biao-qian-yei-lie-biao {
+
+}
+
+/*左侧图片按钮*/
+.an-niu-tu-pian {
+    width: 100px;
+    height: 20px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*右侧卡片*/
+.you-ce-ka-pian {
+    margin-bottom: 20px;
+}
+
+/*右侧小按钮*/
+.you-ce-xiao-an-niu {
+    margin: 0 5px;
+    float: left;
+}
