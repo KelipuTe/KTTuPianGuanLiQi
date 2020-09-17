@@ -34,20 +34,23 @@
                 <div style="height: 20px">
                     一级分类标签
                 </div>
-                <div id="yi-ji-biao-qian" style="height: 250px">
+                <div id="yi-ji-lie-biao" style="height: 250px">
 
                 </div>
                 <div style="height: 30px">
-                    <div id="tian-jia-yi-ji" class="an-niu-zhong button-lan">添加一级标签</div>
+                    <input id="yi-ji-id" type="text" style="width: 80px" aria-label="一级Id"/>
+                    <input id="yi-ji-ming" type="text" style="width: 80px" aria-label="一级标签名"/>
+                    <div id="yi-ji-tian-jia" class="an-niu-zhong button-lan" role="button">添加一级标签</div>
                 </div>
                 <div style="height: 20px">
                     二级分类标签
                 </div>
-                <div id="er-ji-biao-qian" style="height: 250px">
+                <div id="er-ji-lie-biao" style="height: 250px">
 
                 </div>
                 <div style="height: 30px">
-                    <div id="tian-jia-er-ji" class="an-niu-zhong button-lan">添加二级标签</div>
+                    <input id="er-ji-shu-ru" type="text" aria-label="二级标签名"/>
+                    <div id="er-ji-tian-jia" class="an-niu-zhong button-lan" role="button">添加二级标签</div>
                 </div>
             </div>
             <div style="display: none">额外标签</div>
@@ -68,9 +71,21 @@
     let biaoQianYeLieBiao = [];
 
     let yiJiBiaoQian = [];
+    let yiJiXuanZhongId = '';
     let yiJiErJiFenZu = [];
+    let erJiBiaoQian = [];
+    let erJiXuanZhongId = '';
     let sanJiBiaoQian = [];
-    let eleYiJiBiaoQian = '';
+    let sanJiXuanZhongIdLieBiao = [];
+
+    let eleYiJiBiaoQian = {};
+    let eleYiJiIdShuRu = {};
+    let eleYiJiMingShuRu = {};
+    let eleYiJiTianJia = {};
+    let eleErJiBiaoQian = {};
+    let eleErJiIdShuRu = {};
+    let eleErJiMingShuRu = {};
+    let eleErJiTianJia = {};
 
     window.onload = function () {
         biaoQianLieBiao = document.getElementById('biao-qian-lie-biao').children;
@@ -91,7 +106,16 @@
         btnXuanZeMuLu.onclick = xuanZeMuLu;
         divTuPianLieBiao = document.getElementById('tu-pian-lie-biao');
 
-        eleYiJiBiaoQian=document.getElementById('yi-ji-biao-qian');
+        eleYiJiBiaoQian = document.getElementById('yi-ji-lie-biao');
+        eleYiJiIdShuRu = document.getElementById('yi-ji-id');
+        eleYiJiMingShuRu = document.getElementById('yi-ji-ming');
+        eleYiJiTianJia = document.getElementById('yi-ji-tian-jia');
+        eleYiJiTianJia.onclick = tianJiaBiaoQian;
+        eleErJiBiaoQian = document.getElementById('er-ji-lie-biao');
+        eleErJiIdShuRu = document.getElementById('er-ji-id');
+        eleErJiMingShuRu = document.getElementById('er-ji-ming');
+        eleErJiTianJia = document.getElementById('er-ji-tian-jia');
+        eleErJiTianJia.onclick = tianJiaBiaoQian;
     }
 
     function xuanZeMuLu() {
@@ -172,30 +196,106 @@
         eleTuPianZhanShi.src = tuPianLuJing;
     }
 
+    function tianJiaBiaoQian() {
+        let eleId = this.id;
+        if (eleId === 'yi-ji-tian-jia') {
+            let bianQianId = eleYiJiIdShuRu.value;
+            let biaoQianMing = eleYiJiMingShuRu.value;
+            if (gEmpty(bianQianId) || gEmpty(biaoQianMing)) {
+                alert('一级标签数据缺失');
+                return;
+            }
+            yiJiBiaoQian[bianQianId] = biaoQianMing;
+            yiJiErJiFenZu[bianQianId] = {};
+            GFs.opendir(biaoQianMuLu, function (yiChang, muLu) {
+                if (yiChang !== null) {
+                    GFs.mkdirSync(biaoQianMuLu);
+                } else {
+                    muLu.close();
+                }
+                GFs.writeFileSync(biaoQianMuLu + 'yiJiBiaoQian.json', JSON.stringify(yiJiBiaoQian), 'utf8');
+                eleYiJiIdShuRu.value = '';
+                eleYiJiMingShuRu.value = '';
+            });
+            let muBiaoMuLu = caoZuoMuLu + '\\' + bianQianId
+            GFs.opendir(muBiaoMuLu, function (yiChang, muLu) {
+                if (yiChang !== null) {
+                    GFs.mkdirSync(muBiaoMuLu);
+                } else {
+                    muLu.close();
+                }
+            });
+        } else if (eleId === 'er-ji-tian-jia') {
+            if (gEmpty(yiJiXuanZhongId)) {
+                alert('未选择一级标签');
+                return;
+            }
+            let bianQianId = eleErJiIdShuRu.value;
+            let biaoQianMing = eleErJiMingShuRu.value;
+            if (gEmpty(bianQianId) || gEmpty(biaoQianMing)) {
+                alert('二级标签数据缺失');
+                return;
+            }
+            erJiBiaoQian[bianQianId] = biaoQianMing;
+            if (gEmpty(this.yiJiErJiFenZu[this.yiJiXuanZhongId])) {
+                this.yiJiErJiFenZu[this.yiJiXuanZhongId] = {};
+            }
+            this.yiJiErJiFenZu[this.yiJiXuanZhongId][this.erJiBiaoQianId] = this.erJiBiaoQianMing;
+            GFs.opendir(this.biaoQianMuLu, function (yiChang, muLu) {
+                if (yiChang !== null) {
+                    GFs.mkdirSync(thisVue.biaoQianMuLu);
+                } else {
+                    muLu.close();
+                }
+                GFs.writeFileSync(thisVue.biaoQianMuLu + 'yiJiErJiFenZu.json', JSON.stringify(thisVue.yiJiErJiFenZu), 'utf8');
+                thisVue.erJiBiaoQianId = '';
+                thisVue.erJiBiaoQianMing = '';
+            });
+            let muBiaoMuLu = this.caoZuoMuLu + '\\' + this.yiJiXuanZhongId + '\\' + this.erJiBiaoQianId;
+            GFs.opendir(muBiaoMuLu, function (yiChang, muLu) {
+                if (yiChang !== null) {
+                    GFs.mkdirSync(muBiaoMuLu);
+                } else {
+                    muLu.close();
+                }
+            });
+        }
+    }
+
     function huoQuBiaoQian() {
         // 获取保存在文件里的标签
         GFs.readFile(biaoQianMuLu + 'yiJiBiaoQian.json', 'utf8', function (yiChang, yiJiBiaoQianJson) {
             if (yiChang === null) {
+                eleYiJiBiaoQian.innerHTML = '';
                 yiJiBiaoQian = JSON.parse(yiJiBiaoQianJson);
-                for(let biaoQian in yiJiBiaoQian) {
+                for (let biaoQian in yiJiBiaoQian) {
                     let tempBtn = document.createElement('div');
-                    tempBtn.id =biaoQian
-                    tempBtn.innerHTML=yiJiBiaoQian[biaoQian];
+                    tempBtn.id = biaoQian
+                    tempBtn.innerHTML = yiJiBiaoQian[biaoQian];
                     tempBtn.className = 'an-niu-xiao an-niu-lan';
                     eleYiJiBiaoQian.appendChild(tempBtn);
+                    tempBtn.onclick = function () {
+                        eleErJiBiaoQian.innerHTML = '';
+                        erJiBiaoQian = yiJiErJiFenZu[this.id];
+                        for (let biaoQian2 in erJiBiaoQian) {
+                            let tempBtn = document.createElement('div');
+                            tempBtn.id = biaoQian
+                            tempBtn.innerHTML = erJiBiaoQian[biaoQian2];
+                            tempBtn.className = 'an-niu-xiao an-niu-lan';
+                            eleErJiBiaoQian.appendChild(tempBtn);
+                        }
+                    };
                 }
             }
         });
         GFs.readFile(biaoQianMuLu + 'yiJiErJiFenZu.json', 'utf8', function (yiChang, yiJiErJiFenZuJson) {
             if (yiChang === null) {
                 yiJiErJiFenZu = JSON.parse(yiJiErJiFenZuJson);
-                console.log(yiJiBiaoQian);
             }
         });
         GFs.readFile(biaoQianMuLu + 'sanJiBiaoQian.json', 'utf8', function (yiChang, sanJiBiaoQianJson) {
             if (yiChang === null) {
                 sanJiBiaoQian = JSON.parse(sanJiBiaoQianJson);
-                console.log(yiJiBiaoQian);
             }
         });
     }
@@ -277,9 +377,6 @@
     //                     thisVue.sanJiBiaoQianMing = '';
     //                 });
     //             }
-    //         },
-    //         huoqQuBiaoQian: function () {
-    //
     //         },
     //         xuanZhongBiaoQian: function (jiBie, biaoQianId) {
     //             // 选中标签

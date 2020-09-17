@@ -1,20 +1,30 @@
 /*按钮*/
 .an-niu-zhong {
-    width: 100px;
+    display: inline-block;
+    max-width: 150px;
     height: 30px;
+    margin: 5px 5px;
+    padding:6px 10px;
+    font-size: 16px;
+    text-align: center;
 }
 
 .an-niu-xiao {
-    width: 50px;
+    display: inline-block;
+    max-width: 100px;
     height: 20px;
+    margin: 3px 5px;
+    padding:3px 5px;
+    font-size: 12px;
+    text-align: center;
 }
 
 .an-niu-lan {
-    background-color: blue;
+    background-color: #9696ff;
 }
 
 .an-niu-lan:hover {
-    background-color: red;
+    background-color: #ff9696;
 }
 
 /*左侧图片按钮*/
