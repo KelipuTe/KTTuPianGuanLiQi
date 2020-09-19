@@ -29,8 +29,8 @@
 
 /*左侧图片按钮*/
 .an-niu-tu-pian {
-    width: 100px;
-    height: 20px;
+    width: 200px;
+    height: 30px;
     font-size: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
