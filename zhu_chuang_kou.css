@@ -1,0 +1,124 @@
+/*布局样式*/
+
+/*主容器*/
+.zhu-rong-qi {
+    width: 1600px;
+    height: 800px;
+}
+
+/*左侧*/
+.zheng-ti-zuo {
+    display: inline-block;
+    vertical-align: top;
+    width: 280px;
+    height: 800px;
+}
+
+/*中间*/
+.zheng-ti-zhong {
+    display: inline-block;
+    vertical-align: top;
+    width: 900px;
+    height: 800px;
+    margin-left: 15px;
+}
+
+.zheng-ti-zhong img {
+    max-width: 900px;
+    max-height: 800px;
+}
+
+/*右侧*/
+.zheng-ti-you {
+    display: inline-block;
+    vertical-align: top;
+    width: 380px;
+    height: 800px;
+    margin-left: 15px;
+}
+
+/*组件样式*/
+
+/*按钮*/
+.an-niu-zhong {
+    display: inline-block;
+    max-width: 150px;
+    height: 30px;
+    margin: 5px 5px;
+    padding:6px 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.an-niu-xiao {
+    display: inline-block;
+    max-width: 100px;
+    height: 20px;
+    margin: 3px 5px;
+    padding:3px 5px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.an-niu-lan {
+    background-color: #9696ff;
+}
+
+.an-niu-hong {
+    background-color: #c80b4d;
+}
+
+.an-niu-lan:hover {
+    background-color: #ff9696;
+}
+
+/*左侧图片按钮*/
+.an-niu-tu-pian {
+    width: 200px;
+    height: 30px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*标签页*/
+.biao-qian-lie-biao {
+    display: flex;
+    width: 378px;
+    height: 48px;
+    border: 1px solid #1e646e;
+}
+
+.biao-qian-an-niu {
+    text-align: center;
+    font-size: 20px;
+    width: 100px;
+    height: 30px;
+    padding:9px 10px;
+    background-color: #1e646e;
+}
+
+.biao-qian-an-niu:hover{
+    background-color: #b2a59f;
+}
+
+.biao-qian-xuan-zhong{
+    text-align: center;
+    font-size: 20px;
+    width: 100px;
+    height: 30px;
+    padding:9px 10px;
+    background-color: #be1352;
+}
+
+.biao-qian-yei-lie-biao {
+    width: 378px;
+    height: 599px;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-color: #1e646e;
+}
+
+.biao-qian-ye{
+
+}
