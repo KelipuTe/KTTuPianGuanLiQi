@@ -107,25 +107,19 @@ let eleMuBiaoLuJing = {};
 let eleQueRenYiDong = {};
 // 页面初始化
 window.onload = function () {
+    // 选择目录按钮和左侧图片列表
     eleXuanZeMuLu = document.getElementById('xuan-ze-mu-lu');
     eleXuanZeMuLu.onclick = dianJiXuanZeMuLu;
     eleTuPianLieBiao = document.getElementById('tu-pian-lie-biao');
     // 图片展示
     eleTuPianZhanShi = document.getElementById('tu-pian-zhan-shi');
-    eleTuPianZhanShi.onload = jiaZaiTuPian;
+    eleTuPianZhanShi.onload = jiSuanPianYiLiang;
     // 初始化标签页切换
     biaoQianLieBiao = document.getElementById('biao-qian-lie-biao').children;
     biaoQianYeLieBiao = document.getElementById('biao-qian-yei-lie-biao').children;
     for (let i = 0; i < biaoQianLieBiao.length; i++) {
         biaoQianLieBiao[i].id = 'biao-qian-' + i;
-        biaoQianLieBiao[i].onclick = function () {
-            for (let j = 0; j < biaoQianLieBiao.length; j++) {
-                biaoQianLieBiao[j].className = 'biao-qian-an-niu';
-                biaoQianYeLieBiao[j].style.display = 'none';
-            }
-            let idIndex = this.id.replace('biao-qian-', '');
-            biaoQianYeLieBiao[idIndex].style.display = 'block';
-        }
+        biaoQianLieBiao[i].onclick = qieHuanBiaoQianYe;
     }
     // 添加一级标签
     eleYiJiBiaoQian = document.getElementById('yi-ji-lie-biao');
@@ -148,7 +142,7 @@ window.onload = function () {
     // 移动目标目录和确认移动按钮
     eleMuBiaoLuJing = document.getElementById('mu-biao-lu-jing');
     eleQueRenYiDong = document.getElementById('que-ren-yi-dong');
-    eleQueRenYiDong.onclick = queRenYiDong;
+    eleQueRenYiDong.onclick = dianJiQueRenYiDong;
 }
 // 点击选择目录
 function dianJiXuanZeMuLu() {
@@ -190,37 +184,16 @@ function huoQuTuPianLieBiao() {
         }
     });
 }
-
-function huoQuBiaoQian() {
-    // 获取保存在文件里的标签
-    GFs.readFile(biaoQianMuLu + 'yiJiBiaoQian.json', 'utf8', function (yiChang, yiJiBiaoQianJson) {
-        if (yiChang === null) {
-            yiJiBiaoQian = JSON.parse(yiJiBiaoQianJson);
-            gouZaoYiJiBiaoQian();
-        }
-    });
-    GFs.readFile(biaoQianMuLu + 'yiJiErJiFenZu.json', 'utf8', function (yiChang, yiJiErJiFenZuJson) {
-        if (yiChang === null) {
-            yiJiErJiFenZu = JSON.parse(yiJiErJiFenZuJson);
-        }
-    });
-    GFs.readFile(biaoQianMuLu + 'sanJiBiaoQian.json', 'utf8', function (yiChang, sanJiBiaoQianJson) {
-        if (yiChang === null) {
-            sanJiBiaoQian = JSON.parse(sanJiBiaoQianJson);
-        }
-    });
-}
-
+// 点击选择图片
 function dianJiXuanZeTuPian() {
-    // 点击选择图片
     let wenJianMing = this.textContent;
     xuanZhongTuPianMing = wenJianMing;
     tuPianLuJing = tuPianMuLu + '\\' + wenJianMing;
     eleTuPianZhanShi.src = tuPianLuJing;
 }
-
-function jiaZaiTuPian() {
-    // 图片加载的时候计算偏移量，让图片居中
+// 图片加载的时候计算偏移量，让图片居中
+function jiSuanPianYiLiang() {
+    // 获取图片原始大小
     let imgWidth = this.naturalWidth;
     let imgHeight = this.naturalHeight;
     tuPianKuanDu = imgWidth;
@@ -251,10 +224,38 @@ function jiaZaiTuPian() {
     }
     this.setAttribute('style', 'margin-left: ' + imgMarginLeft + 'px; margin-top: ' + imgMarginTop + 'px');
 }
-
+// 获取保存在文件里的标签
+function huoQuBiaoQian() {
+    GFs.readFile(biaoQianMuLu + 'yiJiBiaoQian.json', 'utf8', function (yiChang, yiJiBiaoQianJson) {
+        if (yiChang === null) {
+            yiJiBiaoQian = JSON.parse(yiJiBiaoQianJson);
+            gouZaoYiJiBiaoQian();
+        }
+    });
+    GFs.readFile(biaoQianMuLu + 'yiJiErJiFenZu.json', 'utf8', function (yiChang, yiJiErJiFenZuJson) {
+        if (yiChang === null) {
+            yiJiErJiFenZu = JSON.parse(yiJiErJiFenZuJson);
+        }
+    });
+    GFs.readFile(biaoQianMuLu + 'sanJiBiaoQian.json', 'utf8', function (yiChang, sanJiBiaoQianJson) {
+        if (yiChang === null) {
+            sanJiBiaoQian = JSON.parse(sanJiBiaoQianJson);
+        }
+    });
+}
+// 切换标签页
+function qieHuanBiaoQianYe() {
+    for (let j = 0; j < biaoQianLieBiao.length; j++) {
+        biaoQianLieBiao[j].className = 'biao-qian-an-niu';
+        biaoQianYeLieBiao[j].style.display = 'none';
+    }
+    let idIndex = this.id.replace('biao-qian-', '');
+    biaoQianYeLieBiao[idIndex].style.display = 'block';
+}
+// 点击添加标签
 function dianJiTianJiaBiaoQian() {
-    // 点击添加标签
     let eleId = this.id;
+    // 通过按钮id判断是哪一个按钮
     if (eleId === 'yi-ji-tian-jia') {
         // 添加一级标签
         let xinBianQianId = eleYiJiIdShuRu.value;
@@ -349,9 +350,57 @@ function dianJiTianJiaBiaoQian() {
         gouZaoSanJiBiaoQian();
     }
 }
-
+// 构造一级标签
+function gouZaoYiJiBiaoQian() {
+    eleYiJiBiaoQian.innerHTML = '';
+    for (let kBiaoQian in yiJiBiaoQian) {
+        // 构造一级分类标签按钮
+        let tempEle = document.createElement('button');
+        tempEle.id = kBiaoQian
+        tempEle.type = 'button';
+        tempEle.innerHTML = yiJiBiaoQian[kBiaoQian];
+        tempEle.className = 'an-niu-xiao an-niu-lan';
+        tempEle.setAttribute('data-level', 'yi-ji');
+        // 绑定标签点击事件
+        tempEle.onclick = dianJiFenLeiBiaoQian;
+        eleYiJiBiaoQian.appendChild(tempEle);
+    }
+}
+// 构造二级标签
+function gouZaoErJiBiaoQian() {
+    eleErJiBiaoQian.innerHTML = '';
+    erJiBiaoQian = gEmpty(yiJiErJiFenZu[yiJiXuanZhongId]) ? {} : yiJiErJiFenZu[yiJiXuanZhongId];
+    for (let kBiaoQian2 in erJiBiaoQian) {
+        // 构造二级分类标签按钮
+        let tempEle = document.createElement('button');
+        tempEle.id = kBiaoQian2;
+        tempEle.type = 'button';
+        tempEle.innerHTML = erJiBiaoQian[kBiaoQian2];
+        tempEle.className = 'an-niu-xiao an-niu-lan';
+        tempEle.setAttribute('data-level', 'er-ji');
+        // 绑定标签点击事件
+        tempEle.onclick = dianJiFenLeiBiaoQian;
+        eleErJiBiaoQian.appendChild(tempEle);
+    }
+}
+// 构造三级标签
+function gouZaoSanJiBiaoQian() {
+    eleSanJiBiaoQian.innerHTML = '';
+    for (let kBiaoQian3 in sanJiBiaoQian) {
+        // 构造标签按钮
+        let tempEle = document.createElement('button');
+        tempEle.id = kBiaoQian3;
+        tempEle.type = 'button';
+        tempEle.innerHTML = erJiBiaoQian[kBiaoQian3];
+        tempEle.className = 'an-niu-xiao an-niu-lan';
+        tempEle.setAttribute('data-level', 'san-ji');
+        // 绑定标签点击事件
+        tempEle.onclick = dianJiFenLeiBiaoQian;
+        eleErJiBiaoQian.appendChild(tempEle);
+    }
+}
+// 点击分类标签
 function dianJiFenLeiBiaoQian() {
-    // 点击分类标签
     let biaoQianJiBie = this.getAttribute('data-level');
     if (biaoQianJiBie === 'yi-ji') {
         // 一级标签互斥，同时获取二级标签
@@ -411,61 +460,9 @@ function dianJiFenLeiBiaoQian() {
     chongMingMingTuPian();
     eleMuBiaoLuJing.innerHTML = muBiaoMuLu + tuPianChongMingMing;
 }
-
-function gouZaoYiJiBiaoQian() {
-    // 构造一级标签
-    eleYiJiBiaoQian.innerHTML = '';
-    for (let kBiaoQian in yiJiBiaoQian) {
-        // 构造一级分类标签按钮
-        let tempEle = document.createElement('button');
-        tempEle.id = kBiaoQian
-        tempEle.type = 'button';
-        tempEle.innerHTML = yiJiBiaoQian[kBiaoQian];
-        tempEle.className = 'an-niu-xiao an-niu-lan';
-        tempEle.setAttribute('data-level', 'yi-ji');
-        // 绑定标签点击事件
-        tempEle.onclick = dianJiFenLeiBiaoQian;
-        eleYiJiBiaoQian.appendChild(tempEle);
-    }
-}
-
-function gouZaoErJiBiaoQian() {
-    // 构造二级标签
-    eleErJiBiaoQian.innerHTML = '';
-    erJiBiaoQian = gEmpty(yiJiErJiFenZu[yiJiXuanZhongId]) ? {} : yiJiErJiFenZu[yiJiXuanZhongId];
-    for (let kBiaoQian2 in erJiBiaoQian) {
-        // 构造二级分类标签按钮
-        let tempEle = document.createElement('button');
-        tempEle.id = kBiaoQian2;
-        tempEle.type = 'button';
-        tempEle.innerHTML = erJiBiaoQian[kBiaoQian2];
-        tempEle.className = 'an-niu-xiao an-niu-lan';
-        tempEle.setAttribute('data-level', 'er-ji');
-        // 绑定标签点击事件
-        tempEle.onclick = dianJiFenLeiBiaoQian;
-        eleErJiBiaoQian.appendChild(tempEle);
-    }
-}
-
-function gouZaoSanJiBiaoQian() {
-    // 构造额外标签
-    eleSanJiBiaoQian.innerHTML = '';
-    for (let kBiaoQian3 in sanJiBiaoQian) {
-        // 构造标签按钮
-        let tempEle = document.createElement('button');
-        tempEle.id = kBiaoQian3;
-        tempEle.type = 'button';
-        tempEle.innerHTML = erJiBiaoQian[kBiaoQian3];
-        tempEle.className = 'an-niu-xiao an-niu-lan';
-        tempEle.setAttribute('data-level', 'san-ji');
-        // 绑定标签点击事件
-        tempEle.onclick = dianJiFenLeiBiaoQian;
-        eleErJiBiaoQian.appendChild(tempEle);
-    }
-}
-
+// 重命名图片
 function chongMingMingTuPian() {
-    // 重命名图片
+    // 时间
     let date = new Date();
     let shiJian = String(date.getFullYear());
     let tempMing = date.getMonth() + 1;
@@ -500,8 +497,8 @@ function chongMingMingTuPian() {
         keYiYiDong = false;
     }
 }
-
-function queRenYiDong() {
+// 点击确认移动
+function dianJiQueRenYiDong() {
     if (gEmpty(tuPianLuJing)) {
         alert('未选择图片');
         return;
