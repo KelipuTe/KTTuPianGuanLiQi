@@ -11,32 +11,116 @@ const GDialog = GRemote.dialog;
 const GIpcRenderer = GElectron.ipcRenderer;
 const GFs = require('fs');
 
-const GImgMaxWidth = 900;
-const GImgMaxHeight = 800;
-
 // 配置类
-const CPeiZhiClass = {
+const CPeiZhiService = {
+    muLuLieBiao: {
+        weiFenLei: 'WeiFenLei\\',
+        biaoQian: 'BiaoQian\\'
+    },
+    wenJianMingLieBiao: {
+        fenLeiBiaoQian: 'fenLeiBiaoQian.json',
+        biaoJiBiaoQian: 'biaoJiBiaoQian.json',
+    },
     createNew: function () {
-        let newCPeiZhi = {};
-        newCPeiZhi.muLuLieBiao = {};
-        newCPeiZhi.muLuLieBiao.weiFenLei = 'WeiFenLei\\';
-        newCPeiZhi.muLuLieBiao.biaoQian = 'BiaoQian\\';
-        newCPeiZhi.wenJianMingLieBiao = {};
-        newCPeiZhi.wenJianMingLieBiao.fenLeiBiaoQian = 'fenLeiBiaoQian.json';
-        newCPeiZhi.wenJianMingLieBiao.biaoJiBiaoQian = 'biaoJiBiaoQian.json';
-        newCPeiZhi.caoZuoMuLu = '';
-        newCPeiZhi.tuPianMuLu = '';
-        newCPeiZhi.biaoQianMuLu = '';
-        newCPeiZhi.sheZhiCaoZuoMuLu = function (caoZuoMuLu) {
+        let newService = {};
+        newService.caoZuoMuLu = '';
+        newService.weiFenLeiMuLu = '';
+        newService.biaoQianMuLu = '';
+        newService.sheZhiCaoZuoMuLu = function (caoZuoMuLu) {
             this.caoZuoMuLu = caoZuoMuLu;
-            this.tuPianMuLu = this.caoZuoMuLu + '\\' + this.muLuLieBiao.weiFenLei;
-            this.biaoQianMuLu = this.caoZuoMuLu + '\\' + this.muLuLieBiao.biaoQian;
-        }
-        return newCPeiZhi;
+            this.weiFenLeiMuLu = this.caoZuoMuLu + '\\' + CPeiZhiService.muLuLieBiao.weiFenLei;
+            this.biaoQianMuLu = this.caoZuoMuLu + '\\' + CPeiZhiService.muLuLieBiao.biaoQian;
+        };
+        return newService;
     }
 }
 
-let cPeiZhi = CPeiZhiClass.createNew();
+// 图片类
+const CTuPianService = {
+    tuPianShuLiang: 20,
+    tuPianKuanDuMax: 900,
+    tuPianGaoDuMax: 800,
+    createNew: function () {
+        let newService = {};
+        newService.tuPianLieBiao = [];
+        newService.tuPianMing = '';
+        newService.tuPianLuJing = '';
+        newService.tuPianLuJing = '';
+        newService.tuPianKuanDu = 0;
+        newService.tuPianGaoDu = 0;
+        newService.chongMingMingShiJian = '';
+        newService.tuPianChongMingMing = '';
+        newService.keYiYiDong = false;
+        newService.huoQuTuPianShuJu = function (tuPianMuLuQuan) {
+            // 获取图片列表
+            let jiShu = 1;
+            GFs.readdir(tuPianMuLuQuan, function (yiChang, wenJianLieBiao) {
+                // 先初始化
+                this.tuPianLieBiao = [];
+                eleTuPianLieBiao.innerHTML = '';
+                if (yiChang === null) {
+                    // 没有异常就继续
+                    for (let wenJianMing of wenJianLieBiao) {
+                        if (jiShu > CTuPianService.tuPianShuLiang) {
+                            break;
+                        }
+                        this.tuPianLieBiao.push(wenJianMing);
+                        // 构造图片列表按钮
+                        let tempEle = document.createElement('button');
+                        tempEle.id = 'tu-pian-lie-biao-' + jiShu;
+                        tempEle.type = 'button';
+                        tempEle.className = 'an-niu-tu-pian';
+                        tempEle.innerHTML = wenJianMing;
+                        tempEle.onclick = dianJiXuanZeTuPian;
+                        eleTuPianLieBiao.appendChild(tempEle);
+                        ++jiShu;
+                    }
+                } else {
+                    console.error(yiChang)
+                }
+            });
+        };
+        return newService;
+    }
+}
+
+// 标签类
+const CBiaoQianService = {
+    createNew: function () {
+        let newService = {};
+        newService.biaoQianLieBiao = {};
+        newService.biaoQianYeLieBiao = {};
+        newService.xianZhongBiaoQianYe = 0;
+        newService.biaoQianShuJu = {};
+        newService.yiJiBiaoQian = {};
+        newService.erJiBiaoQian = {};
+        newService.sanJiBiaoQian = {};
+        newService.yiJiXuanZhongId = '';
+        newService.erJiXuanZhongId = '';
+        newService.sanJiXuanZhongId = '';
+        return newService;
+    }
+}
+
+// 类实例
+let sPeiZhi = CPeiZhiService.createNew();
+let sTuPian = CTuPianService.createNew();
+let sBiaoQian = CBiaoQianService.createNew();
+// 图片列表dom对象
+let eleXuanZeMuLu = {};
+let eleTuPianLieBiao = {};
+// 图片dom对象
+let eleTuPianZhanShi = {};
+// 标签页dom对象
+let eleYiJiBiaoQian = {};
+let eleErJiBiaoQian = {};
+let eleSanJiBiaoQian = {};
+let eleXinBiaoQianIdShuRu = {};
+let eleXinBiaoQianMingShuRu = {};
+let eleXinBiaoQianTianJia = {};
+// 确认移动dom对象
+let eleMuBiaoLuJing = {};
+let eleQueRenYiDong = {};
 
 // 全局方法
 // 判断空值
@@ -71,54 +155,6 @@ window.addEventListener('contextmenu', function (event) {
     youJiCaiDan.popup({window: GRemote.getCurrentWindow()});
 }, false);
 
-// 页面逻辑
-// 图片列表变量
-let tuPianLieBiao = [];
-let tuPianShuLiang = 20;
-// 图片列表dom对象
-let eleXuanZeMuLu = {};
-let eleTuPianLieBiao = {};
-// 图片变量
-let tuPianLuJing = '';
-let tuPianKuanDu = 0;
-let tuPianGaoDu = 0;
-
-let xuanZhongTuPianMing = '';
-let shiJianBiaoShi = '';
-let tuPianChongMingMing = '';
-let keYiYiDong = false;
-// 图片dom对象
-let eleTuPianZhanShi = {};
-// 标签页变量
-let biaoQianLieBiao = {};
-let biaoQianYeLieBiao = {};
-
-let yiJiBiaoQian = {};
-let yiJiErJiFenZu = {};
-let erJiBiaoQian = {};
-let sanJiBiaoQian = {};
-
-let yiJiXuanZhongId = '';
-let erJiXuanZhongId = '';
-let sanJiXuanZhongIdLieBiao = [];
-// 标签页dom对象
-let eleYiJiBiaoQian = {};
-let eleYiJiIdShuRu = {};
-let eleYiJiMingShuRu = {};
-let eleYiJiTianJia = {};
-
-let eleErJiBiaoQian = {};
-let eleErJiIdShuRu = {};
-let eleErJiMingShuRu = {};
-let eleErJiTianJia = {};
-
-let eleSanJiBiaoQian = {};
-let eleSanJiIdShuRu = {};
-let eleSanJiMingShuRu = {};
-let eleSanJiTianJia = {};
-// 确认移动dom对象
-let eleMuBiaoLuJing = {};
-let eleQueRenYiDong = {};
 // 页面初始化
 window.onload = function () {
     // 选择目录按钮和左侧图片列表
@@ -129,30 +165,20 @@ window.onload = function () {
     eleTuPianZhanShi = document.getElementById('tu-pian-zhan-shi');
     eleTuPianZhanShi.onload = jiSuanPianYiLiang;
     // 初始化标签页切换
-    biaoQianLieBiao = document.getElementById('biao-qian-lie-biao').children;
-    biaoQianYeLieBiao = document.getElementById('biao-qian-yei-lie-biao').children;
-    for (let i = 0; i < biaoQianLieBiao.length; i++) {
-        biaoQianLieBiao[i].id = 'biao-qian-' + i;
-        biaoQianLieBiao[i].onclick = qieHuanBiaoQianYe;
+    sBiaoQian.biaoQianLieBiao = document.getElementById('biao-qian-lie-biao').children;
+    sBiaoQian.biaoQianYeLieBiao = document.getElementById('biao-qian-yei-lie-biao').children;
+    for (let i = 0; i < sBiaoQian.biaoQianLieBiao.length; i++) {
+        sBiaoQian.biaoQianLieBiao[i].id = 'biao-qian-' + i;
+        sBiaoQian.biaoQianLieBiao[i].onclick = qieHuanBiaoQianYe;
     }
-    // 添加一级标签
+    // 标签
     eleYiJiBiaoQian = document.getElementById('yi-ji-lie-biao');
-    eleYiJiIdShuRu = document.getElementById('yi-ji-id');
-    eleYiJiMingShuRu = document.getElementById('yi-ji-ming');
-    eleYiJiTianJia = document.getElementById('yi-ji-tian-jia');
-    eleYiJiTianJia.onclick = dianJiTianJiaBiaoQian;
-    // 添加二级标签
     eleErJiBiaoQian = document.getElementById('er-ji-lie-biao');
-    eleErJiIdShuRu = document.getElementById('er-ji-id');
-    eleErJiMingShuRu = document.getElementById('er-ji-ming');
-    eleErJiTianJia = document.getElementById('er-ji-tian-jia');
-    eleErJiTianJia.onclick = dianJiTianJiaBiaoQian;
-    // 添加三级标签
     eleSanJiBiaoQian = document.getElementById('san-ji-lie-biao');
-    eleSanJiIdShuRu = document.getElementById('san-ji-id');
-    eleSanJiMingShuRu = document.getElementById('san-ji-ming');
-    eleSanJiTianJia = document.getElementById('san-ji-tian-jia');
-    eleSanJiTianJia.onclick = dianJiTianJiaBiaoQian;
+    eleXinBiaoQianIdShuRu = document.getElementById('xin-biao-qian-id');
+    eleXinBiaoQianMingShuRu = document.getElementById('xin-biao-qian-ming');
+    eleXinBiaoQianTianJia = document.getElementById('xin-biao-qian-tian-jia');
+    eleXinBiaoQianTianJia.onclick = dianJiTianJiaBiaoQian;
     // 移动目标目录和确认移动按钮
     eleMuBiaoLuJing = document.getElementById('mu-biao-lu-jing');
     eleQueRenYiDong = document.getElementById('que-ren-yi-dong');
@@ -165,81 +191,48 @@ function dianJiXuanZeMuLu() {
         'title': '请选择操作目录',
         'properties': ['openDirectory']
     }).then(function (result) {
-        cPeiZhi.sheZhiCaoZuoMuLu(result.filePaths[0]);
-        // caoZuoMuLu = result.filePaths[0];
-        // tuPianMuLu = caoZuoMuLu + '\\' + GWeiFenLeiMuLu;
-        // biaoQianMuLu = caoZuoMuLu + '\\' + GBiaoQianMuLu;
-        huoQuTuPianShuJu();
-        huoQuBiaoQianShuJu();
-    });
-}
-
-// 获取图片列表
-function huoQuTuPianShuJu() {
-    let jiShu = 1;
-    GFs.readdir(cPeiZhi.tuPianMuLu, function (yiChang, wenJianLieBiao) {
-        // 先初始化
-        tuPianLieBiao = [];
-        eleTuPianLieBiao.innerHTML = '';
-        if (yiChang === null) {
-            // 没有异常就继续
-            for (let wenJianMing of wenJianLieBiao) {
-                if (jiShu > tuPianShuLiang) {
-                    break;
-                }
-                tuPianLieBiao.push(wenJianMing);
-                // 构造图片列表按钮
-                let tempEle = document.createElement('button');
-                tempEle.id = 'tu-pian-lie-biao-' + jiShu;
-                tempEle.type = 'button';
-                tempEle.className = 'an-niu-tu-pian';
-                tempEle.innerHTML = wenJianMing;
-                tempEle.onclick = dianJiXuanZeTuPian;
-                eleTuPianLieBiao.appendChild(tempEle);
-                ++jiShu;
-            }
-        } else {
-            console.error(yiChang)
-        }
+        sPeiZhi.sheZhiCaoZuoMuLu(result.filePaths[0]);
+        sTuPian.huoQuTuPianShuJu(sPeiZhi.weiFenLeiMuLu);
+        // huoQuBiaoQianShuJu();
     });
 }
 
 // 点击选择图片
 function dianJiXuanZeTuPian() {
-    xuanZhongTuPianMing = this.textContent;
-    tuPianLuJing = cPeiZhi.tuPianMuLu + '\\' + this.textContent;
-    eleTuPianZhanShi.src = tuPianLuJing;
+    sTuPian.tuPianMing = this.textContent;
+    sTuPian.tuPianLuJing = sPeiZhi.weiFenLeiMuLu + '\\' + this.textContent;
+    eleTuPianZhanShi.src = sTuPian.tuPianLuJing;
 }
 
 // 图片加载的时候计算偏移量，让图片居中
 function jiSuanPianYiLiang() {
     // 获取图片原始大小
+    sTuPian.tuPianKuanDu = this.naturalWidth;
+    sTuPian.tuPianGaoDu = this.naturalHeight;
     let imgWidth = this.naturalWidth;
     let imgHeight = this.naturalHeight;
-    tuPianKuanDu = imgWidth;
-    tuPianGaoDu = imgHeight;
     let imgMarginLeft = 0;
     let imgMarginTop = 0;
-    if (imgWidth <= GImgMaxWidth && imgHeight <= GImgMaxHeight) {
+    if (imgWidth <= CTuPianService.tuPianKuanDuMax && imgHeight <= CTuPianService.tuPianGaoDuMax) {
         // 宽高都小于限制，直接计算偏移量
-        imgMarginLeft = Math.round((GImgMaxWidth - imgWidth) / 2 * 100) / 100;
-        imgMarginTop = Math.round((GImgMaxHeight - imgHeight) / 2 * 100) / 100;
-    } else if (imgWidth <= GImgMaxWidth && imgHeight > GImgMaxHeight) {
+        imgMarginLeft = Math.round((CTuPianService.tuPianKuanDuMax - imgWidth) / 2 * 100) / 100;
+        imgMarginTop = Math.round((CTuPianService.tuPianGaoDuMax - imgHeight) / 2 * 100) / 100;
+    } else if (imgWidth <= CTuPianService.tuPianKuanDuMax && imgHeight > CTuPianService.tuPianGaoDuMax) {
         // 只有宽度超过限制，单独计算高度偏移量
-        imgWidth = Math.round(imgWidth * (GImgMaxHeight / imgHeight));
-        imgMarginLeft = Math.round((GImgMaxWidth - imgWidth) / 2 * 100) / 100;
-    } else if (imgWidth > GImgMaxWidth && imgHeight <= GImgMaxHeight) {
+        imgWidth = Math.round(imgWidth * (CTuPianService.tuPianGaoDuMax / imgHeight));
+        imgMarginLeft = Math.round((CTuPianService.tuPianKuanDuMax - imgWidth) / 2 * 100) / 100;
+    } else if (imgWidth > CTuPianService.tuPianKuanDuMax && imgHeight <= CTuPianService.tuPianGaoDuMax) {
         // 只有高度超过限制，单独计算宽度偏移量
-        imgHeight = Math.round(imgHeight * (GImgMaxWidth / imgWidth));
-        imgMarginTop = Math.round((GImgMaxHeight - imgHeight) / 2 * 100) / 100;
-    } else if (imgWidth > GImgMaxWidth && imgHeight > GImgMaxHeight) {
+        imgHeight = Math.round(imgHeight * (CTuPianService.tuPianKuanDuMax / imgWidth));
+        imgMarginTop = Math.round((CTuPianService.tuPianGaoDuMax - imgHeight) / 2 * 100) / 100;
+    } else if (imgWidth > CTuPianService.tuPianKuanDuMax && imgHeight > CTuPianService.tuPianGaoDuMax) {
         // 只有宽高都超过限制，判断哪个超的更多，需要同比压缩
-        if ((imgWidth / GImgMaxWidth) >= (imgHeight / GImgMaxHeight)) {
-            imgHeight = Math.round(imgHeight * (GImgMaxWidth / imgWidth));
-            imgMarginTop = Math.round((GImgMaxHeight - imgHeight) / 2 * 100) / 100;
+        if ((imgWidth / CTuPianService.tuPianKuanDuMax) >= (imgHeight / CTuPianService.tuPianGaoDuMax)) {
+            imgHeight = Math.round(imgHeight * (CTuPianService.tuPianKuanDuMax / imgWidth));
+            imgMarginTop = Math.round((CTuPianService.tuPianGaoDuMax - imgHeight) / 2 * 100) / 100;
         } else {
-            imgWidth = Math.round(imgWidth * (GImgMaxHeight / imgHeight));
-            imgMarginLeft = Math.round((GImgMaxWidth - imgWidth) / 2 * 100) / 100;
+            imgWidth = Math.round(imgWidth * (CTuPianService.tuPianGaoDuMax / imgHeight));
+            imgMarginLeft = Math.round((CTuPianService.tuPianKuanDuMax - imgWidth) / 2 * 100) / 100;
         }
     }
     this.setAttribute('style', 'margin-left: ' + imgMarginLeft + 'px; margin-top: ' + imgMarginTop + 'px');
@@ -267,110 +260,71 @@ function huoQuBiaoQianShuJu() {
 
 // 切换标签页
 function qieHuanBiaoQianYe() {
-    for (let j = 0; j < biaoQianLieBiao.length; j++) {
-        biaoQianLieBiao[j].className = 'biao-qian-an-niu';
-        biaoQianYeLieBiao[j].style.display = 'none';
+    for (let j = 0; j < sBiaoQian.biaoQianLieBiao.length; j++) {
+        sBiaoQian.biaoQianLieBiao[j].className = 'biao-qian-an-niu';
+        sBiaoQian.biaoQianYeLieBiao[j].style.display = 'none';
     }
     let idIndex = this.id.replace('biao-qian-', '');
-    biaoQianYeLieBiao[idIndex].style.display = 'block';
+    sBiaoQian.xianZhongBiaoQianYe = idIndex;
+    sBiaoQian.biaoQianYeLieBiao[idIndex].style.display = 'block';
 }
 
 // 点击添加标签
 function dianJiTianJiaBiaoQian() {
-    let eleId = this.id;
-    // 通过按钮id判断是哪一个按钮
-    if (eleId === 'yi-ji-tian-jia') {
-        // 添加一级标签
-        let xinBianQianId = eleYiJiIdShuRu.value;
-        let xinBiaoQianMing = eleYiJiMingShuRu.value;
-        if (gEmpty(xinBianQianId) || gEmpty(xinBiaoQianMing)) {
-            alert('一级标签数据缺失');
-            return;
+    let xinBianQianId = eleXinBiaoQianIdShuRu.value;
+    let xinBiaoQianMing = eleXinBiaoQianMingShuRu.value;
+    let muBiaoMuLu = sPeiZhi.caoZuoMuLu;
+    if (sBiaoQian.xianZhongBiaoQianYe === 0) {
+        sBiaoQian.biaoQianShuJu[xinBianQianId] = xinBiaoQianMing;
+        sBiaoQian.yiJiBiaoQian[xinBianQianId] = xinBiaoQianMing;
+        muBiaoMuLu = muBiaoMuLu + '\\' + xinBianQianId;
+    } else if (sBiaoQian.xianZhongBiaoQianYe === 1) {
+        sBiaoQian.biaoQianShuJu[sBiaoQian.yiJiXuanZhongId][xinBianQianId] = xinBiaoQianMing;
+        sBiaoQian.erJiBiaoQian[xinBianQianId] = xinBiaoQianMing;
+        muBiaoMuLu = muBiaoMuLu + '\\' + sBiaoQian.yiJiXuanZhongId + '\\' + xinBianQianId;
+    } else if (sBiaoQian.xianZhongBiaoQianYe === 2) {
+        sBiaoQian.biaoQianShuJu[sBiaoQian.yiJiXuanZhongId][sBiaoQian.erJiXuanZhongId][xinBianQianId] = xinBiaoQianMing;
+        sBiaoQian.sanJiBiaoQian[xinBianQianId] = xinBiaoQianMing;
+        muBiaoMuLu = muBiaoMuLu + '\\' + sBiaoQian.yiJiXuanZhongId + '\\' + sBiaoQian.erJiXuanZhongId + '\\' + xinBianQianId;
+    }
+    // 保存标签数据
+    GFs.opendir(sPeiZhi.biaoQianMuLu, function (yiChang, muLu) {
+        if (yiChang !== null) {
+            GFs.mkdirSync(sPeiZhi.biaoQianMuLu);
+        } else {
+            muLu.close();
         }
-        yiJiBiaoQian[xinBianQianId] = xinBiaoQianMing;
-        yiJiErJiFenZu[xinBianQianId] = {};
-        // 保存标签数据
-        GFs.opendir(biaoQianMuLu, function (yiChang, muLu) {
-            if (yiChang !== null) {
-                GFs.mkdirSync(biaoQianMuLu);
-            } else {
-                muLu.close();
-            }
-            GFs.writeFileSync(biaoQianMuLu + 'yiJiBiaoQian.json', JSON.stringify(yiJiBiaoQian), 'utf8');
-            // 重置输入框
-            eleYiJiIdShuRu.value = '';
-            eleYiJiMingShuRu.value = '';
-        });
-        // 创建标签对应目录
-        let muBiaoMuLu = caoZuoMuLu + '\\' + xinBianQianId
-        GFs.opendir(muBiaoMuLu, function (yiChang, muLu) {
-            if (yiChang !== null) {
-                GFs.mkdirSync(muBiaoMuLu);
-            } else {
-                muLu.close();
-            }
-        });
-        gouZaoYiJiBiaoQian();
-    } else if (eleId === 'er-ji-tian-jia') {
-        // 添加二级标签
-        if (gEmpty(yiJiXuanZhongId)) {
-            alert('未选择一级标签');
-            return;
+        GFs.writeFileSync(sPeiZhi.biaoQianMuLu + sPeiZhi.wenJianMingLieBiao.biaoQian, JSON.stringify(sBiaoQian.biaoQianShuJu), 'utf8');
+    });
+    // 创建标签对应目录
+    GFs.opendir(muBiaoMuLu, function (yiChang, muLu) {
+        if (yiChang !== null) {
+            GFs.mkdirSync(muBiaoMuLu);
+        } else {
+            muLu.close();
         }
-        let xinBianQianId = eleErJiIdShuRu.value;
-        let xinBiaoQianMing = eleErJiMingShuRu.value;
-        if (gEmpty(xinBianQianId) || gEmpty(xinBiaoQianMing)) {
-            alert('二级标签数据缺失');
-            return;
-        }
-        erJiBiaoQian[xinBianQianId] = xinBiaoQianMing;
-        if (gEmpty(yiJiErJiFenZu[yiJiXuanZhongId])) {
-            yiJiErJiFenZu[yiJiXuanZhongId] = {};
-        }
-        yiJiErJiFenZu[yiJiXuanZhongId][xinBianQianId] = xinBiaoQianMing;
-        // 保存标签数据
-        GFs.opendir(biaoQianMuLu, function (yiChang, muLu) {
-            if (yiChang !== null) {
-                GFs.mkdirSync(biaoQianMuLu);
-            } else {
-                muLu.close();
-            }
-            GFs.writeFileSync(biaoQianMuLu + 'yiJiErJiFenZu.json', JSON.stringify(yiJiErJiFenZu), 'utf8');
-            // 重置输入框
-            eleErJiIdShuRu.value = '';
-            eleErJiMingShuRu.value = '';
-        });
-        // 创建标签对应目录
-        let muBiaoMuLu = caoZuoMuLu + '\\' + yiJiXuanZhongId + '\\' + xinBianQianId;
-        GFs.opendir(muBiaoMuLu, function (yiChang, muLu) {
-            if (yiChang !== null) {
-                GFs.mkdirSync(muBiaoMuLu);
-            } else {
-                muLu.close();
-            }
-        });
-        gouZaoErJiBiaoQian();
-    } else if (eleId === 'san-ji-tian-jia') {
-        // 添加标签，并写入文件
-        let xinBianQianId = eleSanJiIdShuRu.value;
-        let xinBiaoQianMing = eleSanJiMingShuRu.value;
-        if (gEmpty(xinBianQianId) || gEmpty(xinBiaoQianMing)) {
-            alert('额外标签数据缺失');
-            return;
-        }
-        sanJiBiaoQian[xinBianQianId] = xinBiaoQianMing;
-        GFs.opendir(biaoQianMuLu, function (yiChang, muLu) {
-            if (yiChang !== null) {
-                GFs.mkdirSync(biaoQianMuLu);
-            } else {
-                muLu.close();
-            }
-            GFs.writeFileSync(biaoQianMuLu + 'sanJiBiaoQian.json', JSON.stringify(sanJiBiaoQian), 'utf8');
-            // 重置输入框
-            eleErJiIdShuRu.value = '';
-            eleErJiMingShuRu.value = '';
-        });
-        gouZaoSanJiBiaoQian();
+    });
+    // 重新构造标签按钮
+    gouZaoBiaoQian(sBiaoQian.xianZhongBiaoQianYe);
+    // 重置输入框
+    eleXinBiaoQianIdShuRu.value='';
+    eleXinBiaoQianMingShuRu.value='';
+}
+
+function gouZaoBiaoQian(){
+    eleErJiBiaoQian.innerHTML = '';
+    erJiBiaoQian = gEmpty(yiJiErJiFenZu[yiJiXuanZhongId]) ? {} : yiJiErJiFenZu[yiJiXuanZhongId];
+    for (let kBiaoQian2 in erJiBiaoQian) {
+        // 构造二级分类标签按钮
+        let tempEle = document.createElement('button');
+        tempEle.id = kBiaoQian2;
+        tempEle.type = 'button';
+        tempEle.innerHTML = erJiBiaoQian[kBiaoQian2];
+        tempEle.className = 'an-niu-xiao an-niu-lan';
+        tempEle.setAttribute('data-level', 'er-ji');
+        // 绑定标签点击事件
+        tempEle.onclick = dianJiFenLeiBiaoQian;
+        eleErJiBiaoQian.appendChild(tempEle);
     }
 }
 

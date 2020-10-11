@@ -20,44 +20,30 @@
     </div>
     <div class="zheng-ti-you">
         <div id="biao-qian-lie-biao" class="biao-qian-lie-biao">
-            <label class="biao-qian-an-niu"><span>主要标签</span></label>
-            <label class="biao-qian-an-niu"><span>次要标签</span></label>
-            <label class="biao-qian-an-niu"><span>额外标签</span></label>
+            <label class="biao-qian-an-niu"><span>一级</span></label>
+            <label class="biao-qian-an-niu"><span>二级</span></label>
+            <label class="biao-qian-an-niu"><span>三级</span></label>
         </div>
         <div id="biao-qian-yei-lie-biao" class="biao-qian-yei-lie-biao">
             <div style="display: block">
                 <div style="height: 20px">一级分类标签</div>
                 <div id="yi-ji-lie-biao" style="height: 250px"></div>
-                <div style="height: 30px">
-                    <input id="yi-ji-id" type="text" style="width: 80px" aria-label="一级标签Id"/>
-                    <input id="yi-ji-ming" type="text" style="width: 80px" aria-label="一级标签名"/>
-                    <button id="yi-ji-tian-jia" type="button" class="an-niu-zhong button-lan">添加一级标签</button>
-                </div>
+            </div>
+            <div style="display: none">
                 <div style="height: 20px">二级分类标签</div>
                 <div id="er-ji-lie-biao" style="height: 250px"></div>
-                <div style="height: 30px">
-                    <input id="er-ji-id" type="text" style="width: 80px" aria-label="二级标签Id"/>
-                    <input id="er-ji-ming" type="text" style="width: 80px" aria-label="二级标签名"/>
-                    <button id="er-ji-tian-jia" type="button" class="an-niu-zhong button-lan">添加二级标签</button>
-                </div>
             </div>
             <div style="display: none">
                 <div style="height: 20px">三级分类标签</div>
                 <div id="san-ji-lie-biao" style="height: 250px"></div>
-                <div style="height: 30px">
-                    <input id="san-ji-id" type="text" style="width: 80px" aria-label="三级标签Id"/>
-                    <input id="san-ji-ming" type="text" style="width: 80px" aria-label="三级标签名"/>
-                    <button id="san-ji-tian-jia" type="button" class="an-niu-zhong button-lan">添加三级标签</button>
-                </div>
-            </div>
-            <div style="display: none">
-                <div style="height: 20px">额外标记标签</div>
             </div>
         </div>
-        <div><span id="mu-biao-lu-jing"></span></div>
         <div>
-            <button id="que-ren-yi-dong">确认移动</button>
+            <input id="xin-biao-qian-id" type="text" style="width: 80px" aria-label="标签Id"/>
+            <input id="xin-biao-qian-ming" type="text" style="width: 80px" aria-label="标签名"/>
+            <button id="xin-biao-qian-tian-jia" type="button" class="an-niu-zhong button-lan">添加标签</button>
         </div>
+        <div><span id="mu-biao-lu-jing"></span><button id="que-ren-yi-dong">确认移动</button></div>
     </div>
 </div>
 </body>
