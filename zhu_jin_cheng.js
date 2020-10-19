@@ -11,7 +11,7 @@ const GCaiDanMuBan = [
         label: '帮助',
         submenu: [
             {
-                label: '打开调试',
+                label: '打开调试窗口',
                 accelerator: 'F12',
                 click: function () {
                     zhuChuangKou.webContents.openDevTools();
@@ -21,7 +21,7 @@ const GCaiDanMuBan = [
     }
 ];
 
-// 监听渲染进行发送的消息
+// 监听渲染进程发送的消息
 GIpcMain.on('da-kai-tiao-shi', function (event, arg) {
     zhuChuangKou.webContents.openDevTools();
 })
@@ -29,8 +29,8 @@ GIpcMain.on('da-kai-tiao-shi', function (event, arg) {
 function chuangJianChuangKou() {
     // 创建浏览器窗口
     zhuChuangKou = new GBrowserWindow({
-        width: 1800,
-        height: 900,
+        width: 1680,
+        height: 880,
         // 不允许改变窗口大小
         // resizable: false,
         webPreferences: {
@@ -48,7 +48,8 @@ function chuangJianChuangKou() {
     zhuChuangKou.on('closed', function () {
         zhuChuangKou = null;
     });
-    zhuChuangKou.webContents.openDevTools();
+    // 打开调试窗口
+    // zhuChuangKou.webContents.openDevTools();
 }
 
 GApp.whenReady().then(chuangJianChuangKou)

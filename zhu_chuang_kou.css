@@ -16,6 +16,7 @@
 .zhu-rong-qi {
     width: 1600px;
     height: 800px;
+    margin: 0 auto;
     background-color: #70f3ff;
     font-size: 0;
 }
@@ -50,6 +51,7 @@
     margin: 10px auto 0;
     text-align: center;
     overflow: hidden;
+    word-break: break-word;
 }
 
 /*左下部分*/
@@ -65,8 +67,8 @@
 /*左图片组*/
 .zuo-tu-pian-zu {
     display: inline-block;
-    width: 100px;
-    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
     margin: 20px 0 0 20px
 }
 
@@ -200,6 +202,7 @@
     margin: 20px auto 0;
     text-align: center;
     overflow: hidden;
+    word-break: break-word;
 }
 
 .you-xia-xia {
