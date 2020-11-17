@@ -364,6 +364,10 @@ function dianJiTianJiaBiaoQian() {
     }
     let xinBianQianId = eleXinBiaoQianIdShuRu.value;
     let xinBiaoQianMing = eleXinBiaoQianMingShuRu.value;
+    if (gEmpty(xinBianQianId) || gEmpty(xinBiaoQianMing)) {
+        alert('标签数据错误');
+        return;
+    }
     let xinMuBiaoMuLu = sMuLu.caoZuoMuLu;
     if (sBiaoQian.xuanZhongBiaoQianYe === CPeiZhiConst.yiJiBiaoQianBiaoShi) {
         // 一级
@@ -409,7 +413,7 @@ function dianJiTianJiaBiaoQian() {
     GFs.opendir(xinMuBiaoMuLu, function (yiChang, muLu) {
         if (yiChang !== null) {
             console.warn(yiChang);
-            GFs.mkdirSync(xinMuBiaoMuLu);
+            GFs.mkdirSync(xinMuBiaoMuLu, {recursive: true});
         } else {
             let tempMuLu = muLu.close();
         }
@@ -522,13 +526,14 @@ function dianJiQueRenYiDong() {
         if (!gEmpty(yiChang)) {
             console.error(yiChang);
             alert('移动图片异常');
+        } else {
+            sTuPian.keYiYiDong = false;
+            eleTuPianZhanShi.src = '';
+            let xiaBiao = sTuPian.tuPianLieBiao.indexOf(sTuPian.xuanZhongTuPianMing)
+            if (xiaBiao !== -1) {
+                sTuPian.tuPianLieBiao.splice(xiaBiao, 1);
+            }
+            sTuPian.chongHuiTuPianLieBiao(sMuLu.weiFenLeiMuLu);
         }
-        sTuPian.keYiYiDong = false;
-        eleTuPianZhanShi.src = '';
-        let xiaBiao = sTuPian.tuPianLieBiao.indexOf(sTuPian.xuanZhongTuPianMing)
-        if (xiaBiao !== -1) {
-            sTuPian.tuPianLieBiao.splice(xiaBiao, 1);
-        }
-        sTuPian.chongHuiTuPianLieBiao(sMuLu.weiFenLeiMuLu);
     });
 }
