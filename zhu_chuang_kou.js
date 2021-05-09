@@ -11,6 +11,12 @@ const GDialog = GRemote.dialog;
 const GIpcRenderer = GElectron.ipcRenderer;
 const GFs = require('fs');
 
+let rFs = require('fs');
+
+let rHelpers = require('./src/helpers');
+let rMuLu = require('./src/mu4lu4');
+let rTuPian = require('./src/tu2pian4');
+
 // 右击菜单
 const youJiCaiDanMuBan = [
     {
