@@ -19,20 +19,20 @@ let sWeiFenLeiMuLu = '';
 //标签目录
 let sBiaoQianMuLu = '';
 
-function setCaoZuoMuLu(psCaoZuoMuLu) {
+function fSetCaoZuoMuLu(psCaoZuoMuLu) {
     sCaoZuoMuLu = psCaoZuoMuLu;
     sWeiFenLeiMuLu = psCaoZuoMuLu + '\\' + cConfig.oMuLu.sWeiFenLei;
     sBiaoQianMuLu = psCaoZuoMuLu + '\\' + cConfig.oMuLu.sBiaoQian;
 }
 
-function getWeiFenLeiMuLu() {
+function fGetWeiFenLeiMuLu() {
     return sWeiFenLeiMuLu;
 }
 
-function getBiaoQianMuLu() {
+function fGetBiaoQianMuLu() {
     return sBiaoQianMuLu;
 }
 
-module.exports.setCaoZuoMuLu = setCaoZuoMuLu;
-module.exports.getWeiFenLeiMuLu = getWeiFenLeiMuLu;
-module.exports.getBiaoQianMuLu = getBiaoQianMuLu;
+module.exports.fSetCaoZuoMuLu = fSetCaoZuoMuLu;
+module.exports.fGetWeiFenLeiMuLu = fGetWeiFenLeiMuLu;
+module.exports.fGetBiaoQianMuLu = fGetBiaoQianMuLu;

@@ -1,8 +1,8 @@
 {
-  "name": "kttupianguanliqi",
+  "name": "tu2pian4guan3li3qi4",
   "version": "1.0.0",
   "description": "",
-  "main": "zhu_jin_cheng.js",
+  "main": "zhu3jin4cheng2.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."

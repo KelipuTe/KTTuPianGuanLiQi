@@ -1,5 +1,6 @@
 //图片模块
 
+//配置
 const cConfig = {
     iTuPianShuLiang: 20,
     iTuPianKuanMax: 900,
@@ -19,27 +20,23 @@ let bKeYiYiDong = false;
 /**
  * 加载图片
  * @param pfs module:fs
+ * @param psMuLu 图片目录路径
  */
-function jiaZaiTuPian(pfs, psMuLu) {
-    pfs.readdir(psMuLu, function (exc, sarrWenJianMing) {
-        // 先初始化
-        sarrTuPianMing = [];
-        if (exc === null) {
-            // 没有异常就继续
-            let iJiShu = 1;
-            for (let sWenJianMing of sarrWenJianMing) {
-                if (iJiShu > cConfig.iTuPianShuLiang) {
-                    break;
-                } else {
-                    sarrTuPianMing.push(sWenJianMing);
-                    ++iJiShu;
-                }
-            }
+function fJiaZaiTuPianLieBiao(pfs, psMuLu) {
+    //先初始化
+    sarrTuPianMing = [];
+    //同步读取目录下的文件
+    let sarrWenJianMing = pfs.readdirSync(psMuLu);
+    let iJiShu = 1;
+    for (let sWenJianMing of sarrWenJianMing) {
+        if (iJiShu > cConfig.iTuPianShuLiang) {
+            break;
         } else {
-            console.error(exc)
+            sarrTuPianMing.push(sWenJianMing);
+            ++iJiShu;
         }
-    });
+    }
+    return sarrTuPianMing;
 }
 
-module.exports.jiaZaiTuPian = jiaZaiTuPian;
-module.exports.test = test;
+module.exports.fJiaZaiTuPianLieBiao = fJiaZaiTuPianLieBiao;

@@ -11,14 +11,22 @@ const GDialog = GRemote.dialog;
 const GIpcRenderer = GElectron.ipcRenderer;
 const GFs = require('fs');
 
-let rFs = require('fs');
+const rHelpers = require('./src/helpers');
+const rMuLu = require('./src/mu4lu4');
+const rTuPian = require('./src/tu2pian4');
+const rBiaoQian = require('./src/biao1qian1');
+const rXuanRan = require('./src/xuan4ran3');
 
-let rHelpers = require('./src/helpers');
-let rMuLu = require('./src/mu4lu4');
-let rTuPian = require('./src/tu2pian4');
+const rElectron = require('electron');
+const rFs = require('fs');
+
+const rRemote = rElectron.remote;
+const rMenu = rRemote.Menu;
+const rDialog = rRemote.dialog;
+const rIpcRenderer = rElectron.ipcRenderer;
 
 // 右击菜单
-const youJiCaiDanMuBan = [
+let oYouJiCaiDanMuBan = [
     {
         label: '打开调试窗口',
         accelerator: 'F12',
@@ -28,13 +36,13 @@ const youJiCaiDanMuBan = [
         }
     }
 ]
-let youJiCaiDan = GMenu.buildFromTemplate(youJiCaiDanMuBan);
+let oYouJiCaiDan = rMenu.buildFromTemplate(oYouJiCaiDanMuBan);
 // 监听右击事件
 window.addEventListener('contextmenu', function (event) {
     // 取消事件的默认动作
     event.preventDefault();
     // 在目标窗口中弹出菜单
-    youJiCaiDan.popup({window: GRemote.getCurrentWindow()});
+    oYouJiCaiDan.popup({window: GRemote.getCurrentWindow()});
 }, false);
 
 // 全局方法
@@ -268,7 +276,7 @@ let eleQueRenYiDong = {};
 window.onload = function () {
     // 选择目录按钮和左侧图片列表
     eleXuanZeMuLu = document.getElementById('xuan-ze-mu-lu');
-    eleXuanZeMuLu.onclick = dianJiXuanZeMuLu;
+    eleXuanZeMuLu.onclick = fDianJiXuanZeMuLu;
     eleMuLuLuJing = document.getElementById('mu-lu-lu-jing')
     eleTuPianLieBiao = document.getElementById('tu-pian-lie-biao');
     // 图片展示
@@ -295,24 +303,43 @@ window.onload = function () {
     eleQueRenYiDong.onclick = dianJiQueRenYiDong;
 }
 
-function dianJiXuanZeMuLu() {
+// function dianJiXuanZeMuLu() {
+//     // 点击事件，点击选择目录
+//     GDialog.showOpenDialog({
+//         'title': '请选择操作目录',
+//         'properties': ['openDirectory']
+//     }).then(function (result) {
+//         sMuLu.sheZhiCaoZuoMuLu(result.filePaths[0]);
+//         sTuPian.huoQuTuPianShuJu(sMuLu.weiFenLeiMuLu);
+//         sBiaoQian.huoQuBiaoQianShuJu();
+//     });
+// }
+
+function fDianJiXuanZeMuLu() {
     // 点击事件，点击选择目录
-    GDialog.showOpenDialog({
+    rDialog.showOpenDialog({
         'title': '请选择操作目录',
         'properties': ['openDirectory']
     }).then(function (result) {
-        sMuLu.sheZhiCaoZuoMuLu(result.filePaths[0]);
-        sTuPian.huoQuTuPianShuJu(sMuLu.weiFenLeiMuLu);
-        sBiaoQian.huoQuBiaoQianShuJu();
+        rMuLu.fSetCaoZuoMuLu(result.filePaths[0]);
+        let sWeiFenLeiMuLu = rMuLu.fGetWeiFenLeiMuLu()
+        let sarrTuPianMing = rTuPian.fJiaZaiTuPianLieBiao(rFs, sWeiFenLeiMuLu);
+        rXuanRan.fTuPianLieBiao(eleTuPianLieBiao,sWeiFenLeiMuLu, sarrTuPianMing,fDianJiXuanZeTuPian);
     });
 }
 
-function dianJiXuanZeTuPian() {
+// function dianJiXuanZeTuPian() {
+//     // 点击事件，点击选择图片
+//     sTuPian.xuanZhongTuPianMing = this.getAttribute('data-wen-jian-ming');
+//     sTuPian.tuPianLuJing = sMuLu.weiFenLeiMuLu + '\\' + sTuPian.xuanZhongTuPianMing;
+//     eleTuPianZhanShi.src = sTuPian.tuPianLuJing;
+//     sTuPian.chongMingMingTuPian();
+// }
+
+function fDianJiXuanZeTuPian() {
     // 点击事件，点击选择图片
-    sTuPian.xuanZhongTuPianMing = this.getAttribute('data-wen-jian-ming');
-    sTuPian.tuPianLuJing = sMuLu.weiFenLeiMuLu + '\\' + sTuPian.xuanZhongTuPianMing;
-    eleTuPianZhanShi.src = sTuPian.tuPianLuJing;
-    sTuPian.chongMingMingTuPian();
+    let xuanZhongTuPianMing = this.getAttribute('data-wen-jian-ming');
+    console.log(xuanZhongTuPianMing);
 }
 
 // 图片加载的时候计算偏移量，让图片居中

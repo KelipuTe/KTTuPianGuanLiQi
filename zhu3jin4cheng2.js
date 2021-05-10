@@ -1,12 +1,12 @@
-const GElectron = require('electron');
-const GApp = GElectron.app;
-const GBrowserWindow = GElectron.BrowserWindow;
-const GMenu = GElectron.Menu;
-const GIpcMain = GElectron.ipcMain;
+const rElectron = require('electron');
+const rApp = rElectron.app;
+const rBrowserWindow = rElectron.BrowserWindow;
+const rMenu = rElectron.Menu;
+const rIpcMain = rElectron.ipcMain;
 // 主窗口
-let zhuChuangKou = null;
+let bwZhuChuangKou = null;
 // 顶部菜单
-const GCaiDanMuBan = [
+let oarrDingBuCaiDanMuBan = [
     {
         label: '帮助',
         submenu: [
@@ -14,21 +14,16 @@ const GCaiDanMuBan = [
                 label: '打开调试窗口',
                 accelerator: 'F12',
                 click: function () {
-                    zhuChuangKou.webContents.openDevTools();
+                    bwZhuChuangKou.webContents.openDevTools();
                 }
             }
         ]
     }
 ];
 
-// 监听渲染进程发送的消息
-GIpcMain.on('da-kai-tiao-shi', function (event, arg) {
-    zhuChuangKou.webContents.openDevTools();
-})
-
 function chuangJianChuangKou() {
     // 创建浏览器窗口
-    zhuChuangKou = new GBrowserWindow({
+    bwZhuChuangKou = new rBrowserWindow({
         width: 1680,
         height: 880,
         // 不允许改变窗口大小
@@ -40,16 +35,21 @@ function chuangJianChuangKou() {
             enableRemoteModule: true,
         }
     });
-    let caiDan = GMenu.buildFromTemplate(GCaiDanMuBan);
-    GMenu.setApplicationMenu(caiDan);
+    let oDingBuCaiDan = rMenu.buildFromTemplate(oarrDingBuCaiDanMuBan);
+    rMenu.setApplicationMenu(oDingBuCaiDan);
     // 加载主窗口
-    zhuChuangKou.loadFile('zhu_chuang_kou.html');
+    bwZhuChuangKou.loadFile('zhu3chuang1kou3.html');
     // 窗口关闭事件
-    zhuChuangKou.on('closed', function () {
-        zhuChuangKou = null;
+    bwZhuChuangKou.on('closed', function () {
+        bwZhuChuangKou = null;
     });
     // 打开调试窗口
     // zhuChuangKou.webContents.openDevTools();
 }
 
-GApp.whenReady().then(chuangJianChuangKou)
+// 监听渲染进程发送的消息
+rIpcMain.on('da-kai-tiao-shi', function (event, arg) {
+    bwZhuChuangKou.webContents.openDevTools();
+})
+
+rApp.whenReady().then(chuangJianChuangKou)
