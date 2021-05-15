@@ -1,7 +1,7 @@
 //全局辅助模块
 
 //判断变量是否为空
-function gfEmpty(bianLiang) {
+function fEmpty(bianLiang) {
     if (bianLiang === undefined) {
         return true;
     } else if (bianLiang === null) {
@@ -12,4 +12,4 @@ function gfEmpty(bianLiang) {
     return false;
 }
 
-module.exports.gfEmpty = gfEmpty;
+module.exports.fEmpty = fEmpty;

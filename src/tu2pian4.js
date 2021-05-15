@@ -1,15 +1,15 @@
 //图片模块
 
+let rHelper = require('./helpers');
+
 //配置
 const cConfig = {
+    //图片列表数量
     iTuPianShuLiang: 20,
-    iTuPianKuanMax: 900,
-    iTuPianGaoMax: 800,
 };
 
 let sarrTuPianMing = [];
 let sTuPianMing = '';
-let sTuPianLuJing = '';
 let iTuPianKuan = 0;
 let iTuPianGao = 0;
 let iTimestamp = 0;
@@ -22,11 +22,11 @@ let bKeYiYiDong = false;
  * @param pfs module:fs
  * @param psMuLu 图片目录路径
  */
-function fJiaZaiTuPianLieBiao(pfs, psMuLu) {
+function fJiaZaiTuPianLieBiao(rfs, sMuLu) {
     //先初始化
     sarrTuPianMing = [];
     //同步读取目录下的文件
-    let sarrWenJianMing = pfs.readdirSync(psMuLu);
+    let sarrWenJianMing = rfs.readdirSync(sMuLu);
     let iJiShu = 1;
     for (let sWenJianMing of sarrWenJianMing) {
         if (iJiShu > cConfig.iTuPianShuLiang) {
@@ -37,6 +37,10 @@ function fJiaZaiTuPianLieBiao(pfs, psMuLu) {
         }
     }
     return sarrTuPianMing;
+}
+
+function fSetTuPianInfo(sTuPianMing, iImageWidth, iImageHeight) {
+
 }
 
 module.exports.fJiaZaiTuPianLieBiao = fJiaZaiTuPianLieBiao;
