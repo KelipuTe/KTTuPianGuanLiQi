@@ -44,7 +44,7 @@ function chuangJianChuangKou() {
         bwZhuChuangKou = null;
     });
     // 打开调试窗口
-    // zhuChuangKou.webContents.openDevTools();
+    bwZhuChuangKou.webContents.openDevTools();
 }
 
 // 监听渲染进程发送的消息

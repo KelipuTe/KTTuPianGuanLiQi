@@ -28,7 +28,7 @@ function fTuPianLieBiao(eleTuPianLieBiao, sWeiFenLeiMuLu, sarrTuPianMing, fDianJ
 }
 
 //图片居中
-function fTuPianJuZhong(eleTuPianZhanShi){
+function fTuPianJuZhong(eleTuPianZhanShi) {
     // 获取图片原始大小
     let imgWidth = eleTuPianZhanShi.naturalWidth;
     let imgHeight = eleTuPianZhanShi.naturalHeight;
@@ -59,9 +59,21 @@ function fTuPianJuZhong(eleTuPianZhanShi){
     eleTuPianZhanShi.setAttribute('style', 'margin-left: ' + imgMarginLeft + 'px; margin-top: ' + imgMarginTop + 'px');
 }
 
-function fBiaoQianLieBiao(){
-
+function fBiaoQianLieBiao(iXuanZhongBQBS, eleBQ, arrDaiGouZaoBQ) {
+    for (let kBQ in arrDaiGouZaoBQ) {
+        // 构造标签按钮
+        let tempEle = document.createElement('button');
+        tempEle.id = kBQ;
+        tempEle.type = 'button';
+        tempEle.innerHTML = arrDaiGouZaoBQ[kBQ];
+        tempEle.className = 'an-niu-xiao an-niu-shan-hu-hong';
+        tempEle.setAttribute('data-level', iXuanZhongBQBS);
+        // 绑定标签点击事件
+        // tempEle.onclick = dianJiFenLeiBiaoQian;
+        eleBQ.appendChild(tempEle);
+    }
 }
 
 module.exports.fTuPianLieBiao = fTuPianLieBiao;
 module.exports.fTuPianJuZhong = fTuPianJuZhong;
+module.exports.fBiaoQianLieBiao = fBiaoQianLieBiao;
