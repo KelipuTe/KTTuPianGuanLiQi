@@ -1,14 +1,17 @@
 //图片模块
 
-let rHelper = require('./helpers');
+const rHelper = require('./helpers');
+
+const rFs = require('fs');
 
 //配置
+//iTPNum:图片列表数量
 const cConfig = {
-    //图片列表数量
-    iTuPianShuLiang: 20,
+    iSArrTPMingLen: 20,
 };
+//图片名列表
+let sarrTPMing = [];
 
-let sarrTuPianMing = [];
 let sTuPianMing = '';
 let iTuPianKuan = 0;
 let iTuPianGao = 0;
@@ -19,28 +22,28 @@ let bKeYiYiDong = false;
 
 /**
  * 加载图片
- * @param pfs module:fs
- * @param psMuLu 图片目录路径
+ * @param sMuLu 图片目录路径
  */
-function fJiaZaiTuPianLieBiao(rfs, sMuLu) {
-    //先初始化
-    sarrTuPianMing = [];
+function fJiaZaiTP(sMuLu) {
+    //清空数据
+    sarrTPMing = [];
     //同步读取目录下的文件
-    let sarrWenJianMing = rfs.readdirSync(sMuLu);
-    let iJiShu = 1;
+    let sarrWenJianMing = rFs.readdirSync(sMuLu);
+    //一次取一定数量的图片
+    let ii = 1;
     for (let sWenJianMing of sarrWenJianMing) {
-        if (iJiShu > cConfig.iTuPianShuLiang) {
+        if (ii > cConfig.iSArrTPMingLen) {
             break;
         } else {
-            sarrTuPianMing.push(sWenJianMing);
-            ++iJiShu;
+            sarrTPMing.push(sWenJianMing);
+            ++ii;
         }
     }
-    return sarrTuPianMing;
+    return sarrTPMing;
 }
 
 function fSetTuPianInfo(sTuPianMing, iImageWidth, iImageHeight) {
 
 }
 
-module.exports.fJiaZaiTuPianLieBiao = fJiaZaiTuPianLieBiao;
+module.exports.fJiaZaiTP = fJiaZaiTP;

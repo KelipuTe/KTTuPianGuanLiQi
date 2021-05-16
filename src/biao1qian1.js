@@ -3,13 +3,13 @@
 let rHelpers = require('./helpers');
 
 //配置
+//iBQBS1:一级标签标识
+//iBQBS2:二级标签标识
+//iBQBS3:三级标签标识
 const cConfig = {
-    //一级标签标识
-    iYiJiBiaoQianBiaoShi: 0,
-    //二级标签标识
-    iErJiBiaoQianBiaoShi: 1,
-    //三级标签标识
-    iSanJiBiaoQianBiaoShi: 2
+    iBQBS1: 1,
+    iBQBS2: 2,
+    iBQBS3: 3
 };
 
 //标签数据
@@ -38,7 +38,32 @@ function fSetXuanZhongBQBS(piXuanZhongBQBS) {
     iXuanZhongBQBS = piXuanZhongBQBS;
 }
 
-function fTianJiaBiaoQian(iXinBiaoQianId, sXinBiaoQianMing) {
+function fGetFenJiXuanZhongId(iXuanZhongBQBS) {
+    if (iXuanZhongBQBS === cConfig.iYiJiBiaoQianBiaoShi) {
+        return sYiJiXuanZhongId;
+    } else if (iXuanZhongBQBS === cConfig.iErJiBiaoQianBiaoShi) {
+        return sErJiXuanZhongId;
+    } else if (iXuanZhongBQBS === cConfig.iSanJiBiaoQianBiaoShi) {
+        return sSanJiXuanZhongId;
+    }
+}
+
+function fSetFenJiXuanZhongId(iXuanZhongBQBS, iXuanZhongId) {
+    if (iXuanZhongBQBS === cConfig.iYiJiBiaoQianBiaoShi) {
+        return sYiJiXuanZhongId = iXuanZhongId;
+    } else if (iXuanZhongBQBS === cConfig.iErJiBiaoQianBiaoShi) {
+        return sErJiXuanZhongId = iXuanZhongId;
+    } else if (iXuanZhongBQBS === cConfig.iSanJiBiaoQianBiaoShi) {
+        return sSanJiXuanZhongId = iXuanZhongId;
+    }
+}
+
+function fCleanFenJiXuanZhongId(iXuanZhongBQBS) {
+    sErJiXuanZhongId = ''
+    sSanJiXuanZhongId = ''
+}
+
+function fXinBQAdd(iXinBiaoQianId, sXinBiaoQianMing) {
     if (rHelpers.fEmpty(iXinBiaoQianId) || rHelpers.fEmpty(sXinBiaoQianMing)) {
         alert('标签数据错误');
         return {};
@@ -100,6 +125,7 @@ function fGetDaiGouZaoBiaoQian() {
 module.exports.cConfig = cConfig;
 module.exports.fGetXuanZhongBQBS = fGetXuanZhongBQBS;
 module.exports.fSetXuanZhongBQBS = fSetXuanZhongBQBS;
-module.exports.fTianJiaBiaoQian = fTianJiaBiaoQian;
+module.exports.fGetFenJiXuanZhongId = fGetFenJiXuanZhongId;
+module.exports.fXinBQAdd = fXinBQAdd;
 module.exports.fGetDaiGouZaoBiaoQian = fGetDaiGouZaoBiaoQian;
 
