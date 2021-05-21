@@ -123,9 +123,9 @@ let elearrBiaoQianYe = {};
 /*##########其他dom对象##########*/
 
 // 标签页dom对象
-let eleYiJiBiaoQian = {};
-let eleErJiBiaoQian = {};
-let eleSanJiBiaoQian = {};
+let eleBQlist1 = {};
+let eleBQlist2 = {};
+let eleBQlist3 = {};
 
 let eleXinBQId = {};
 let eleXinBQMing = {};
@@ -134,8 +134,6 @@ let eleXinBQAdd = {};
 // 确认移动dom对象
 let eleMuBiaoLuJing = {};
 let eleQueRenYiDong = {};
-
-
 
 
 // 页面初始化
@@ -158,9 +156,9 @@ window.onload = function () {
         elearrBiaoQian[ii].onclick = fQieHuanBQYe;
     }
     // 标签
-    eleYiJiBiaoQian = document.getElementById('yi-ji-lie-biao');
-    eleErJiBiaoQian = document.getElementById('er-ji-lie-biao');
-    eleSanJiBiaoQian = document.getElementById('san-ji-lie-biao');
+    eleBQlist1 = document.getElementById('bq1-list');
+    eleBQlist2 = document.getElementById('bq2-list');
+    eleBQlist3 = document.getElementById('bq3-list');
 
     eleXinBQId = document.getElementById('xin-bq-id');
     eleXinBQMing = document.getElementById('xin-bq-ming');
@@ -245,8 +243,8 @@ function fQieHuanBQYe() {
     }
     let iBQBS = this.id.replace('bq-', '');
     rBiaoQian.fSetXuanZhongBQBS(parseInt(iBQBS));
-    elearrBiaoQian[iBQBS].className = 'biao-qian-xuan-zhong';
-    elearrBiaoQianYe[iBQBS].style.display = 'block';
+    elearrBiaoQian[iBQBS - 1].className = 'biao-qian-xuan-zhong';
+    elearrBiaoQianYe[iBQBS - 1].style.display = 'block';
 }
 
 function fClickXinBQAdd() {
@@ -257,7 +255,7 @@ function fClickXinBQAdd() {
     let iXinBQId = eleXinBQId.value;
     let sXinBQMing = eleXinBQMing.value;
     rBiaoQian.fXinBQAdd(iXinBQId, sXinBQMing);
-    // // 保存标签数据
+    // 保存标签数据
     // GFs.opendir(sMuLu.biaoQianMuLu, function (yiChang, muLu) {
     //     if (yiChang !== null) {
     //         console.warn(yiChang);
@@ -277,116 +275,109 @@ function fClickXinBQAdd() {
     //     }
     // });
     let iXuanZhongBQBS = rBiaoQian.fGetXuanZhongBQBS();
+    let arrDaiGouZaoBQ = rBiaoQian.fGetDaiGouZaoBQ();
     if (iXuanZhongBQBS === rBiaoQian.cConfig.iBQBS1) {
-        rXuanRan.fBiaoQianLieBiao(iXuanZhongBQBS, eleYiJiBiaoQian, rBiaoQian.fGetDaiGouZaoBiaoQian(), fDianJiFenLeiBiaoQian);
+        fGouZaoBQList(iXuanZhongBQBS, eleBQlist1, arrDaiGouZaoBQ);
     } else if (iXuanZhongBQBS === rBiaoQian.cConfig.iBQBS2) {
-        rXuanRan.fBiaoQianLieBiao(iXuanZhongBQBS, eleErJiBiaoQian, rBiaoQian.fGetDaiGouZaoBiaoQian(), fDianJiFenLeiBiaoQian);
+        fGouZaoBQList(iXuanZhongBQBS, eleBQlist2, arrDaiGouZaoBQ);
     } else if (iXuanZhongBQBS === rBiaoQian.cConfig.iBQBS3) {
-        rXuanRan.fBiaoQianLieBiao(iXuanZhongBQBS, eleSanJiBiaoQian, rBiaoQian.fGetDaiGouZaoBiaoQian(), fDianJiFenLeiBiaoQian);
+        fGouZaoBQList(iXuanZhongBQBS, eleBQlist3, arrDaiGouZaoBQ);
     }
     // 重置输入框
     eleXinBQId.value = '';
     eleXinBQMing.value = '';
 }
 
-function fBiaoQianLieBiao(iXuanZhongBQBS, eleBQ, arrDaiGouZaoBQ, fDianJiFenLeiBiaoQian) {
+/**
+ * 渲染标签列表
+ * @param iXuanZhongBQBS
+ * @param eleBQ
+ * @param arrDaiGouZaoBQ
+ */
+function fGouZaoBQList(iXuanZhongBQBS, eleBQ, arrDaiGouZaoBQ) {
+    eleBQ.innerHTML = '';
     for (let kBQ in arrDaiGouZaoBQ) {
-        // 构造标签按钮
         let tempEle = document.createElement('button');
         tempEle.id = kBQ;
         tempEle.type = 'button';
         tempEle.innerHTML = arrDaiGouZaoBQ[kBQ];
         tempEle.className = 'an-niu-xiao an-niu-shan-hu-hong';
-        tempEle.setAttribute('data-level', iXuanZhongBQBS);
+        tempEle.setAttribute('data-bqbs', iXuanZhongBQBS);
         // 绑定标签点击事件
-        tempEle.onclick = fDianJiFenLeiBiaoQian;
+        tempEle.onclick = fDianJiFenLeiBQ;
         eleBQ.appendChild(tempEle);
     }
 }
 
-// 点击分类标签
-function fDianJiFenLeiBiaoQian() {
-    let iXuanZhongBQBS = parseInt(this.getAttribute('data-level'));
-    if (iXuanZhongBQBS === rBiaoQian.cConfig.iYiJiBiaoQianBiaoShi) {
-        // 一级标签互斥，同时获取二级标签
-        if (rBiaoQian.fGetFenJiXuanZhongId(iXuanZhongBQBS) === this.id) {
-            sBiaoQian.yiJiXuanZhongId = '';
-            sBiaoQian.erJiXuanZhongId = '';
-            eleErJiBiaoQian.innerHTML = '';
-            sBiaoQian.erJiBiaoQianLieBiao = {};
-            sBiaoQian.sanJiXuanZhongId = '';
-            eleSanJiBiaoQian.innerHTML = '';
-            sBiaoQian.sanJiBiaoQianLieBiao = {};
-            let yiJiLieBiao = document.getElementById('yi-ji-lie-biao').children;
-            for (let i = 0; i < yiJiLieBiao.length; ++i) {
-                yiJiLieBiao[i].className = 'an-niu-xiao an-niu-shan-hu-hong';
+/**
+ * 点击分类标签
+ */
+function fDianJiFenLeiBQ() {
+    let iXuanZhongBQBS = parseInt(this.getAttribute('data-bqbs'));
+    if (iXuanZhongBQBS === rBiaoQian.cConfig.iBQBS1) {
+        //一级标签
+        if (rBiaoQian.fGetXuanZhongId(iXuanZhongBQBS) === this.id) {
+            //如果已选中的就是这个标签
+            rBiaoQian.fCleanXuanZhongId(iXuanZhongBQBS);
+            eleBQlist2.innerHTML = '';
+            eleBQlist3.innerHTML = '';
+            let teleBQList = eleBQlist1.children;
+            for (let ii = 0; ii < teleBQList.length; ++ii) {
+                teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
             }
         } else {
-            sBiaoQian.yiJiXuanZhongId = this.id;
-            sBiaoQian.erJiBiaoQianLieBiao = sBiaoQian.gouZaoBiaoQianShuJu(sBiaoQian.biaoQianShuJu[sBiaoQian.yiJiXuanZhongId].zi_lie_biao);
-            sBiaoQian.gouZaoBiaoQian(CPeiZhiConst.erJiBiaoQianBiaoShi);
-            sBiaoQian.muBiaoMuLu = sMuLu.caoZuoMuLu + '\\' + sBiaoQian.yiJiXuanZhongId + '\\';
-            let yiJiLieBiao = document.getElementById('yi-ji-lie-biao').children;
-            for (let i = 0; i < yiJiLieBiao.length; ++i) {
-                if (yiJiLieBiao[i].id === this.id) {
-                    yiJiLieBiao[i].className = 'an-niu-xiao an-niu-zi';
+            //如果已选中的是其他标签
+            rBiaoQian.fSetXuanZhongId(iXuanZhongBQBS, this.id)
+            let teleBQList = eleBQlist1.children;
+            for (let ii = 0; ii < teleBQList.length; ++ii) {
+                if (teleBQList[ii].id === this.id) {
+                    teleBQList[ii].className = 'an-niu-xiao an-niu-zi';
                 } else {
-                    yiJiLieBiao[i].className = 'an-niu-xiao an-niu-shan-hu-hong';
+                    teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
                 }
             }
         }
-    } else if (biaoQianJiBie === CPeiZhiConst.erJiBiaoQianBiaoShi) {
-        // 二级标签互斥，同时获取三级标签
-        if (sBiaoQian.erJiXuanZhongId === this.id) {
-            sBiaoQian.erJiXuanZhongId = '';
-            sBiaoQian.sanJiXuanZhongId = '';
-            eleSanJiBiaoQian.innerHTML = '';
-            sBiaoQian.sanJiBiaoQianLieBiao = {};
-            sBiaoQian.muBiaoMuLu = sMuLu.caoZuoMuLu + '\\' + sBiaoQian.yiJiXuanZhongId + '\\'
-            let erJiLieBiao = document.getElementById('er-ji-lie-biao').children;
-            for (let i = 0; i < erJiLieBiao.length; i++) {
-                erJiLieBiao[i].className = 'an-niu-xiao an-niu-shan-hu-hong';
+    } else if (iXuanZhongBQBS === rBiaoQian.cConfig.iBQBS2) {
+        // 二级标签
+        if (rBiaoQian.fGetXuanZhongId(iXuanZhongBQBS) === this.id) {
+            rBiaoQian.fCleanXuanZhongId(iXuanZhongBQBS);
+            eleBQlist3.innerHTML = '';
+            let teleBQList = eleBQlist2.children;
+            for (let ii = 0; ii < teleBQList.length; ++ii) {
+                teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
             }
         } else {
-            sBiaoQian.erJiXuanZhongId = this.id;
-            sBiaoQian.sanJiBiaoQianLieBiao = sBiaoQian.gouZaoBiaoQianShuJu(sBiaoQian.biaoQianShuJu[sBiaoQian.yiJiXuanZhongId].zi_lie_biao[sBiaoQian.erJiXuanZhongId].zi_lie_biao);
-            sBiaoQian.gouZaoBiaoQian(CPeiZhiConst.sanJiBiaoQianBiaoShi);
-            sBiaoQian.muBiaoMuLu = sMuLu.caoZuoMuLu + '\\' + sBiaoQian.yiJiXuanZhongId + '\\'
-                + sBiaoQian.erJiXuanZhongId + '\\';
-            let erJiLieBiao = document.getElementById('er-ji-lie-biao').children;
-            for (let i = 0; i < erJiLieBiao.length; i++) {
-                if (erJiLieBiao[i].id === this.id) {
-                    erJiLieBiao[i].className = 'an-niu-xiao an-niu-zi';
+            rBiaoQian.fSetXuanZhongId(iXuanZhongBQBS, this.id)
+            let teleBQList = eleBQlist2.children;
+            for (let ii = 0; ii < teleBQList.length; ++ii) {
+                if (teleBQList[ii].id === this.id) {
+                    teleBQList[ii].className = 'an-niu-xiao an-niu-zi';
                 } else {
-                    erJiLieBiao[i].className = 'an-niu-xiao an-niu-shan-hu-hong';
+                    teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
                 }
             }
         }
-    } else if (biaoQianJiBie === CPeiZhiConst.sanJiBiaoQianBiaoShi) {
-        // 三级标签互斥
-        if (sBiaoQian.sanJiXuanZhongId === this.id) {
-            sBiaoQian.sanJiXuanZhongId = '';
-            sBiaoQian.muBiaoMuLu = sMuLu.caoZuoMuLu + '\\' + sBiaoQian.yiJiXuanZhongId + '\\'
-                + sBiaoQian.erJiXuanZhongId + '\\';
-            let sanJiLieBiao = document.getElementById('san-ji-lie-biao').children;
-            for (let i = 0; i < sanJiLieBiao.length; i++) {
-                sanJiLieBiao[i].className = 'an-niu-xiao an-niu-shan-hu-hong';
+    } else if (iXuanZhongBQBS === rBiaoQian.cConfig.iBQBS3) {
+        // 三级标签
+        if (rBiaoQian.fGetXuanZhongId(iXuanZhongBQBS) === this.id) {
+            rBiaoQian.fCleanXuanZhongId(iXuanZhongBQBS);
+            let teleBQList = eleBQlist3.children;
+            for (let ii = 0; ii < teleBQList.length; ++ii) {
+                teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
             }
         } else {
-            sBiaoQian.sanJiXuanZhongId = this.id;
-            sBiaoQian.muBiaoMuLu = sMuLu.caoZuoMuLu + '\\' + sBiaoQian.yiJiXuanZhongId + '\\'
-                + sBiaoQian.erJiXuanZhongId + '\\' + sBiaoQian.sanJiXuanZhongId + '\\';
-            let sanJiLieBiao = document.getElementById('san-ji-lie-biao').children;
-            for (let i = 0; i < sanJiLieBiao.length; i++) {
-                if (sanJiLieBiao[i].id === this.id) {
-                    sanJiLieBiao[i].className = 'an-niu-xiao an-niu-zi';
+            rBiaoQian.fSetXuanZhongId(iXuanZhongBQBS, this.id)
+            let teleBQList = eleBQlist3.children;
+            for (let ii = 0; ii < teleBQList.length; ++ii) {
+                if (teleBQList[ii].id === this.id) {
+                    teleBQList[ii].className = 'an-niu-xiao an-niu-zi';
                 } else {
-                    sanJiLieBiao[i].className = 'an-niu-xiao an-niu-shan-hu-hong';
+                    teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
                 }
             }
         }
     }
-    sTuPian.chongMingMingTuPian();
+    // sTuPian.chongMingMingTuPian();
 }
 
 // 点击确认移动

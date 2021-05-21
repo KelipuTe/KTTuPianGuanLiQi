@@ -13,21 +13,22 @@ const cConfig = {
 };
 
 //标签数据
-let oBiaoQianShuJu = {};
+let oBQData = {};
 //一级标签列表
-let arrYiJiBiaoQian = {};
+let arrBQ1 = {};
 //二级标签列表
-let arrErJiBiaoQian = {};
+let arrBQ2 = {};
 //三级标签列表
-let arrSanJiBiaoQian = {};
+let arrBQ3 = {};
+
 //当前选中的标签页
-let iXuanZhongBQBS = cConfig.iYiJiBiaoQianBiaoShi;
+let iXuanZhongBQBS = cConfig.iBQBS1;
 //当前选中的一级标签Id
-let sYiJiXuanZhongId = '';
+let sXuanZhongId1 = '';
 //当前选中的二级标签Id
-let sErJiXuanZhongId = '';
+let sXuanZhongId2 = '';
 //当前选中的三级标签Id
-let sSanJiXuanZhongId = '';
+let sXuanZhongId3 = '';
 
 
 function fGetXuanZhongBQBS() {
@@ -38,86 +39,121 @@ function fSetXuanZhongBQBS(piXuanZhongBQBS) {
     iXuanZhongBQBS = piXuanZhongBQBS;
 }
 
-function fGetFenJiXuanZhongId(iXuanZhongBQBS) {
-    if (iXuanZhongBQBS === cConfig.iYiJiBiaoQianBiaoShi) {
-        return sYiJiXuanZhongId;
-    } else if (iXuanZhongBQBS === cConfig.iErJiBiaoQianBiaoShi) {
-        return sErJiXuanZhongId;
-    } else if (iXuanZhongBQBS === cConfig.iSanJiBiaoQianBiaoShi) {
-        return sSanJiXuanZhongId;
+function fGetXuanZhongId(iXuanZhongBQBS) {
+    if (iXuanZhongBQBS === cConfig.iBQBS1) {
+        return sXuanZhongId1;
+    } else if (iXuanZhongBQBS === cConfig.iBQBS2) {
+        return sXuanZhongId2;
+    } else if (iXuanZhongBQBS === cConfig.iBQBS3) {
+        return sXuanZhongId3;
     }
 }
 
-function fSetFenJiXuanZhongId(iXuanZhongBQBS, iXuanZhongId) {
-    if (iXuanZhongBQBS === cConfig.iYiJiBiaoQianBiaoShi) {
-        return sYiJiXuanZhongId = iXuanZhongId;
-    } else if (iXuanZhongBQBS === cConfig.iErJiBiaoQianBiaoShi) {
-        return sErJiXuanZhongId = iXuanZhongId;
-    } else if (iXuanZhongBQBS === cConfig.iSanJiBiaoQianBiaoShi) {
-        return sSanJiXuanZhongId = iXuanZhongId;
+function fSetXuanZhongId(iXuanZhongBQBS, psXuanZhongId) {
+    if (iXuanZhongBQBS === cConfig.iBQBS1) {
+        sXuanZhongId1 = psXuanZhongId;
+        arrBQ2 = oBQData[psXuanZhongId].zi3lie4biao3;
+    } else if (iXuanZhongBQBS === cConfig.iBQBS2) {
+        sXuanZhongId2 = psXuanZhongId;
+        arrBQ3 = oBQData[sXuanZhongId1].zi3lie4biao3[psXuanZhongId].zi3lie4biao3;
+    } else if (iXuanZhongBQBS === cConfig.iBQBS3) {
+        sXuanZhongId3 = psXuanZhongId;
     }
 }
 
-function fCleanFenJiXuanZhongId(iXuanZhongBQBS) {
-    sErJiXuanZhongId = ''
-    sSanJiXuanZhongId = ''
+/**
+ * 根据标签标识清理数据
+ * @param iXuanZhongBQBS
+ */
+function fCleanXuanZhongId(iXuanZhongBQBS) {
+    if (iXuanZhongBQBS === cConfig.iBQBS1) {
+        sXuanZhongId1 = '';
+        arrBQ2 = {};
+        sXuanZhongId2 = '';
+        arrBQ3 = {};
+        sXuanZhongId3 = '';
+    } else if (iXuanZhongBQBS === cConfig.iBQBS2) {
+        sXuanZhongId2 = '';
+        arrBQ3 = {};
+        sXuanZhongId3 = '';
+    } else if (iXuanZhongBQBS === cConfig.iBQBS3) {
+        sXuanZhongId3 = '';
+    }
 }
 
-function fXinBQAdd(iXinBiaoQianId, sXinBiaoQianMing) {
-    if (rHelpers.fEmpty(iXinBiaoQianId) || rHelpers.fEmpty(sXinBiaoQianMing)) {
+/**
+ * 添加新标签
+ * @param iXinBQId 标签id
+ * @param sXinBQMing 标签名
+ */
+function fXinBQAdd(iXinBQId, sXinBQMing) {
+    if (rHelpers.fEmpty(iXinBQId) || rHelpers.fEmpty(sXinBQMing)) {
         alert('标签数据错误');
         return {};
     }
-    if (iXuanZhongBQBS === cConfig.iYiJiBiaoQianBiaoShi) {
-        // 一级
-        oBiaoQianShuJu[iXinBiaoQianId] = {};
-        oBiaoQianShuJu[iXinBiaoQianId].ming2cheng1 = sXinBiaoQianMing;
-        oBiaoQianShuJu[iXinBiaoQianId].zi3lie4biao3 = {};
+    //判断现在选中的是哪一级的标签页
+    if (iXuanZhongBQBS === cConfig.iBQBS1) {
+        oBQData[iXinBQId] = {};
+        oBQData[iXinBQId].ming2cheng1 = sXinBQMing;
+        oBQData[iXinBQId].zi3lie4biao3 = {};
 
-        arrYiJiBiaoQian[iXinBiaoQianId] = sXinBiaoQianMing;
+        arrBQ1[iXinBQId] = sXinBQMing;
+        arrBQ1 = fArrBQSort(arrBQ1);
 
-        return arrYiJiBiaoQian;
+        return arrBQ1;
 
-    } else if (iXuanZhongBQBS === cConfig.iErJiBiaoQianBiaoShi) {
-        // 二级
-        if (rHelpers.fEmpty(sYiJiXuanZhongId)) {
+    } else if (iXuanZhongBQBS === cConfig.iBQBS2) {
+        if (rHelpers.fEmpty(sXuanZhongId1)) {
             alert('一级标签缺失');
-            return;
+            return {};
         }
-        oBiaoQianShuJu[sYiJiXuanZhongId].zi3lie4biao3[iXinBiaoQianId] = {};
-        oBiaoQianShuJu[sYiJiXuanZhongId].zi3lie4biao3[iXinBiaoQianId].ming2cheng1 = sXinBiaoQianMing;
-        oBiaoQianShuJu[sYiJiXuanZhongId].zi3lie4biao3[iXinBiaoQianId].zi3lie4biao3 = {};
+        oBQData[sXuanZhongId1].zi3lie4biao3[iXinBQId] = {};
+        oBQData[sXuanZhongId1].zi3lie4biao3[iXinBQId].ming2cheng1 = sXinBQMing;
+        oBQData[sXuanZhongId1].zi3lie4biao3[iXinBQId].zi3lie4biao3 = {};
 
-        arrErJiBiaoQian[iXinBiaoQianId] = sXinBiaoQianMing;
+        arrBQ2[iXinBQId] = sXinBQMing;
+        arrBQ2 = fArrBQSort(arrBQ2);
 
-        return arrErJiBiaoQian;
+        return arrBQ2;
 
-    } else if (iXuanZhongBQBS === cConfig.iSanJiBiaoQianBiaoShi) {
-        // 三级
-        if (rHelpers.fEmpty(sYiJiXuanZhongId)) {
+    } else if (iXuanZhongBQBS === cConfig.iBQBS3) {
+        if (rHelpers.fEmpty(sXuanZhongId1)) {
             alert('一级标签缺失');
-            return;
+            return {};
         }
-        if (rHelpers.fEmpty(sErJiXuanZhongId)) {
+        if (rHelpers.fEmpty(sXuanZhongId2)) {
             alert('二级标签缺失');
-            return;
+            return {};
         }
-        oBiaoQianShuJu[sYiJiXuanZhongId].zi3lie4biao3[sErJiXuanZhongId].zi3lie4biao3[iXinBiaoQianId] = {};
-        oBiaoQianShuJu[sYiJiXuanZhongId].zi3lie4biao3[sErJiXuanZhongId].zi3lie4biao3[iXinBiaoQianId].ming2cheng1 = sXinBiaoQianMing;
+        oBQData[sXuanZhongId1].zi3lie4biao3[sXuanZhongId2].zi3lie4biao3[iXinBQId] = {};
+        oBQData[sXuanZhongId1].zi3lie4biao3[sXuanZhongId2].zi3lie4biao3[iXinBQId].ming2cheng1 = sXinBQMing;
 
-        arrSanJiBiaoQian[iXinBiaoQianId] = sXinBiaoQianMing;
+        arrBQ3[iXinBQId] = sXinBQMing;
+        arrBQ3 = fArrBQSort(arrBQ3);
 
-        return arrSanJiBiaoQian;
+        return arrBQ3;
     }
 }
 
-function fGetDaiGouZaoBiaoQian() {
-    if (iXuanZhongBQBS === cConfig.iYiJiBiaoQianBiaoShi) {
-        return arrYiJiBiaoQian;
-    } else if (iXuanZhongBQBS === cConfig.iErJiBiaoQianBiaoShi) {
-        return arrErJiBiaoQian;
-    } else if (iXuanZhongBQBS === cConfig.iSanJiBiaoQianBiaoShi) {
-        return arrSanJiBiaoQian;
+function fArrBQSort(arrBQ) {
+    let arrBQKeySort = Object.keys(arrBQ).sort();
+    let arrNewBQ = {};
+    for (let ii = 0; ii < arrBQKeySort.length; ++ii) {
+        arrNewBQ[arrBQKeySort[ii]] = arrBQ1[arrBQKeySort[ii]];
+    }
+    return arrNewBQ;
+}
+
+/**
+ * 获取待构造标签
+ */
+function fGetDaiGouZaoBQ() {
+    if (iXuanZhongBQBS === cConfig.iBQBS1) {
+        return arrBQ1;
+    } else if (iXuanZhongBQBS === cConfig.iBQBS2) {
+        return arrBQ2;
+    } else if (iXuanZhongBQBS === cConfig.iBQBS3) {
+        return arrBQ3;
     }
     return {};
 }
@@ -125,7 +161,9 @@ function fGetDaiGouZaoBiaoQian() {
 module.exports.cConfig = cConfig;
 module.exports.fGetXuanZhongBQBS = fGetXuanZhongBQBS;
 module.exports.fSetXuanZhongBQBS = fSetXuanZhongBQBS;
-module.exports.fGetFenJiXuanZhongId = fGetFenJiXuanZhongId;
+module.exports.fGetXuanZhongId = fGetXuanZhongId;
+module.exports.fSetXuanZhongId = fSetXuanZhongId;
+module.exports.fCleanXuanZhongId = fCleanXuanZhongId;
 module.exports.fXinBQAdd = fXinBQAdd;
-module.exports.fGetDaiGouZaoBiaoQian = fGetDaiGouZaoBiaoQian;
+module.exports.fGetDaiGouZaoBQ = fGetDaiGouZaoBQ;
 
