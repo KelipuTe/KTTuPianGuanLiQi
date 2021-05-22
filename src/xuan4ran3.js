@@ -11,7 +11,7 @@ const cConfig = {
  * @param iTPGao
  * @returns {{iTPMarginLeft: number, iTPMarginTop: number}}
  */
-function fTPJuZhong(iTPKuan,iTPGao){
+function fTPJu1Zhong1(iTPKuan,iTPGao){
     let iTPMarginLeft = 0;
     let iTPMarginTop = 0;
     if (iTPKuan <= cConfig.iTPShowKuanMax && iTPGao <= cConfig.iTPShowGaoMax) {
@@ -42,4 +42,4 @@ function fTPJuZhong(iTPKuan,iTPGao){
     };
 }
 
-module.exports.fTPJuZhong = fTPJuZhong;
+module.exports.fTPJu1Zhong1 = fTPJu1Zhong1;

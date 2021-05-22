@@ -24,7 +24,7 @@ let bKeYiYiDong = false;
  * 加载图片
  * @param sMuLu 图片目录路径
  */
-function fJiaZaiTP(sMuLu) {
+function fLoadTP(sMuLu) {
     //清空数据
     sarrTPMing = [];
     //同步读取目录下的文件
@@ -46,4 +46,4 @@ function fSetTuPianInfo(sTuPianMing, iImageWidth, iImageHeight) {
 
 }
 
-module.exports.fJiaZaiTP = fJiaZaiTP;
+module.exports.fLoadTP = fLoadTP;
