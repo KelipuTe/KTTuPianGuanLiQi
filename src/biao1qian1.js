@@ -1,11 +1,9 @@
 //标签模块
 
 const rHelpers = require('./helpers');
-
 const rFs = require('fs');
 
-//配置
-//iBQBS[1,2,3]=[一,二,三]级标签标识
+//iBQBS[1,2,3]--[一,二,三]级标签标识
 const cConfig = {
     iBQBS1: 1,
     iBQBS2: 2,
@@ -43,7 +41,7 @@ function fSetXuanZhongBQBS(piXuanZhongBQBS) {
 }
 
 /**
- * 获取标签标识对应的标签Id
+ * 获取标签标识对应的标签id
  * @param iXuanZhongBQBS
  * @returns {string}
  */
@@ -58,15 +56,15 @@ function fGetXuanZhongId(iXuanZhongBQBS) {
 }
 
 /**
- *
+ * 获取全部选中标签的id
  * @returns {string[]}
  */
-function fGetAllXuanZhongId(){
+function fGetAllXuanZhongId() {
     return [sXuanZhongId1, sXuanZhongId2, sXuanZhongId3]
 }
 
 /**
- * 设置标签标识对应的标签Id
+ * 设置标签标识对应的标签id
  * @param iXuanZhongBQBS
  * @param psXuanZhongId
  */
@@ -181,6 +179,9 @@ function fSaveFen1Lei4BQ(sFen1Lei4BQMuLu, sBQLu4Jing4) {
  * @param sBQLu4Jing4
  */
 function fLoadFen1Lei4BQ(sBQLu4Jing4) {
+    if (!rFs.existsSync(sBQLu4Jing4)) {
+        return;
+    }
     let tsBQData = rFs.readFileSync(sBQLu4Jing4, 'utf8');
     oBQData = JSON.parse(tsBQData);
     let arrBQKey = Object.keys(oBQData);
@@ -204,7 +205,7 @@ function fArrBQSort(arrBQ) {
 }
 
 /**
- * 获取待构造标签
+ * 获取待构造标签列表
  */
 function fGetDaiGouZaoBQ(piXuanZhongBQBS) {
     if (piXuanZhongBQBS === cConfig.iBQBS1) {

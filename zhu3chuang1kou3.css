@@ -113,7 +113,7 @@
 }
 
 /*标签按钮*/
-.biao-qian-an-niu {
+.bq-an-niu {
     width: 94px;
     height: 50px;
     padding: 0 8px;
@@ -123,12 +123,12 @@
     font-size: 16px;
 }
 
-.biao-qian-an-niu:hover {
+.bq-an-niu:hover {
     background-color: #ffcc88;
 }
 
 /*标签选中*/
-.biao-qian-xuan-zhong {
+.bq-xuan-zhong {
     width: 94px;
     height: 50px;
     padding: 0 8px;
@@ -179,7 +179,7 @@
 }
 
 /*标签输入*/
-.biao-qian-shu-ru {
+.bq-shu-ru {
     display: inline-block;
     vertical-align: top;
     width: 110px;

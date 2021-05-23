@@ -1,14 +1,12 @@
 //目录模块
 
 const rHelper = require('./helpers');
-
 const rFs = require('fs');
 
-//配置
-//oMuLu.sWFL=未分类目录
-//oMuLu.sBQ=标签目录
-//oWenJianMing.sFenLeiBQ=分类标签存储文件名
-//oWenJianMing.sBiaoJiBQ=标记标签存储文件名
+//oMuLu.sWFL--未分类目录
+//oMuLu.sBQ--标签目录
+//oWenJianMing.sFenLeiBQ--分类标签存储文件名
+//oWenJianMing.sBiaoJiBQ--标记标签存储文件名
 const cConfig = {
     oMuLu: {
         sWFL: 'wei4fen1lei4\\',
@@ -41,8 +39,8 @@ function getCaoZuoMuLu() {
  */
 function fSetCaoZuoMuLu(psCaoZuoMuLu) {
     sCaoZuoMuLu = psCaoZuoMuLu + '\\';
-    sWFLMuLu = psCaoZuoMuLu + '\\' + cConfig.oMuLu.sWFL + '\\';
-    sBQMuLu = psCaoZuoMuLu + '\\' + cConfig.oMuLu.sBQ + '\\';
+    sWFLMuLu = sCaoZuoMuLu + cConfig.oMuLu.sWFL;
+    sBQMuLu = sCaoZuoMuLu + cConfig.oMuLu.sBQ;
 }
 
 /**
@@ -97,6 +95,26 @@ function fMakeBQMuLu(iXuanZhongBQBS, oAllXuanZhongId, iXinBQId) {
     if (!rFs.existsSync(tsMuLu)) {
         rFs.mkdirSync(tsMuLu);
     }
+    return tsMuLu;
+}
+
+/**
+ * 用当前标签组合出对应目录
+ * @param iXuanZhongBQBS
+ * @param oAllXuanZhongId
+ * @returns {string}
+ */
+function fZu3He2BQMuLu(iXuanZhongBQBS, oAllXuanZhongId) {
+    let tiTag = 1;
+    let tsMuLu = sCaoZuoMuLu
+    while (tiTag <= iXuanZhongBQBS) {
+        tsMuLu += oAllXuanZhongId[tiTag - 1] + '\\';
+        if (!rFs.existsSync(tsMuLu)) {
+            rFs.mkdirSync(tsMuLu);
+        }
+        ++tiTag;
+    }
+    return tsMuLu;
 }
 
 module.exports.getCaoZuoMuLu = getCaoZuoMuLu;
@@ -106,3 +124,4 @@ module.exports.fGetWeiFenLeiMuLu = fGetWeiFenLeiMuLu;
 module.exports.fGetBQMuLu = fGetBQMuLu;
 module.exports.fGetFen1Lei4BQLu4Jing4 = fGetFen1Lei4BQLu4Jing4;
 module.exports.fMakeBQMuLu = fMakeBQMuLu;
+module.exports.fZu3He2BQMuLu = fZu3He2BQMuLu;

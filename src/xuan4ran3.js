@@ -1,5 +1,6 @@
 //渲染模块
 
+//iTPShowKuanMax,iTPShowGaoMax--图片展示区域最大宽高
 const cConfig = {
     iTPShowKuanMax: 900,
     iTPShowGaoMax: 800,
@@ -11,7 +12,7 @@ const cConfig = {
  * @param iTPGao
  * @returns {{iTPMarginLeft: number, iTPMarginTop: number}}
  */
-function fTPJu1Zhong1(iTPKuan,iTPGao){
+function fTPJu1Zhong1(iTPKuan, iTPGao) {
     let iTPMarginLeft = 0;
     let iTPMarginTop = 0;
     if (iTPKuan <= cConfig.iTPShowKuanMax && iTPGao <= cConfig.iTPShowGaoMax) {
@@ -37,8 +38,8 @@ function fTPJu1Zhong1(iTPKuan,iTPGao){
         }
     }
     return {
-        'iTPMarginTop':iTPMarginTop,
-        'iTPMarginLeft':iTPMarginLeft
+        'iTPMarginTop': iTPMarginTop,
+        'iTPMarginLeft': iTPMarginLeft
     };
 }
 
