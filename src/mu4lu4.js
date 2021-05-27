@@ -1,46 +1,35 @@
-//目录模块
+/*#####目录模块#####*/
 
-const rHelper = require('./helpers');
+const rHelper = require('./helper');
 const rFs = require('fs');
 
-//oMuLu.sWFL--未分类目录
-//oMuLu.sBQ--标签目录
-//oWenJianMing.sFenLeiBQ--分类标签存储文件名
-//oWenJianMing.sBiaoJiBQ--标记标签存储文件名
+//oML.sWFL--未分类目录；
+//oML.sBQ--标签目录
+//oWJM.sFen1Lei4BQ--分类标签存储文件名
+//oWJM.sBiao1Ji4BQ--标记标签存储文件名
 const cConfig = {
-    oMuLu: {
+    oML: {
         sWFL: 'wei4fen1lei4\\',
         sBQ: 'biao1qian1\\',
     },
-    oWenJianMing: {
-        sFenLeiBQ: 'fen1lei4biao1qian1.json',
-        sBiaoJiBQ: 'biao1ji4biao1qian1.json',
+    oWJM: {
+        sFen1Lei4BQ: 'fen1lei4biao1qian1.json',
+        sBiao1Ji4BQ: 'biao1ji4biao1qian1.json',
     }
 };
 
-//操作目录
-let sCaoZuoMuLu = '';
-//未分类目录
-let sWFLMuLu = '';
-//标签目录
-let sBQMuLu = '';
-
-/**
- * 获取操作目录
- * @returns {string}
- */
-function getCaoZuoMuLu() {
-    return sCaoZuoMuLu;
-}
+let sCZML = ''; //操作目录
+let sWFLML = ''; //未分类目录
+let sBQML = ''; //标签目录
 
 /**
  * 设置操作目录
- * @returns {string}
+ * @param psCZML
  */
-function fSetCaoZuoMuLu(psCaoZuoMuLu) {
-    sCaoZuoMuLu = psCaoZuoMuLu + '\\';
-    sWFLMuLu = sCaoZuoMuLu + cConfig.oMuLu.sWFL;
-    sBQMuLu = sCaoZuoMuLu + cConfig.oMuLu.sBQ;
+function fSetCaoZuoMuLu(psCZML) {
+    sCZML = psCZML + '\\';
+    sWFLML = sCZML + cConfig.oML.sWFL;
+    sBQML = sCZML + cConfig.oML.sBQ;
 }
 
 /**
@@ -48,7 +37,7 @@ function fSetCaoZuoMuLu(psCaoZuoMuLu) {
  * @returns {boolean}
  */
 function fCheckCaoZuoMuLu() {
-    return rHelper.fEmpty(sCaoZuoMuLu);
+    return rHelper.fEmpty(sCZML);
 }
 
 /**
@@ -56,7 +45,7 @@ function fCheckCaoZuoMuLu() {
  * @returns {string}
  */
 function fGetWeiFenLeiMuLu() {
-    return sWFLMuLu;
+    return sWFLML;
 }
 
 /**
@@ -64,7 +53,7 @@ function fGetWeiFenLeiMuLu() {
  * @returns {string}
  */
 function fGetBQMuLu() {
-    return sBQMuLu;
+    return sBQML;
 }
 
 /**
@@ -72,7 +61,7 @@ function fGetBQMuLu() {
  * @returns {string}
  */
 function fGetFen1Lei4BQLu4Jing4() {
-    return sBQMuLu + cConfig.oWenJianMing.sFenLeiBQ;
+    return sBQML + cConfig.oWJM.sFen1Lei4BQ;
 }
 
 /**
@@ -83,7 +72,7 @@ function fGetFen1Lei4BQLu4Jing4() {
  */
 function fMakeBQMuLu(iXuanZhongBQBS, oAllXuanZhongId, iXinBQId) {
     let tiTag = 1;
-    let tsMuLu = sCaoZuoMuLu
+    let tsMuLu = sCZML
     while (tiTag < iXuanZhongBQBS) {
         tsMuLu += oAllXuanZhongId[tiTag - 1] + '\\';
         if (!rFs.existsSync(tsMuLu)) {
@@ -106,7 +95,7 @@ function fMakeBQMuLu(iXuanZhongBQBS, oAllXuanZhongId, iXinBQId) {
  */
 function fZu3He2BQMuLu(iXuanZhongBQBS, oAllXuanZhongId) {
     let tiTag = 1;
-    let tsMuLu = sCaoZuoMuLu
+    let tsMuLu = sCZML
     while (tiTag <= iXuanZhongBQBS) {
         tsMuLu += oAllXuanZhongId[tiTag - 1] + '\\';
         if (!rFs.existsSync(tsMuLu)) {
@@ -117,7 +106,6 @@ function fZu3He2BQMuLu(iXuanZhongBQBS, oAllXuanZhongId) {
     return tsMuLu;
 }
 
-module.exports.getCaoZuoMuLu = getCaoZuoMuLu;
 module.exports.fSetCaoZuoMuLu = fSetCaoZuoMuLu;
 module.exports.fCheckCaoZuoMuLu = fCheckCaoZuoMuLu;
 module.exports.fGetWeiFenLeiMuLu = fGetWeiFenLeiMuLu;

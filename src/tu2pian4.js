@@ -1,6 +1,6 @@
 //图片模块
 
-const rHelper = require('./helpers');
+const rHelper = require('./helper');
 const rFs = require('fs');
 
 //iTPNum--图片列表数量

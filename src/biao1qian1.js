@@ -1,6 +1,6 @@
 //标签模块
 
-const rHelpers = require('./helpers');
+const rHelper = require('./helper');
 const rFs = require('fs');
 
 //iBQBS[1,2,3]--[一,二,三]级标签标识
@@ -112,7 +112,7 @@ function fCleanXuanZhongId(iXuanZhongBQBS) {
  * @param sXinBQMing 标签名
  */
 function fXinBQAdd(iXinBQId, sXinBQMing) {
-    if (rHelpers.fEmpty(iXinBQId) || rHelpers.fEmpty(sXinBQMing)) {
+    if (rHelper.fEmpty(iXinBQId) || rHelper.fEmpty(sXinBQMing)) {
         alert('标签数据错误');
         return {};
     }
@@ -129,7 +129,7 @@ function fXinBQAdd(iXinBQId, sXinBQMing) {
         return arrBQ1;
 
     } else if (iXuanZhongBQBS === cConfig.iBQBS2) {
-        if (rHelpers.fEmpty(sXuanZhongId1)) {
+        if (rHelper.fEmpty(sXuanZhongId1)) {
             alert('一级标签缺失');
             return {};
         }
@@ -144,11 +144,11 @@ function fXinBQAdd(iXinBQId, sXinBQMing) {
         return arrBQ2;
 
     } else if (iXuanZhongBQBS === cConfig.iBQBS3) {
-        if (rHelpers.fEmpty(sXuanZhongId1)) {
+        if (rHelper.fEmpty(sXuanZhongId1)) {
             alert('一级标签缺失');
             return {};
         }
-        if (rHelpers.fEmpty(sXuanZhongId2)) {
+        if (rHelper.fEmpty(sXuanZhongId2)) {
             alert('二级标签缺失');
             return {};
         }

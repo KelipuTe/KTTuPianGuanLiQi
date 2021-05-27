@@ -1,12 +1,12 @@
 //全局辅助模块
 
 //判断变量是否为空
-function fEmpty(bianLiang) {
-    if (bianLiang === undefined) {
+function fEmpty(pParam) {
+    if (pParam === undefined) {
         return true;
-    } else if (bianLiang === null) {
+    } else if (pParam === null) {
         return true;
-    } else if (bianLiang === '') {
+    } else if (pParam === '') {
         return true;
     }
     return false;
