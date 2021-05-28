@@ -1,15 +1,28 @@
-//全局辅助模块
+/*##全局辅助模块##*/
 
-//判断变量是否为空
+/*##判空##*/
+
 function fEmpty(pParam) {
-    if (pParam === undefined) {
-        return true;
-    } else if (pParam === null) {
-        return true;
-    } else if (pParam === '') {
-        return true;
-    }
-    return false;
+    return pParam === undefined || pParam === null ||
+        pParam === {} || pParam === [] || pParam === '';
 }
 
+function fEmptyStr(p) {
+    if (typeof p !== 'string') {
+        return false;
+    }
+    return p === '';
+}
+
+function fEmptyNum(p) {
+    if (typeof p !== 'number') {
+        return false;
+    }
+    return isNaN(p);
+}
+
+/*####判空####*/
+
 module.exports.fEmpty = fEmpty;
+module.exports.fEmptyNum = fEmptyNum;
+module.exports.fEmptyStr = fEmptyStr;

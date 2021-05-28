@@ -1,4 +1,4 @@
-/*#####目录模块#####*/
+/*##目录模块##*/
 
 const rHelper = require('./helper');
 const rFs = require('fs');
@@ -24,7 +24,7 @@ let sBQML = ''; //标签目录
 
 /**
  * 设置操作目录
- * @param psCZML
+ * @string psCZML
  */
 function fSetCaoZuoMuLu(psCZML) {
     sCZML = psCZML + '\\';

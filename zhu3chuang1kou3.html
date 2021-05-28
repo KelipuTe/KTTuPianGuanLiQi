@@ -11,32 +11,32 @@
     <div class="zheng-ti-zuo">
         <div class="zuo-shang">
             <p class="zuo-shang-shang">
-                <button id="xuan-ze-mu-lu" type="button" class="an-niu-da an-niu-shan-hu-hong">选择目录</button>
+                <button id="czml-select" type="button" class="an-niu-da an-niu-shan-hu-hong">选择操作目录</button>
             </p>
-            <p class="zuo-shang-xia"><span>操作目录：</span><span id="mu-lu-lu-jing"></span></p>
+            <p class="zuo-shang-xia"><span>操作目录：</span><span id="czml-path"></span></p>
         </div>
-        <div id="tp-list" class="zuo-xia"></div>
+        <div id="tp-arr" class="zuo-xia"></div>
     </div>
     <div class="zheng-ti-you">
         <div class="you-shang">
-            <div id="biao-qian-list" class="you-shang-shang">
+            <div id="bqy-arr" class="you-shang-shang">
                 <button type="button" class="bq-xuan-zhong">一级</button>
                 <button type="button" class="bq-an-niu">二级</button>
                 <button type="button" class="bq-an-niu">三级</button>
                 <button type="button" class="bq-an-niu">标记</button>
             </div>
-            <div id="biao-qian-ye-list" class="you-shang-zhong">
+            <div id="bqy-show-arr" class="you-shang-zhong">
                 <div style="display: block">
                     <p class="biao-qian-yei-tou">一级标签</p>
-                    <div id="bq1-list" class="biao-qian-yei-zhu"></div>
+                    <div id="bq-arr1" class="biao-qian-yei-zhu"></div>
                 </div>
                 <div style="display: none">
                     <p class="biao-qian-yei-tou">二级标签</p>
-                    <div id="bq2-list" class="biao-qian-yei-zhu"></div>
+                    <div id="bq-arr2" class="biao-qian-yei-zhu"></div>
                 </div>
                 <div style="display: none">
                     <p class="biao-qian-yei-tou">三级标签</p>
-                    <div id="bq3-list" class="biao-qian-yei-zhu"></div>
+                    <div id="bq-arr3" class="biao-qian-yei-zhu"></div>
                 </div>
                 <div style="display: none">
                     <p class="biao-qian-yei-tou">标记标签</p>
@@ -44,15 +44,15 @@
                 </div>
             </div>
             <div class="you-shang-xia">
-                <input id="xin-bq-id" type="text" class="bq-shu-ru" placeholder="标签Id" aria-label="标签Id"/>
-                <input id="xin-bq-ming" type="text" class="bq-shu-ru" placeholder="标签名" aria-label="标签名"/>
-                <button id="xin-bq-add" type="button" class="an-niu-zhong an-niu-zi">添加标签</button>
+                <input id="new-bq-id" type="text" class="bq-shu-ru" placeholder="标签Id" aria-label="标签Id"/>
+                <input id="new-bq-name" type="text" class="bq-shu-ru" placeholder="标签名" aria-label="标签名"/>
+                <button id="new-bq-add" type="button" class="an-niu-zhong an-niu-zi">添加标签</button>
             </div>
         </div>
         <div class="you-xia">
-            <p class="you-xia-shang"><span>目标路径：</span><span id="mu-biao-lu-jing"></span></p>
+            <p class="you-xia-shang"><span>目标路径：</span><span id="tp-target-path"></span></p>
             <p class="you-xia-xia">
-                <button id="que-ren-yi-dong" type="button" class="an-niu-da an-niu-shan-hu-hong">确认移动</button>
+                <button id="tp-move" type="button" class="an-niu-da an-niu-shan-hu-hong">移动图片</button>
             </p>
         </div>
     </div>
