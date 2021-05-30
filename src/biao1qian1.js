@@ -207,7 +207,7 @@ function fArrBQSort(arrBQ) {
 /**
  * 获取待构造标签列表
  */
-function fGetDaiGouZaoBQ(piXuanZhongBQBS) {
+function fGetWaitBQ(piXuanZhongBQBS) {
     if (piXuanZhongBQBS === cConfig.iBQBS1) {
         return arrBQ1;
     } else if (piXuanZhongBQBS === cConfig.iBQBS2) {
@@ -226,7 +226,7 @@ module.exports.fGetAllXuanZhongId = fGetAllXuanZhongId;
 module.exports.fSetXuanZhongId = fSetXuanZhongId;
 module.exports.fCleanXuanZhongId = fCleanXuanZhongId;
 module.exports.fXinBQAdd = fXinBQAdd;
-module.exports.fGetDaiGouZaoBQ = fGetDaiGouZaoBQ;
+module.exports.fGetWaitBQ = fGetWaitBQ;
 module.exports.fSaveFen1Lei4BQ = fSaveFen1Lei4BQ;
 module.exports.fLoadFen1Lei4BQ = fLoadFen1Lei4BQ;
 

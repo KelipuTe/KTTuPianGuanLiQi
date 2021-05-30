@@ -13,8 +13,8 @@ const cConfig = {
         sBQ: 'biao1qian1\\',
     },
     oWJM: {
-        sFen1Lei4BQ: 'fen1lei4biao1qian1.json',
-        sBiao1Ji4BQ: 'biao1ji4biao1qian1.json',
+        sFen1Lei4BQ: 'fen1lei4.json',
+        sBiao1Ji4BQ: 'biao1ji4.json',
     }
 };
 
@@ -26,7 +26,7 @@ let sBQML = ''; //标签目录
  * 设置操作目录
  * @string psCZML
  */
-function fSetCaoZuoMuLu(psCZML) {
+function fSetCZML(psCZML) {
     sCZML = psCZML + '\\';
     sWFLML = sCZML + cConfig.oML.sWFL;
     sBQML = sCZML + cConfig.oML.sBQ;
@@ -36,15 +36,15 @@ function fSetCaoZuoMuLu(psCZML) {
  * 检查操作目录是否设置
  * @returns {boolean}
  */
-function fCheckCaoZuoMuLu() {
-    return rHelper.fEmpty(sCZML);
+function fCheckCZML() {
+    return rHelper.fEmptyStr(sCZML);
 }
 
 /**
  * 获取未分类目录
  * @returns {string}
  */
-function fGetWeiFenLeiMuLu() {
+function fGetWFLML() {
     return sWFLML;
 }
 
@@ -52,7 +52,7 @@ function fGetWeiFenLeiMuLu() {
  * 获取标签目录
  * @returns {string}
  */
-function fGetBQMuLu() {
+function fGetBQML() {
     return sBQML;
 }
 
@@ -60,7 +60,7 @@ function fGetBQMuLu() {
  * 获取分类标签路径
  * @returns {string}
  */
-function fGetFen1Lei4BQLu4Jing4() {
+function fGetPathFen1Lei4BQ() {
     return sBQML + cConfig.oWJM.sFen1Lei4BQ;
 }
 
@@ -106,10 +106,10 @@ function fZu3He2BQMuLu(iXuanZhongBQBS, oAllXuanZhongId) {
     return tsMuLu;
 }
 
-module.exports.fSetCaoZuoMuLu = fSetCaoZuoMuLu;
-module.exports.fCheckCaoZuoMuLu = fCheckCaoZuoMuLu;
-module.exports.fGetWeiFenLeiMuLu = fGetWeiFenLeiMuLu;
-module.exports.fGetBQMuLu = fGetBQMuLu;
-module.exports.fGetFen1Lei4BQLu4Jing4 = fGetFen1Lei4BQLu4Jing4;
+module.exports.fSetCZML = fSetCZML;
+module.exports.fCheckCZML = fCheckCZML;
+module.exports.fGetWFLML = fGetWFLML;
+module.exports.fGetBQML = fGetBQML;
+module.exports.fGetPathFen1Lei4BQ = fGetPathFen1Lei4BQ;
 module.exports.fMakeBQMuLu = fMakeBQMuLu;
 module.exports.fZu3He2BQMuLu = fZu3He2BQMuLu;

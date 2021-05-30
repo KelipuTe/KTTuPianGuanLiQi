@@ -5,7 +5,7 @@ const rFs = require('fs');
 
 //iTPNum--图片列表数量
 const cConfig = {
-    iSArrTPMingLen: 5,
+    iSArrTPMingLen: 20,
 };
 
 //图片名列表
@@ -23,19 +23,19 @@ let sMuBiaoLuJing = '';
 
 /**
  * 加载图片
- * @param sMuLu 图片目录路径
+ * @param sWFLML 图片目录路径
  */
-function fLoadTP(sMuLu) {
-    if (!rFs.existsSync(sMuLu)) {
+function fLoadTP(sWFLML) {
+    if (!rFs.existsSync(sWFLML)) {
         return [];
     }
     //清空数据
     sarrTPMing = [];
     //同步读取目录下的文件
-    let sarrWenJianMing = rFs.readdirSync(sMuLu);
+    let sarrFileName = rFs.readdirSync(sWFLML);
     //一次取一定数量的图片
     let ii = 1;
-    for (let sWenJianMing of sarrWenJianMing) {
+    for (let sWenJianMing of sarrFileName) {
         if (ii > cConfig.iSArrTPMingLen) {
             break;
         } else {

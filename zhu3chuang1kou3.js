@@ -95,16 +95,16 @@ function fcCZMLSelect() {
         'title': '请选择操作目录',
         'properties': ['openDirectory']
     }).then(function (result) {
-        if (rHelper.fEmpty(result.filePaths[0])) {
+        if (rHelper.fEmptyStr(result.filePaths[0])) {
             console.warn('未选择操作目录');
         } else {
-            rMu4Lu4.fSetCaoZuoMuLu(result.filePaths[0]);
-            let sWeiFenLeiMuLu = rMu4Lu4.fGetWeiFenLeiMuLu();
-            let sarrTPMing = rTu2Pian4.fLoadTP(sWeiFenLeiMuLu);
-            fLoadTPArr(sWeiFenLeiMuLu, sarrTPMing);
-            rBiao1Qian1.fLoadFen1Lei4BQ(rMu4Lu4.fGetFen1Lei4BQLu4Jing4());
-            fGouZaoBQList(rBiao1Qian1.cConfig.iBQBS1, eBQArr1,
-                rBiao1Qian1.fGetDaiGouZaoBQ(rBiao1Qian1.cConfig.iBQBS1));
+            rMu4Lu4.fSetCZML(result.filePaths[0]);
+            let sWFLML = rMu4Lu4.fGetWFLML();
+            let sarrTPName = rTu2Pian4.fLoadTP(sWFLML);
+            fLoadTPArr(sWFLML, sarrTPName);
+            rBiao1Qian1.fLoadFen1Lei4BQ(rMu4Lu4.fGetPathFen1Lei4BQ());
+            fMakeBQArr(rBiao1Qian1.cConfig.iBQBS1, eBQArr1,
+                rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS1));
         }
     });
 }
@@ -112,14 +112,14 @@ function fcCZMLSelect() {
 /**
  * 渲染图片列表
  * @param sWeiFenLeiMuLu
- * @param sarrTPMing
+ * @param sarrTPName
  */
-function fLoadTPArr(sWeiFenLeiMuLu, sarrTPMing) {
+function fLoadTPArr(sWeiFenLeiMuLu, sarrTPName) {
     //先清空列表中的元素
     eTPArr.innerHTML = '';
     //然后遍历图片列表重新生成
     let iJiShu = 1;
-    for (let sTPMing of sarrTPMing) {
+    for (let sTPMing of sarrTPName) {
         // 构造图片按钮
         let tempEle = document.createElement('img');
         tempEle.id = 'tp-arr-' + iJiShu;
@@ -138,7 +138,7 @@ function fLoadTPArr(sWeiFenLeiMuLu, sarrTPMing) {
 function fcTPItem() {
     let sTPMing = this.getAttribute('data-wen-jian-ming');
     rTu2Pian4.fSetTPMing(sTPMing);
-    let sTPLuJing = rMu4Lu4.fGetWeiFenLeiMuLu() + sTPMing;
+    let sTPLuJing = rMu4Lu4.fGetWFLML() + sTPMing;
     rTu2Pian4.fSetTPLuJing(sTPLuJing);
     eTPShow.src = sTPLuJing;
 }
@@ -183,11 +183,9 @@ function fQieHuanBiaoQianYe() {
     eBQYShowArr[iBQBS - 1].style.display = 'block';
 }
 
-/**
- * 点击事件，添加新标签
- */
+//点击，添加新标签
 function fcXinBQAdd() {
-    if (rMu4Lu4.fCheckCaoZuoMuLu()) {
+    if (rMu4Lu4.fCheckCZML()) {
         alert('未选择操作目录');
         return;
     }
@@ -195,17 +193,17 @@ function fcXinBQAdd() {
     let iXinBQId = eNewBQId.value;
     let sXinBQMing = eNewBQName.value;
     rBiao1Qian1.fXinBQAdd(iXinBQId, sXinBQMing);
-    rBiao1Qian1.fSaveFen1Lei4BQ(rMu4Lu4.fGetBQMuLu(), rMu4Lu4.fGetFen1Lei4BQLu4Jing4());
+    rBiao1Qian1.fSaveFen1Lei4BQ(rMu4Lu4.fGetBQML(), rMu4Lu4.fGetPathFen1Lei4BQ());
     rMu4Lu4.fMakeBQMuLu(iXuanZhongBQBS, rBiao1Qian1.fGetAllXuanZhongId(), iXinBQId);
     if (iXuanZhongBQBS === rBiao1Qian1.cConfig.iBQBS1) {
-        fGouZaoBQList(iXuanZhongBQBS, eBQArr1,
-            rBiao1Qian1.fGetDaiGouZaoBQ(iXuanZhongBQBS));
+        fMakeBQArr(iXuanZhongBQBS, eBQArr1,
+            rBiao1Qian1.fGetWaitBQ(iXuanZhongBQBS));
     } else if (iXuanZhongBQBS === rBiao1Qian1.cConfig.iBQBS2) {
-        fGouZaoBQList(iXuanZhongBQBS, eBQArr2,
-            rBiao1Qian1.fGetDaiGouZaoBQ(iXuanZhongBQBS));
+        fMakeBQArr(iXuanZhongBQBS, eBQArr2,
+            rBiao1Qian1.fGetWaitBQ(iXuanZhongBQBS));
     } else if (iXuanZhongBQBS === rBiao1Qian1.cConfig.iBQBS3) {
-        fGouZaoBQList(iXuanZhongBQBS, eBQArr3,
-            rBiao1Qian1.fGetDaiGouZaoBQ(iXuanZhongBQBS));
+        fMakeBQArr(iXuanZhongBQBS, eBQArr3,
+            rBiao1Qian1.fGetWaitBQ(iXuanZhongBQBS));
     }
     // 重置输入框
     eNewBQId.value = '';
@@ -218,7 +216,7 @@ function fcXinBQAdd() {
  * @param eleBQ
  * @param arrDaiGouZaoBQ
  */
-function fGouZaoBQList(iXuanZhongBQBS, eleBQ, arrDaiGouZaoBQ) {
+function fMakeBQArr(iXuanZhongBQBS, eleBQ, arrDaiGouZaoBQ) {
     eleBQ.innerHTML = '';
     for (let kBQ in arrDaiGouZaoBQ) {
         let tempEle = document.createElement('button');
@@ -259,8 +257,8 @@ function fcFen1Lei4BQ() {
             eBQArr3.innerHTML = '';
 
             rBiao1Qian1.fSetXuanZhongId(iXuanZhongBQBS, this.id);
-            fGouZaoBQList(rBiao1Qian1.cConfig.iBQBS2, eBQArr2,
-                rBiao1Qian1.fGetDaiGouZaoBQ(rBiao1Qian1.cConfig.iBQBS2));
+            fMakeBQArr(rBiao1Qian1.cConfig.iBQBS2, eBQArr2,
+                rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS2));
 
             let teleBQList = eBQArr1.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
@@ -286,8 +284,8 @@ function fcFen1Lei4BQ() {
             eBQArr3.innerHTML = '';
 
             rBiao1Qian1.fSetXuanZhongId(iXuanZhongBQBS, this.id)
-            fGouZaoBQList(rBiao1Qian1.cConfig.iBQBS3, eBQArr3,
-                rBiao1Qian1.fGetDaiGouZaoBQ(rBiao1Qian1.cConfig.iBQBS3));
+            fMakeBQArr(rBiao1Qian1.cConfig.iBQBS3, eBQArr3,
+                rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS3));
 
             let teleBQList = eBQArr2.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
@@ -330,12 +328,12 @@ function fcTPMove() {
     eTPShow.src = '';
     eTPMove.disabled = false;
     //重新渲染左侧图片列表
-    let sWeiFenLeiMuLu = rMu4Lu4.fGetWeiFenLeiMuLu();
-    let sarrTPMing = rTu2Pian4.fGetArrTPMing();
-    if (sarrTPMing.length < 1) {
-        sarrTPMing = rTu2Pian4.fLoadTP(sWeiFenLeiMuLu);
+    let sWeiFenLeiMuLu = rMu4Lu4.fGetWFLML();
+    let sarrTPName = rTu2Pian4.fGetArrTPMing();
+    if (sarrTPName.length < 1) {
+        sarrTPName = rTu2Pian4.fLoadTP(sWeiFenLeiMuLu);
     }
-    fLoadTPArr(sWeiFenLeiMuLu, sarrTPMing);
+    fLoadTPArr(sWeiFenLeiMuLu, sarrTPName);
 }
 
 
