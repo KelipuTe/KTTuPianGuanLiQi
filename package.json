@@ -2,7 +2,7 @@
   "name": "tu2pian4guan3li3qi4",
   "version": "1.0.0",
   "description": "",
-  "main": "zhu3jin4cheng2.js",
+  "main": "zhu3process.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."

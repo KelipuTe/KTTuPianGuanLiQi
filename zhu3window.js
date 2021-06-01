@@ -3,11 +3,11 @@ console.log('Node:' + process.versions.node);
 console.log('Chrome:' + process.versions.chrome);
 console.log('Electron:' + process.versions.electron);
 
-const rHelper = require('./src/helper');
-const rMu4Lu4 = require('./src/mu4lu4');
-const rTu2Pian4 = require('./src/tu2pian4');
-const rBiao1Qian1 = require('./src/biao1qian1');
-const rXuan4Ran3 = require('./src/xuan4ran3');
+const rHelper = require('./src/js/helper');
+const rMu4Lu4 = require('./src/js/mu4lu4');
+const rTu2Pian4 = require('./src/js/tu2pian4');
+const rBiao1Qian1 = require('./src/js/biao1qian1');
+const rXuan4Ran3 = require('./src/js/xuan4ran3');
 
 const rElectron = require('electron');
 const rRemote = rElectron.remote;
@@ -22,7 +22,7 @@ let oYou4Ji1Cai4Dan1 = rMenu.buildFromTemplate([
         accelerator: 'F12',
         click: function () {
             //给主进程发送消息
-            rIpcRenderer.send('da-kai-tiao-shi', '申请打开调试窗口');
+            rIpcRenderer.send('open0debug0window', '打开调试窗口');
         }
     }
 ]);
@@ -42,8 +42,8 @@ let eCZMLPath = {}; //操作目录路径展示
 let eTPArr = {}; //左侧图片列表
 let eTPShow = {}; //右侧图片展示
 
-let eBQYArr = {}; //标签页按钮列表
-let eBQYShowArr = {}; //标签页展示列表
+let eBQBQYBtnArr = {}; //标签页按钮列表
+let eBQBQYBodyArr = {}; //标签页展示列表
 
 let eBQArr1 = {}; //标签列表1
 let eBQArr2 = {}; //标签列表2
@@ -59,32 +59,32 @@ let eTPMove = {}; //图片移动按钮
 /*####dom对象####*/
 
 window.onload = function () {
-    eCZMLSelect = document.getElementById('czml-select');
+    eCZMLSelect = document.getElementById('ml0czml0select');
     eCZMLSelect.onclick = fcCZMLSelect;
-    eCZMLPath = document.getElementById('czml-path')
+    eCZMLPath = document.getElementById('ml0czml0path')
 
-    eTPArr = document.getElementById('tp-arr');
-    eTPShow = document.getElementById('tp-show');
+    eTPArr = document.getElementById('tp0arr');
+    eTPShow = document.getElementById('tp0show');
     eTPShow.onload = fTPOnLoad;
     //初始化标签页切换
-    eBQYArr = document.getElementById('bqy-arr').children;
-    eBQYShowArr = document.getElementById('bqy-show-arr').children;
-    for (let ii = 0; ii < eBQYArr.length; ++ii) {
-        eBQYArr[ii].id = 'bq-' + (ii + 1);
-        eBQYArr[ii].onclick = fQieHuanBiaoQianYe;
+    eBQBQYBtnArr = document.getElementById('bq0bqy0btn0arr').children;
+    eBQBQYBodyArr = document.getElementById('bq0bqy0body0arr').children;
+    for (let ii = 0; ii < eBQBQYBtnArr.length; ++ii) {
+        eBQBQYBtnArr[ii].id = 'bq0bqy0i' + (ii + 1);
+        eBQBQYBtnArr[ii].onclick = fcBQYSwitch;
     }
 
-    eBQArr1 = document.getElementById('bq-arr1');
-    eBQArr2 = document.getElementById('bq-arr2');
-    eBQArr3 = document.getElementById('bq-arr3');
+    eBQArr1 = document.getElementById('bq0arr1');
+    eBQArr2 = document.getElementById('bq0arr2');
+    eBQArr3 = document.getElementById('bq0arr3');
 
-    eNewBQId = document.getElementById('new-bq-id');
-    eNewBQName = document.getElementById('new-bq-name');
-    eNewBQAdd = document.getElementById('new-bq-add');
-    eNewBQAdd.onclick = fcXinBQAdd;
+    eNewBQId = document.getElementById('bq0new0id');
+    eNewBQName = document.getElementById('bq0new0name');
+    eNewBQAdd = document.getElementById('bq0new0add');
+    eNewBQAdd.onclick = fcNewBQAdd;
 
-    eTPTargetPath = document.getElementById('tp-target-path');
-    eTPMove = document.getElementById('tp-move');
+    eTPTargetPath = document.getElementById('ml0target0path');
+    eTPMove = document.getElementById('ml0tp0move');
     eTPMove.onclick = fcTPMove;
     eTPMove.disabled = true;
 }
@@ -99,6 +99,7 @@ function fcCZMLSelect() {
             console.warn('未选择操作目录');
         } else {
             rMu4Lu4.fSetCZML(result.filePaths[0]);
+            eCZMLPath.value = result.filePaths[0];
             let sWFLML = rMu4Lu4.fGetWFLML();
             let sarrTPName = rTu2Pian4.fLoadTP(sWFLML);
             fLoadTPArr(sWFLML, sarrTPName);
@@ -111,80 +112,71 @@ function fcCZMLSelect() {
 
 /**
  * 渲染图片列表
- * @param sWeiFenLeiMuLu
- * @param sarrTPName
+ * @string sWFLML
+ * @string sarrTPName
  */
-function fLoadTPArr(sWeiFenLeiMuLu, sarrTPName) {
+function fLoadTPArr(sWFLML, sarrTPName) {
     //先清空列表中的元素
     eTPArr.innerHTML = '';
     //然后遍历图片列表重新生成
-    let iJiShu = 1;
-    for (let sTPMing of sarrTPName) {
+    let ii = 1;
+    for (let sTPName of sarrTPName) {
         // 构造图片按钮
         let tempEle = document.createElement('img');
-        tempEle.id = 'tp-arr-' + iJiShu;
-        tempEle.className = 'zuo-tu-pian-zu';
-        tempEle.setAttribute('data-wen-jian-ming', sTPMing);
-        tempEle.src = sWeiFenLeiMuLu + '\\' + sTPMing;
+        tempEle.id = 'tp0arr0i' + ii;
+        tempEle.className = 'tp0arr';
+        tempEle.setAttribute('data-tp0name', sTPName);
+        tempEle.src = sWFLML + '\\' + sTPName;
         tempEle.onclick = fcTPItem;
         eTPArr.appendChild(tempEle);
-        ++iJiShu;
+        ++ii;
     }
 }
 
-/**
- * 点击事件，选择图片
- */
+//点击，选择图片
 function fcTPItem() {
-    let sTPMing = this.getAttribute('data-wen-jian-ming');
-    rTu2Pian4.fSetTPMing(sTPMing);
-    let sTPLuJing = rMu4Lu4.fGetWFLML() + sTPMing;
-    rTu2Pian4.fSetTPLuJing(sTPLuJing);
-    eTPShow.src = sTPLuJing;
+    let sTPName = this.getAttribute('data-tp0name');
+    rTu2Pian4.fSetTPMing(sTPName);
+    let sTPPath = rMu4Lu4.fGetWFLML() + sTPName;
+    rTu2Pian4.fSetTPLuJing(sTPPath);
+    eTPShow.src = sTPPath;
 }
 
 //eTPShow的onload事件
 function fTPOnLoad() {
-    //获取图片原始大小
+    //获取图片原始宽高
     let iTPKuan = this.naturalWidth;
     let iTPGao = this.naturalHeight;
     rTu2Pian4.fSetTPKuanGao(iTPKuan, iTPGao);
     let oRes = rXuan4Ran3.fTPJu1Zhong1(iTPKuan, iTPGao);
     let sStyle = 'margin-left: ' + oRes.iTPMarginLeft + 'px; margin-top: ' + oRes.iTPMarginTop + 'px';
     eTPShow.setAttribute('style', sStyle);
-    fTPChong2Ming4Ming2();
+    fTPRename();
 }
 
-/**
- * 图片重命名
- */
-function fTPChong2Ming4Ming2() {
+//图片重命名
+function fTPRename() {
     let sBQMuLu = rMu4Lu4.fZu3He2BQMuLu(rBiao1Qian1.fGetXuanZhongBQBS(), rBiao1Qian1.fGetAllXuanZhongId());
     let sXuanZhongId = rBiao1Qian1.fGetXuanZhongId(rBiao1Qian1.fGetXuanZhongBQBS());
     let sChongMingMing = rTu2Pian4.fGetChong2Ming4Ming4();
     let sMuBiaoLuJing = sBQMuLu + sXuanZhongId + sChongMingMing;
     rTu2Pian4.fSetMuBiaoLuJing(sMuBiaoLuJing);
-    eTPTargetPath.innerHTML = sMuBiaoLuJing;
+    eTPTargetPath.value = sMuBiaoLuJing;
     eTPMove.disabled = false;
 }
 
-/**
- * 点击事件，切换标签页
- */
-function fQieHuanBiaoQianYe() {
-    //全部重置，然后改动目标的展示样式
-    for (let ii = 0; ii < eBQYArr.length; ++ii) {
-        eBQYArr[ii].className = 'bq-an-niu';
-        eBQYShowArr[ii].style.display = 'none';
+//点击，切换标签页
+function fcBQYSwitch() {
+    for (let ii = 0; ii < eBQBQYBtnArr.length; ++ii) {
+        eBQBQYBodyArr[ii].style.display = 'none';
     }
-    let iBQBS = this.id.replace('bq-', '');
+    let iBQBS = this.id.replace('bq0bqy0i', '');
     rBiao1Qian1.fSetXuanZhongBQBS(parseInt(iBQBS));
-    eBQYArr[iBQBS - 1].className = 'bq-xuan-zhong';
-    eBQYShowArr[iBQBS - 1].style.display = 'block';
+    eBQBQYBodyArr[iBQBS - 1].style.display = 'block';
 }
 
 //点击，添加新标签
-function fcXinBQAdd() {
+function fcNewBQAdd() {
     if (rMu4Lu4.fCheckCZML()) {
         alert('未选择操作目录');
         return;
@@ -223,7 +215,7 @@ function fMakeBQArr(iXuanZhongBQBS, eleBQ, arrDaiGouZaoBQ) {
         tempEle.id = kBQ;
         tempEle.type = 'button';
         tempEle.innerHTML = arrDaiGouZaoBQ[kBQ];
-        tempEle.className = 'an-niu-xiao an-niu-shan-hu-hong';
+        tempEle.className = 'bq0bq0btn btn0shh';
         tempEle.setAttribute('data-bqbs', iXuanZhongBQBS);
         // 绑定标签点击事件
         tempEle.onclick = fcFen1Lei4BQ;
@@ -231,9 +223,7 @@ function fMakeBQArr(iXuanZhongBQBS, eleBQ, arrDaiGouZaoBQ) {
     }
 }
 
-/**
- * 点击分类标签
- */
+//点击，分类标签
 function fcFen1Lei4BQ() {
     let iXuanZhongBQBS = parseInt(this.getAttribute('data-bqbs'));
     if (iXuanZhongBQBS === rBiao1Qian1.cConfig.iBQBS1) {
@@ -247,7 +237,7 @@ function fcFen1Lei4BQ() {
 
             let teleBQList = eBQArr1.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
-                teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
+                teleBQList[ii].className = 'bq0bq0btn btn0shh';
             }
         } else {
             //如果已选中的是其他标签
@@ -263,9 +253,9 @@ function fcFen1Lei4BQ() {
             let teleBQList = eBQArr1.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
                 if (teleBQList[ii].id === this.id) {
-                    teleBQList[ii].className = 'an-niu-xiao an-niu-zi';
+                    teleBQList[ii].className = 'bq0bq0btn btn0zi3';
                 } else {
-                    teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
+                    teleBQList[ii].className = 'bq0bq0btn btn0shh';
                 }
             }
         }
@@ -277,7 +267,7 @@ function fcFen1Lei4BQ() {
 
             let teleBQList = eBQArr2.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
-                teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
+                teleBQList[ii].className = 'bq0bq0btn btn0shh';
             }
         } else {
             rBiao1Qian1.fCleanXuanZhongId(iXuanZhongBQBS);
@@ -290,9 +280,9 @@ function fcFen1Lei4BQ() {
             let teleBQList = eBQArr2.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
                 if (teleBQList[ii].id === this.id) {
-                    teleBQList[ii].className = 'an-niu-xiao an-niu-zi';
+                    teleBQList[ii].className = 'bq0bq0btn btn0zi3';
                 } else {
-                    teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
+                    teleBQList[ii].className = 'bq0bq0btn btn0shh';
                 }
             }
         }
@@ -303,7 +293,7 @@ function fcFen1Lei4BQ() {
 
             let teleBQList = eBQArr3.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
-                teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
+                teleBQList[ii].className = 'bq0bq0btn btn0shh';
             }
         } else {
             rBiao1Qian1.fSetXuanZhongId(iXuanZhongBQBS, this.id)
@@ -311,14 +301,14 @@ function fcFen1Lei4BQ() {
             let teleBQList = eBQArr3.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
                 if (teleBQList[ii].id === this.id) {
-                    teleBQList[ii].className = 'an-niu-xiao an-niu-zi';
+                    teleBQList[ii].className = 'bq0bq0btn btn0zi3';
                 } else {
-                    teleBQList[ii].className = 'an-niu-xiao an-niu-shan-hu-hong';
+                    teleBQList[ii].className = 'bq0bq0btn btn0shh';
                 }
             }
         }
     }
-    fTPChong2Ming4Ming2();
+    fTPRename();
 }
 
 //点击，图片移动
@@ -328,12 +318,12 @@ function fcTPMove() {
     eTPShow.src = '';
     eTPMove.disabled = false;
     //重新渲染左侧图片列表
-    let sWeiFenLeiMuLu = rMu4Lu4.fGetWFLML();
+    let sWFLML = rMu4Lu4.fGetWFLML();
     let sarrTPName = rTu2Pian4.fGetArrTPMing();
     if (sarrTPName.length < 1) {
-        sarrTPName = rTu2Pian4.fLoadTP(sWeiFenLeiMuLu);
+        sarrTPName = rTu2Pian4.fLoadTP(sWFLML);
     }
-    fLoadTPArr(sWeiFenLeiMuLu, sarrTPName);
+    fLoadTPArr(sWFLML, sarrTPName);
 }
 
 

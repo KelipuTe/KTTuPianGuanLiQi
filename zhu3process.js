@@ -32,7 +32,7 @@ function fBulidChuang1Kou3() {
     //webPreferences.enableRemoteModule--默认false，不设为true，remote不能用
     bwZhuChuangKou = new rBrowserWindow({
         width: 1680,
-        height: 880,
+        height: 980,
         // resizable: false,
         webPreferences: {
             nodeIntegration: true,
@@ -42,7 +42,7 @@ function fBulidChuang1Kou3() {
     let oDingBuCaiDan = rMenu.buildFromTemplate(oarrDingBuCaiDanMuBan);
     rMenu.setApplicationMenu(oDingBuCaiDan);
     //加载主窗口
-    bwZhuChuangKou.loadFile('zhu3chuang1kou3.html');
+    bwZhuChuangKou.loadFile('./zhu3window.html');
     //窗口关闭事件
     bwZhuChuangKou.on('closed', function () {
         bwZhuChuangKou = null;
@@ -53,7 +53,7 @@ function fBulidChuang1Kou3() {
 
 //rIpcMain.on()监听渲染进程发送的消息
 //打开调试窗口消息
-rIpcMain.on('da-kai-tiao-shi', function (event, arg) {
+rIpcMain.on('open0debug0window', function (event, arg) {
     bwZhuChuangKou.webContents.openDevTools();
 })
 

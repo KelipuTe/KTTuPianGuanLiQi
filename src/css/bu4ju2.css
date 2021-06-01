@@ -1,0 +1,98 @@
+/*##布局##*/
+
+/*主容器*/
+.zhu3rong2qi4 {
+    width: 1600px;
+    height: 900px;
+    margin: 0 auto;
+    background-color: #70f3ff;
+    font-size: 0;
+}
+
+/*图片*/
+.tp0rong2qi4 {
+    display: inline-block;
+    vertical-align: top;
+    width: 350px;
+    height: 800px;
+    overflow-y: scroll;
+}
+
+/*标签*/
+
+.bq0rong2qi4 {
+    display: inline-block;
+    vertical-align: top;
+    width: 350px;
+    height: 800px;
+}
+
+.bq0action0 {
+    width: 350px;
+    height: 150px;
+}
+
+.bq0bqy0head {
+    width: 350px;
+    height: 50px;
+    font-size: 0;
+}
+
+.bq0bqy0body {
+    width: 350px;
+    height: 600px;
+}
+
+.bq0bqy0body0head {
+    width: 350px;
+    height: 20px;
+    margin: 0;
+    padding: 15px 0;
+    background-color: #2edfa3;
+    text-align: center;
+    font-size: 16px;
+}
+
+.bq0bqy0body0body {
+    width: 350px;
+    height: 550px;
+    background-color: #2edfa3;
+}
+
+/*图片展示*/
+
+.tp0show0rong2qi4 {
+    display: inline-block;
+    vertical-align: top;
+    width: 900px;
+    height: 800px;
+    background-color: #e9f1f6;
+}
+
+.tp0show0rong2qi4 img {
+    max-width: 900px;
+    max-height: 800px;
+}
+
+/*目录*/
+
+.ml0rong2qi4 {
+    display: inline-block;
+    vertical-align: top;
+    width: 1600px;
+    height: 100px;
+}
+
+.ml0zuo3 {
+    display: inline-block;
+    vertical-align: top;
+    width: 700px;
+    height: 100px;
+}
+
+.ml0you4 {
+    display: inline-block;
+    vertical-align: top;
+    width: 900px;
+    height: 100px;
+}

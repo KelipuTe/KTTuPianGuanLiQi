@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>图片管理器</title>
+    <link rel="stylesheet" href="./src/css/yan2se4.css">
+    <link rel="stylesheet" href="./src/css/bu4ju2.css">
+    <link rel="stylesheet" href="./src/css/zu3jian4.css">
+    <script src="zhu3window.js"></script>
+</head>
+<body>
+<div class="zhu3rong2qi4">
+    <div>
+        <div id="tp0arr" class="tp0rong2qi4"></div>
+        <div class="bq0rong2qi4">
+            <div class="bq0action0">
+                <button id="bq0old0del" class="bq0action0btn btn0shh">移除标签</button>
+                <button id="bq0new0add" class="bq0action0btn btn0ch">添加标签</button>
+                <input id="bq0new0id" class="bq0new0input1" type="text"
+                       placeholder="标签Id" aria-label="标签Id"/>
+                <input id="bq0new0name" class="bq0new0input2" type="text"
+                       placeholder="标签名" aria-label="标签名"/>
+            </div>
+            <div id="bq0bqy0btn0arr" class="bq0bqy0head">
+                <button class="bq0bqy0btn btn0ch">一级</button>
+                <button class="bq0bqy0btn btn0ch">二级</button>
+                <button class="bq0bqy0btn btn0ch">三级</button>
+            </div>
+            <div id="bq0bqy0body0arr" class="bq0bqy0body">
+                <div style="display: block">
+                    <p class="bq0bqy0body0head">一级标签</p>
+                    <div id="bq0arr1" class="bq0bqy0body0body"></div>
+                </div>
+                <div style="display: none">
+                    <p class="bq0bqy0body0head">二级标签</p>
+                    <div id="bq0arr2" class="bq0bqy0body0body"></div>
+                </div>
+                <div style="display: none">
+                    <p class="bq0bqy0body0head">三级标签</p>
+                    <div id="bq0arr3" class="bq0bqy0body0body"></div>
+                </div>
+            </div>
+        </div>
+        <div class="tp0show0rong2qi4">
+            <img id="tp0show" src="" alt="">
+        </div>
+    </div>
+    <div>
+        <div class="ml0rong2qi4">
+            <div class="ml0zuo3">
+                <button id="ml0czml0select" class="ml0action0btn btn0ch">选择操作目录</button>
+                <button id="ml0tp0move" class="ml0action0btn btn0shh">确认移动图片</button>
+            </div>
+            <div class="ml0you4">
+                <input id="ml0target0path" class="ml0target0path" type="text"
+                       placeholder="目标路径" aria-label="目标路径"/>
+                <input id="ml0czml0path" class="ml0czml0path" type="text"
+                       placeholder="操作目录" aria-label="操作目录" disabled/>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
