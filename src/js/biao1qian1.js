@@ -63,7 +63,6 @@ function fGetBQSelectId(iBQBSSelect) {
     }
 }
 
-
 /**
  * 设置标签标识对应的标签id
  * @int iBQBSSelect 标签标识
@@ -72,18 +71,21 @@ function fGetBQSelectId(iBQBSSelect) {
 function fSetBQSelectId(iBQBSSelect, psBQSelectId) {
     if (iBQBSSelect === cConfig.iBQBS1) {
         sBQSelectId1 = psBQSelectId;
-        let arrBQKey = Object.keys(oBQData[psBQSelectId].zi3list);
+        let arrBQKey = Object.keys(oBQData[psBQSelectId].mapzi3bq);
         for (let tsBQKey of arrBQKey) {
-            arrBQ2[tsBQKey] = oBQData[psBQSelectId].zi3list[tsBQKey].ming2cheng1;
+            arrBQ2[tsBQKey] = oBQData[psBQSelectId].mapzi3bq[tsBQKey].bq0name;
         }
+        return arrBQ1[psBQSelectId];
     } else if (iBQBSSelect === cConfig.iBQBS2) {
         sBQSelectId2 = psBQSelectId;
-        let arrBQKey = Object.keys(oBQData[sBQSelectId1].zi3list[psBQSelectId].zi3list);
+        let arrBQKey = Object.keys(oBQData[sBQSelectId1].mapzi3bq[psBQSelectId].mapzi3bq);
         for (let tsBQKey of arrBQKey) {
-            arrBQ3[tsBQKey] = oBQData[sBQSelectId1].zi3list[psBQSelectId].zi3list[tsBQKey].ming2cheng1;
+            arrBQ3[tsBQKey] = oBQData[sBQSelectId1].mapzi3bq[psBQSelectId].mapzi3bq[tsBQKey].bq0name;
         }
+        return arrBQ2[psBQSelectId];
     } else if (iBQBSSelect === cConfig.iBQBS3) {
         sBQSelectId3 = psBQSelectId;
+        return arrBQ3[psBQSelectId];
     }
 }
 
@@ -120,53 +122,64 @@ function fGetAllBQSelectId() {
 function fXinBQAdd(sXinBQId, sXinBQName) {
     if (rHelper.fEmpty(sXinBQId) || rHelper.fEmpty(sXinBQName)) {
         alert('标签数据错误');
-        return {};
+        return '';
     }
+    let sOldBQId = ''; //用于判断是新标签还是老标签
     //判断现在选中的是哪一级的标签页
     if (iBQBSSelect === cConfig.iBQBS1) {
-        oBQData[sXinBQId] = {};
-        oBQData[sXinBQId].ming2cheng1 = sXinBQName;
-        oBQData[sXinBQId].zi3list = {};
-        oBQData[sXinBQId].zi3list = fArrBQSort(oBQData[sXinBQId].zi3list);
-
+        if (rHelper.fEmpty(oBQData[sXinBQId])) {
+            oBQData[sXinBQId] = {};
+            oBQData[sXinBQId].bq0name = sXinBQName;
+            oBQData[sXinBQId].mapzi3bq = {};
+            oBQData[sXinBQId].mapzi3bq = fArrBQSort(oBQData[sXinBQId].mapzi3bq);
+        } else {
+            sOldBQId = sXinBQId;
+            oBQData[sXinBQId].bq0name = sXinBQName;
+        }
         arrBQ1[sXinBQId] = sXinBQName;
         arrBQ1 = fArrBQSort(arrBQ1);
 
-        return arrBQ1;
-
+        return sOldBQId;
     } else if (iBQBSSelect === cConfig.iBQBS2) {
         if (rHelper.fEmpty(sBQSelectId1)) {
             alert('一级标签缺失');
-            return {};
+            return '';
         }
-        oBQData[sBQSelectId1].zi3list[sXinBQId] = {};
-        oBQData[sBQSelectId1].zi3list[sXinBQId].ming2cheng1 = sXinBQName;
-        oBQData[sBQSelectId1].zi3list[sXinBQId].zi3list = {};
-        oBQData[sBQSelectId1].zi3list = fArrBQSort(oBQData[sBQSelectId1].zi3list);
-
+        if (rHelper.fEmpty(oBQData[sBQSelectId1].mapzi3bq[sXinBQId])) {
+            oBQData[sBQSelectId1].mapzi3bq[sXinBQId] = {};
+            oBQData[sBQSelectId1].mapzi3bq[sXinBQId].bq0name = sXinBQName;
+            oBQData[sBQSelectId1].mapzi3bq[sXinBQId].mapzi3bq = {};
+            oBQData[sBQSelectId1].mapzi3bq = fArrBQSort(oBQData[sBQSelectId1].mapzi3bq);
+        } else {
+            sOldBQId = sXinBQId;
+            oBQData[sBQSelectId1].mapzi3bq[sXinBQId].bq0name = sXinBQName;
+        }
         arrBQ2[sXinBQId] = sXinBQName;
         arrBQ2 = fArrBQSort(arrBQ2);
 
-        return arrBQ2;
-
+        return sOldBQId;
     } else if (iBQBSSelect === cConfig.iBQBS3) {
         if (rHelper.fEmpty(sBQSelectId1)) {
             alert('一级标签缺失');
-            return {};
+            return '';
         }
         if (rHelper.fEmpty(sBQSelectId2)) {
             alert('二级标签缺失');
-            return {};
+            return '';
         }
-        oBQData[sBQSelectId1].zi3list[sBQSelectId2].zi3list[sXinBQId] = {};
-        oBQData[sBQSelectId1].zi3list[sBQSelectId2].zi3list[sXinBQId].ming2cheng1 = sXinBQName;
-        oBQData[sBQSelectId1].zi3list[sBQSelectId2].zi3list =
-            fArrBQSort(oBQData[sBQSelectId1].zi3list[sBQSelectId2].zi3list);
-
+        if (rHelper.fEmpty(oBQData[sBQSelectId1].mapzi3bq[sBQSelectId2].mapzi3bq[sXinBQId])) {
+            oBQData[sBQSelectId1].mapzi3bq[sBQSelectId2].mapzi3bq[sXinBQId] = {};
+            oBQData[sBQSelectId1].mapzi3bq[sBQSelectId2].mapzi3bq[sXinBQId].bq0name = sXinBQName;
+            oBQData[sBQSelectId1].mapzi3bq[sBQSelectId2].mapzi3bq =
+                fArrBQSort(oBQData[sBQSelectId1].mapzi3bq[sBQSelectId2].mapzi3bq);
+        } else {
+            sOldBQId = sXinBQId;
+            oBQData[sBQSelectId1].mapzi3bq[sBQSelectId2].mapzi3bq[sXinBQId].bq0name = sXinBQName;
+        }
         arrBQ3[sXinBQId] = sXinBQName;
         arrBQ3 = fArrBQSort(arrBQ3);
 
-        return arrBQ3;
+        return sOldBQId;
     }
 }
 
@@ -194,7 +207,7 @@ function fLoadFen1Lei4BQ(sBQPath) {
     oBQData = JSON.parse(tsBQData);
     let arrBQKey = Object.keys(oBQData);
     for (let tsBQKey of arrBQKey) {
-        arrBQ1[tsBQKey] = oBQData[tsBQKey].ming2cheng1;
+        arrBQ1[tsBQKey] = oBQData[tsBQKey].bq0name;
     }
 }
 

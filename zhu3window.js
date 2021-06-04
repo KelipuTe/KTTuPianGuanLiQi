@@ -181,7 +181,7 @@ function fcNewBQAdd() {
     let iBQBSSelect = rBiao1Qian1.fGetBQBSSelect();
     let iXinBQId = eNewBQId.value;
     let sXinBQName = eNewBQName.value;
-    rBiao1Qian1.fXinBQAdd(iXinBQId, sXinBQName);
+    let sOldBQId = rBiao1Qian1.fXinBQAdd(iXinBQId, sXinBQName);
     rBiao1Qian1.fSaveFen1Lei4BQ(rMu4Lu4.fGetBQML(), rMu4Lu4.fGetPathFen1Lei4BQ());
     rMu4Lu4.fMakeBQML(iBQBSSelect, rBiao1Qian1.fGetAllBQSelectId(), iXinBQId);
     if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS1) {
@@ -191,7 +191,8 @@ function fcNewBQAdd() {
     } else if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS3) {
         fMakeBQArr(iBQBSSelect, eBQArr3, rBiao1Qian1.fGetWaitBQ(iBQBSSelect));
     }
-    // 重置输入框
+    fRedrawFen1Lei4BQ(iBQBSSelect, rHelper.fEncodeBQEleId(iBQBSSelect, sOldBQId));
+    //重置输入框
     eNewBQId.value = '';
     eNewBQName.value = '';
 }
@@ -206,7 +207,7 @@ function fMakeBQArr(iBQBSSelect, eleBQ, arrDaiGouZaoBQ) {
     eleBQ.innerHTML = '';
     for (let kBQ in arrDaiGouZaoBQ) {
         let tempEle = document.createElement('button');
-        tempEle.id = kBQ;
+        tempEle.id = rHelper.fEncodeBQEleId(iBQBSSelect, kBQ);
         tempEle.type = 'button';
         tempEle.innerHTML = arrDaiGouZaoBQ[kBQ];
         tempEle.className = 'bq0bq0btn btn0shh';
@@ -220,19 +221,16 @@ function fMakeBQArr(iBQBSSelect, eleBQ, arrDaiGouZaoBQ) {
 //点击，分类标签
 function fcFen1Lei4BQ() {
     let iBQBSSelect = parseInt(this.getAttribute('data-bqbs'));
+    let sBQKey = rHelper.fDecodeBQEleId(iBQBSSelect, this.id);
     if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS1) {
         //一级标签
-        if (rBiao1Qian1.fGetBQSelectId(iBQBSSelect) === this.id) {
+        if (rBiao1Qian1.fGetBQSelectId(iBQBSSelect) === sBQKey) {
             //如果已选中的就是这个标签
             //清空数据
             rBiao1Qian1.fCleanBQSelectId(iBQBSSelect);
             eBQArr2.innerHTML = '';
             eBQArr3.innerHTML = '';
-
-            let teleBQList = eBQArr1.children;
-            for (let ii = 0; ii < teleBQList.length; ++ii) {
-                teleBQList[ii].className = 'bq0bq0btn btn0shh';
-            }
+            fRedrawFen1Lei4BQ(iBQBSSelect);
         } else {
             //如果已选中的是其他标签
             //清空数据，然后加载对应标签的数据
@@ -240,67 +238,61 @@ function fcFen1Lei4BQ() {
             eBQArr2.innerHTML = '';
             eBQArr3.innerHTML = '';
 
-            rBiao1Qian1.fSetBQSelectId(iBQBSSelect, this.id);
+            eNewBQId.value = sBQKey;
+            eNewBQName.value = rBiao1Qian1.fSetBQSelectId(iBQBSSelect, sBQKey);
             fMakeBQArr(rBiao1Qian1.cConfig.iBQBS2, eBQArr2, rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS2));
-
-            let teleBQList = eBQArr1.children;
-            for (let ii = 0; ii < teleBQList.length; ++ii) {
-                if (teleBQList[ii].id === this.id) {
-                    teleBQList[ii].className = 'bq0bq0btn btn0zi3';
-                } else {
-                    teleBQList[ii].className = 'bq0bq0btn btn0shh';
-                }
-            }
+            fRedrawFen1Lei4BQ(iBQBSSelect, this.id);
         }
     } else if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS2) {
         //二级标签
-        if (rBiao1Qian1.fGetBQSelectId(iBQBSSelect) === this.id) {
+        if (rBiao1Qian1.fGetBQSelectId(iBQBSSelect) === sBQKey) {
             rBiao1Qian1.fCleanBQSelectId(iBQBSSelect);
             eBQArr3.innerHTML = '';
-
-            let teleBQList = eBQArr2.children;
-            for (let ii = 0; ii < teleBQList.length; ++ii) {
-                teleBQList[ii].className = 'bq0bq0btn btn0shh';
-            }
+            fRedrawFen1Lei4BQ(iBQBSSelect);
         } else {
             rBiao1Qian1.fCleanBQSelectId(iBQBSSelect);
             eBQArr3.innerHTML = '';
 
-            rBiao1Qian1.fSetBQSelectId(iBQBSSelect, this.id)
+            eNewBQId.value = sBQKey;
+            eNewBQName.value = rBiao1Qian1.fSetBQSelectId(iBQBSSelect, sBQKey)
             fMakeBQArr(rBiao1Qian1.cConfig.iBQBS3, eBQArr3, rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS3));
-
-            let teleBQList = eBQArr2.children;
-            for (let ii = 0; ii < teleBQList.length; ++ii) {
-                if (teleBQList[ii].id === this.id) {
-                    teleBQList[ii].className = 'bq0bq0btn btn0zi3';
-                } else {
-                    teleBQList[ii].className = 'bq0bq0btn btn0shh';
-                }
-            }
+            fRedrawFen1Lei4BQ(iBQBSSelect, this.id);
         }
     } else if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS3) {
         //三级标签
-        if (rBiao1Qian1.fGetBQSelectId(iBQBSSelect) === this.id) {
+        if (rBiao1Qian1.fGetBQSelectId(iBQBSSelect) === sBQKey) {
             rBiao1Qian1.fCleanBQSelectId(iBQBSSelect);
-
-            let teleBQList = eBQArr3.children;
-            for (let ii = 0; ii < teleBQList.length; ++ii) {
-                teleBQList[ii].className = 'bq0bq0btn btn0shh';
-            }
+            fRedrawFen1Lei4BQ(iBQBSSelect);
         } else {
-            rBiao1Qian1.fSetBQSelectId(iBQBSSelect, this.id)
-
-            let teleBQList = eBQArr3.children;
-            for (let ii = 0; ii < teleBQList.length; ++ii) {
-                if (teleBQList[ii].id === this.id) {
-                    teleBQList[ii].className = 'bq0bq0btn btn0zi3';
-                } else {
-                    teleBQList[ii].className = 'bq0bq0btn btn0shh';
-                }
-            }
+            eNewBQId.value = sBQKey;
+            eNewBQName.value = rBiao1Qian1.fSetBQSelectId(iBQBSSelect, sBQKey)
+            fRedrawFen1Lei4BQ(iBQBSSelect, this.id);
         }
     }
     fTPRename();
+}
+
+/**
+ * 重绘分类标签
+ * @int iBQBSSelect
+ * @string sBQId
+ */
+function fRedrawFen1Lei4BQ(iBQBSSelect, sBQId = '') {
+    let teleBQList = [];
+    if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS1) {
+        teleBQList = eBQArr1.children;
+    } else if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS2) {
+        teleBQList = eBQArr2.children;
+    } else if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS3) {
+        teleBQList = eBQArr3.children;
+    }
+    for (let ii = 0; ii < teleBQList.length; ++ii) {
+        if (teleBQList[ii].id === sBQId) {
+            teleBQList[ii].className = 'bq0bq0btn btn0zi3';
+        } else {
+            teleBQList[ii].className = 'bq0bq0btn btn0shh';
+        }
+    }
 }
 
 //点击，图片移动
