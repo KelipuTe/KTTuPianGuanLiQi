@@ -1,79 +1,63 @@
-//图片模块
+/*##图片模块##*/
 
 const rHelper = require('./helper');
 const rFs = require('fs');
 
-//iTPNum--图片列表数量
+//iSArrTPNameLen--图片列表数量
 const cConfig = {
-    iSArrTPMingLen: 20,
+    iSArrTPNameLen: 20,
 };
 
-//图片名列表
-let sarrTPMing = [];
-//图片名
-let sTPMing = '';
-let sTPLuJing = '';
-//图片宽高
-let iTPKuan = 0;
-let iTPGao = 0;
-//重命名
-let sShi2Jian1 = '';
-let sChongMingMing = '';
-let sMuBiaoLuJing = '';
+let sarrTPName = []; //图片名列表
+let sTPName = ''; //图片名
+let sTPPath = ''; //图片路径
+let iTPKuan = 0; //宽
+let iTPGao = 0; //高
+let sTime = ''; //时间标识
+let sTPRename = ''; //重命名
 
 /**
  * 加载图片
- * @param sWFLML 图片目录路径
+ * @string sWFLML 图片目录
  */
 function fLoadTP(sWFLML) {
     if (!rFs.existsSync(sWFLML)) {
         return [];
     }
     //清空数据
-    sarrTPMing = [];
+    sarrTPName = [];
     //同步读取目录下的文件
     let sarrFileName = rFs.readdirSync(sWFLML);
     //一次取一定数量的图片
     let ii = 1;
-    for (let sWenJianMing of sarrFileName) {
-        if (ii > cConfig.iSArrTPMingLen) {
+    for (let sWJM of sarrFileName) {
+        if (ii > cConfig.iSArrTPNameLen) {
             break;
         } else {
-            sarrTPMing.push(sWenJianMing);
+            sarrTPName.push(sWJM);
             ++ii;
         }
     }
-    return sarrTPMing;
+    return sarrTPName;
 }
 
-/**
- * 获取图片名列表
- * @returns {[]}
- */
-function fGetArrTPMing() {
-    return sarrTPMing;
+//获取图片名列表
+function fGetArrTPName() {
+    return sarrTPName;
 }
 
 /**
  * 设置图片名
- * @param psTPMing
+ * @string psTPMing
  */
-function fSetTPMing(psTPMing) {
-    sTPMing = psTPMing;
-}
-
-/**
- * 获取图片名
- * @returns {string}
- */
-function fGetTPMing() {
-    return sTPMing;
+function fSetTPName(psTPMing) {
+    sTPName = psTPMing;
 }
 
 /**
  * 设置图片原始宽高
- * @param piTPKuan
- * @param piTPGao
+ * @int piTPKuan
+ * @int piTPGao
  */
 function fSetTPKuanGao(piTPKuan, piTPGao) {
     iTPKuan = piTPKuan;
@@ -81,69 +65,57 @@ function fSetTPKuanGao(piTPKuan, piTPGao) {
 }
 
 /**
- * 图片重命名
- * @returns {string}
+ * 设置图片原始路径
+ * @string pTPPath
  */
-function fGetChong2Ming4Ming4() {
-    let arrTPMing = sTPMing.split('.');
-    let sTPHou4Zhui4 = arrTPMing[arrTPMing.length - 1];
+function fSetTPPath(pTPPath) {
+    sTPPath = pTPPath;
+}
+
+//图片重命名
+function fGetRename() {
+    let arrTPName = sTPName.split('.');
+    let sTPHou4Zhui4 = arrTPName[arrTPName.length - 1];
     //构造时间字符串
     let oDate = new Date();
-    sShi2Jian1 = String(oDate.getFullYear());
+    sTime = String(oDate.getFullYear());
     let tiTime = oDate.getMonth() + 1;
-    sShi2Jian1 += (tiTime < 10) ? '0' + tiTime : String(tiTime);
+    sTime += (tiTime < 10) ? '0' + tiTime : String(tiTime);
     tiTime = oDate.getDate();
-    sShi2Jian1 += (tiTime < 10) ? '0' + tiTime : String(tiTime);
+    sTime += (tiTime < 10) ? '0' + tiTime : String(tiTime);
     tiTime = oDate.getHours();
-    sShi2Jian1 += (tiTime < 10) ? '0' + tiTime : String(tiTime);
+    sTime += (tiTime < 10) ? '0' + tiTime : String(tiTime);
     tiTime = oDate.getMinutes();
-    sShi2Jian1 += (tiTime < 10) ? '0' + tiTime : String(tiTime);
+    sTime += (tiTime < 10) ? '0' + tiTime : String(tiTime);
     tiTime = oDate.getSeconds();
-    sShi2Jian1 += (tiTime < 10) ? '0' + tiTime : String(tiTime);
-    sChongMingMing = '-' + iTPKuan + '-' + iTPGao + '-' + sShi2Jian1 + '.' + sTPHou4Zhui4;
+    sTime += (tiTime < 10) ? '0' + tiTime : String(tiTime);
+    sTPRename = '-' + iTPKuan + '-' + iTPGao + '-' + sTime + '.' + sTPHou4Zhui4;
 
-    return sChongMingMing
-}
-
-/**
- * 设置图片原始路径
- * @param pTPLuJing
- */
-function fSetTPLuJing(pTPLuJing) {
-    sTPLuJing = pTPLuJing;
-}
-
-/**
- * 设置图片将要移动到的目标路径
- * @param psMuBiaoLuJing
- */
-function fSetMuBiaoLuJing(psMuBiaoLuJing) {
-    sMuBiaoLuJing = psMuBiaoLuJing;
+    return sTPRename
 }
 
 /**
  * 移动图片
+ * @string sTargetPath 目标路径
  */
-function fYiDongTuPian() {
-    if (rHelper.fEmpty(sTPLuJing) || rHelper.fEmpty(sMuBiaoLuJing)) {
+function fTPMove(sTargetPath) {
+    if (rHelper.fEmpty(sTPPath) || rHelper.fEmpty(sTargetPath)) {
         alert('缺少图片路径参数');
         return;
     }
     //移动图片
-    rFs.renameSync(sTPLuJing, sMuBiaoLuJing);
+    rFs.renameSync(sTPPath, sTargetPath);
     //从列表移除图片
-    let iIndex = sarrTPMing.indexOf(sTPMing);
+    let iIndex = sarrTPName.indexOf(sTPName);
     if (iIndex !== -1) {
-        sarrTPMing.splice(iIndex, 1);
+        sarrTPName.splice(iIndex, 1);
     }
 }
 
 module.exports.fLoadTP = fLoadTP;
-module.exports.fGetTPMing = fGetTPMing;
-module.exports.fSetTPMing = fSetTPMing;
+module.exports.fGetArrTPName = fGetArrTPName;
+module.exports.fSetTPName = fSetTPName;
 module.exports.fSetTPKuanGao = fSetTPKuanGao;
-module.exports.fGetChong2Ming4Ming4 = fGetChong2Ming4Ming4;
-module.exports.fSetTPLuJing = fSetTPLuJing;
-module.exports.fSetMuBiaoLuJing = fSetMuBiaoLuJing;
-module.exports.fYiDongTuPian = fYiDongTuPian;
-module.exports.fGetArrTPMing = fGetArrTPMing;
+module.exports.fSetTPPath = fSetTPPath;
+module.exports.fGetRename = fGetRename;
+module.exports.fTPMove = fTPMove;

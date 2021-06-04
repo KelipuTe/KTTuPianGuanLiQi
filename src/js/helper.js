@@ -2,23 +2,23 @@
 
 /*##判空##*/
 
-function fEmpty(pParam) {
-    return pParam === undefined || pParam === null ||
-        pParam === {} || pParam === [] || pParam === '';
+function fEmpty(op) {
+    return op === undefined || op === null ||
+        op === {} || op === [] || op === '';
 }
 
-function fEmptyStr(p) {
-    if (typeof p !== 'string') {
+function fEmptyStr(op) {
+    if (typeof op !== 'string') {
         return false;
     }
-    return p === '';
+    return op === '';
 }
 
-function fEmptyNum(p) {
-    if (typeof p !== 'number') {
+function fEmptyNum(op) {
+    if (typeof op !== 'number') {
         return false;
     }
-    return isNaN(p);
+    return isNaN(op);
 }
 
 /*####判空####*/

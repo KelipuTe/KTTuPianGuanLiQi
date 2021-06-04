@@ -1,4 +1,4 @@
-//标签模块
+/*##标签模块##*/
 
 const rHelper = require('./helper');
 const rFs = require('fs');
@@ -10,190 +10,20 @@ const cConfig = {
     iBQBS3: 3,
 };
 
-//标签数据
-let oBQData = {};
-//[一,二,三]级标签列表
-let arrBQ1 = {};
-let arrBQ2 = {};
-let arrBQ3 = {};
+let oBQData = {}; //标签数据
+let arrBQ1 = {}; //一级标签列表
+let arrBQ2 = {}; //二级标签列表
+let arrBQ3 = {}; //三级标签列表
+let iBQBSSelect = cConfig.iBQBS1; //当前选中的标签标识
+let sBQSelectId1 = ''; //当前选中的一级标签Id
+let sBQSelectId2 = ''; //当前选中的二级标签Id
+let sBQSelectId3 = ''; //当前选中的三级标签Id
 
-//当前选中的标签标识
-let iXuanZhongBQBS = cConfig.iBQBS1;
-//当前选中的[一,二,三]级标签Id
-let sXuanZhongId1 = '';
-let sXuanZhongId2 = '';
-let sXuanZhongId3 = '';
-
-/**
- * 获取当前选中标签标识
- * @returns {number}
- */
-function fGetXuanZhongBQBS() {
-    return iXuanZhongBQBS;
-}
-
-/**
- * 设置当前选中标签标识
- * @param piXuanZhongBQBS
- */
-function fSetXuanZhongBQBS(piXuanZhongBQBS) {
-    iXuanZhongBQBS = piXuanZhongBQBS;
-}
-
-/**
- * 获取标签标识对应的标签id
- * @param iXuanZhongBQBS
- * @returns {string}
- */
-function fGetXuanZhongId(iXuanZhongBQBS) {
-    if (iXuanZhongBQBS === cConfig.iBQBS1) {
-        return sXuanZhongId1;
-    } else if (iXuanZhongBQBS === cConfig.iBQBS2) {
-        return sXuanZhongId2;
-    } else if (iXuanZhongBQBS === cConfig.iBQBS3) {
-        return sXuanZhongId3;
-    }
-}
-
-/**
- * 获取全部选中标签的id
- * @returns {string[]}
- */
-function fGetAllXuanZhongId() {
-    return [sXuanZhongId1, sXuanZhongId2, sXuanZhongId3]
-}
-
-/**
- * 设置标签标识对应的标签id
- * @param iXuanZhongBQBS
- * @param psXuanZhongId
- */
-function fSetXuanZhongId(iXuanZhongBQBS, psXuanZhongId) {
-    if (iXuanZhongBQBS === cConfig.iBQBS1) {
-        sXuanZhongId1 = psXuanZhongId;
-        let arrBQKey = Object.keys(oBQData[psXuanZhongId].zi3list);
-        for (let tsBQKey of arrBQKey) {
-            arrBQ2[tsBQKey] = oBQData[psXuanZhongId].zi3list[tsBQKey].ming2cheng1;
-        }
-    } else if (iXuanZhongBQBS === cConfig.iBQBS2) {
-        sXuanZhongId2 = psXuanZhongId;
-        let arrBQKey = Object.keys(oBQData[sXuanZhongId1].zi3list[psXuanZhongId].zi3list);
-        for (let tsBQKey of arrBQKey) {
-            arrBQ3[tsBQKey] = oBQData[sXuanZhongId1].zi3list[psXuanZhongId].zi3list[tsBQKey].ming2cheng1;
-        }
-    } else if (iXuanZhongBQBS === cConfig.iBQBS3) {
-        sXuanZhongId3 = psXuanZhongId;
-    }
-}
-
-/**
- * 根据标签标识清理数据
- * @param iXuanZhongBQBS
- */
-function fCleanXuanZhongId(iXuanZhongBQBS) {
-    if (iXuanZhongBQBS === cConfig.iBQBS1) {
-        sXuanZhongId1 = '';
-        arrBQ2 = {};
-        sXuanZhongId2 = '';
-        arrBQ3 = {};
-        sXuanZhongId3 = '';
-    } else if (iXuanZhongBQBS === cConfig.iBQBS2) {
-        sXuanZhongId2 = '';
-        arrBQ3 = {};
-        sXuanZhongId3 = '';
-    } else if (iXuanZhongBQBS === cConfig.iBQBS3) {
-        sXuanZhongId3 = '';
-    }
-}
-
-/**
- * 添加新标签
- * @param iXinBQId 标签id
- * @param sXinBQMing 标签名
- */
-function fXinBQAdd(iXinBQId, sXinBQMing) {
-    if (rHelper.fEmpty(iXinBQId) || rHelper.fEmpty(sXinBQMing)) {
-        alert('标签数据错误');
-        return {};
-    }
-    //判断现在选中的是哪一级的标签页
-    if (iXuanZhongBQBS === cConfig.iBQBS1) {
-        oBQData[iXinBQId] = {};
-        oBQData[iXinBQId].ming2cheng1 = sXinBQMing;
-        oBQData[iXinBQId].zi3list = {};
-        oBQData[iXinBQId].zi3list = fArrBQSort(oBQData[iXinBQId].zi3list);
-
-        arrBQ1[iXinBQId] = sXinBQMing;
-        arrBQ1 = fArrBQSort(arrBQ1);
-
-        return arrBQ1;
-
-    } else if (iXuanZhongBQBS === cConfig.iBQBS2) {
-        if (rHelper.fEmpty(sXuanZhongId1)) {
-            alert('一级标签缺失');
-            return {};
-        }
-        oBQData[sXuanZhongId1].zi3list[iXinBQId] = {};
-        oBQData[sXuanZhongId1].zi3list[iXinBQId].ming2cheng1 = sXinBQMing;
-        oBQData[sXuanZhongId1].zi3list[iXinBQId].zi3list = {};
-        oBQData[sXuanZhongId1].zi3list = fArrBQSort(oBQData[sXuanZhongId1].zi3list);
-
-        arrBQ2[iXinBQId] = sXinBQMing;
-        arrBQ2 = fArrBQSort(arrBQ2);
-
-        return arrBQ2;
-
-    } else if (iXuanZhongBQBS === cConfig.iBQBS3) {
-        if (rHelper.fEmpty(sXuanZhongId1)) {
-            alert('一级标签缺失');
-            return {};
-        }
-        if (rHelper.fEmpty(sXuanZhongId2)) {
-            alert('二级标签缺失');
-            return {};
-        }
-        oBQData[sXuanZhongId1].zi3list[sXuanZhongId2].zi3list[iXinBQId] = {};
-        oBQData[sXuanZhongId1].zi3list[sXuanZhongId2].zi3list[iXinBQId].ming2cheng1 = sXinBQMing;
-        oBQData[sXuanZhongId1].zi3list[sXuanZhongId2].zi3list =
-            fArrBQSort(oBQData[sXuanZhongId1].zi3list[sXuanZhongId2].zi3list);
-
-        arrBQ3[iXinBQId] = sXinBQMing;
-        arrBQ3 = fArrBQSort(arrBQ3);
-
-        return arrBQ3;
-    }
-}
-
-/**
- * 保存标签数据
- */
-function fSaveFen1Lei4BQ(sFen1Lei4BQMuLu, sBQLu4Jing4) {
-    if (!rFs.existsSync(sFen1Lei4BQMuLu)) {
-        rFs.mkdirSync(sFen1Lei4BQMuLu);
-    }
-    rFs.writeFileSync(sBQLu4Jing4, JSON.stringify(oBQData), 'utf8');
-}
-
-/**
- * 加载标签数据
- * @param sBQLu4Jing4
- */
-function fLoadFen1Lei4BQ(sBQLu4Jing4) {
-    if (!rFs.existsSync(sBQLu4Jing4)) {
-        return;
-    }
-    let tsBQData = rFs.readFileSync(sBQLu4Jing4, 'utf8');
-    oBQData = JSON.parse(tsBQData);
-    let arrBQKey = Object.keys(oBQData);
-    for (let tsBQKey of arrBQKey) {
-        arrBQ1[tsBQKey] = oBQData[tsBQKey].ming2cheng1;
-    }
-}
+/*##辅助函数##*/
 
 /**
  * 标签列表排序
- * @param arrBQ
- * @returns {{}}
+ * @object arrBQ 标签列表
  */
 function fArrBQSort(arrBQ) {
     let arrBQKeySort = Object.keys(arrBQ).sort();
@@ -204,29 +34,194 @@ function fArrBQSort(arrBQ) {
     return arrNewBQ;
 }
 
+/*####辅助函数####*/
+
+//获取当前选中标签标识
+function fGetBQBSSelect() {
+    return iBQBSSelect;
+}
+
+/**
+ * 设置当前选中标签标识
+ * @int piBQBSSelect 标签标识
+ */
+function fSetBQBSSelect(piBQBSSelect) {
+    iBQBSSelect = piBQBSSelect;
+}
+
+/**
+ * 获取标签标识对应的标签id
+ * @int iBQBSSelect 标签标识
+ */
+function fGetBQSelectId(iBQBSSelect) {
+    if (iBQBSSelect === cConfig.iBQBS1) {
+        return sBQSelectId1;
+    } else if (iBQBSSelect === cConfig.iBQBS2) {
+        return sBQSelectId2;
+    } else if (iBQBSSelect === cConfig.iBQBS3) {
+        return sBQSelectId3;
+    }
+}
+
+
+/**
+ * 设置标签标识对应的标签id
+ * @int iBQBSSelect 标签标识
+ * @string psBQSelectId 标签id
+ */
+function fSetBQSelectId(iBQBSSelect, psBQSelectId) {
+    if (iBQBSSelect === cConfig.iBQBS1) {
+        sBQSelectId1 = psBQSelectId;
+        let arrBQKey = Object.keys(oBQData[psBQSelectId].zi3list);
+        for (let tsBQKey of arrBQKey) {
+            arrBQ2[tsBQKey] = oBQData[psBQSelectId].zi3list[tsBQKey].ming2cheng1;
+        }
+    } else if (iBQBSSelect === cConfig.iBQBS2) {
+        sBQSelectId2 = psBQSelectId;
+        let arrBQKey = Object.keys(oBQData[sBQSelectId1].zi3list[psBQSelectId].zi3list);
+        for (let tsBQKey of arrBQKey) {
+            arrBQ3[tsBQKey] = oBQData[sBQSelectId1].zi3list[psBQSelectId].zi3list[tsBQKey].ming2cheng1;
+        }
+    } else if (iBQBSSelect === cConfig.iBQBS3) {
+        sBQSelectId3 = psBQSelectId;
+    }
+}
+
+/**
+ * 根据标签标识清理数据
+ * @int iBQBSSelect 标签标识
+ */
+function fCleanBQSelectId(iBQBSSelect) {
+    if (iBQBSSelect === cConfig.iBQBS1) {
+        sBQSelectId1 = '';
+        arrBQ2 = {};
+        sBQSelectId2 = '';
+        arrBQ3 = {};
+        sBQSelectId3 = '';
+    } else if (iBQBSSelect === cConfig.iBQBS2) {
+        sBQSelectId2 = '';
+        arrBQ3 = {};
+        sBQSelectId3 = '';
+    } else if (iBQBSSelect === cConfig.iBQBS3) {
+        sBQSelectId3 = '';
+    }
+}
+
+//获取全部选中标签的id
+function fGetAllBQSelectId() {
+    return [sBQSelectId1, sBQSelectId2, sBQSelectId3]
+}
+
+/**
+ * 添加新标签
+ * @string sXinBQId 标签id
+ * @string sXinBQName 标签名
+ */
+function fXinBQAdd(sXinBQId, sXinBQName) {
+    if (rHelper.fEmpty(sXinBQId) || rHelper.fEmpty(sXinBQName)) {
+        alert('标签数据错误');
+        return {};
+    }
+    //判断现在选中的是哪一级的标签页
+    if (iBQBSSelect === cConfig.iBQBS1) {
+        oBQData[sXinBQId] = {};
+        oBQData[sXinBQId].ming2cheng1 = sXinBQName;
+        oBQData[sXinBQId].zi3list = {};
+        oBQData[sXinBQId].zi3list = fArrBQSort(oBQData[sXinBQId].zi3list);
+
+        arrBQ1[sXinBQId] = sXinBQName;
+        arrBQ1 = fArrBQSort(arrBQ1);
+
+        return arrBQ1;
+
+    } else if (iBQBSSelect === cConfig.iBQBS2) {
+        if (rHelper.fEmpty(sBQSelectId1)) {
+            alert('一级标签缺失');
+            return {};
+        }
+        oBQData[sBQSelectId1].zi3list[sXinBQId] = {};
+        oBQData[sBQSelectId1].zi3list[sXinBQId].ming2cheng1 = sXinBQName;
+        oBQData[sBQSelectId1].zi3list[sXinBQId].zi3list = {};
+        oBQData[sBQSelectId1].zi3list = fArrBQSort(oBQData[sBQSelectId1].zi3list);
+
+        arrBQ2[sXinBQId] = sXinBQName;
+        arrBQ2 = fArrBQSort(arrBQ2);
+
+        return arrBQ2;
+
+    } else if (iBQBSSelect === cConfig.iBQBS3) {
+        if (rHelper.fEmpty(sBQSelectId1)) {
+            alert('一级标签缺失');
+            return {};
+        }
+        if (rHelper.fEmpty(sBQSelectId2)) {
+            alert('二级标签缺失');
+            return {};
+        }
+        oBQData[sBQSelectId1].zi3list[sBQSelectId2].zi3list[sXinBQId] = {};
+        oBQData[sBQSelectId1].zi3list[sBQSelectId2].zi3list[sXinBQId].ming2cheng1 = sXinBQName;
+        oBQData[sBQSelectId1].zi3list[sBQSelectId2].zi3list =
+            fArrBQSort(oBQData[sBQSelectId1].zi3list[sBQSelectId2].zi3list);
+
+        arrBQ3[sXinBQId] = sXinBQName;
+        arrBQ3 = fArrBQSort(arrBQ3);
+
+        return arrBQ3;
+    }
+}
+
+/**
+ * 保存分类标签数据
+ * @string sFen1Lei4BQML 分类标签目录
+ * @string sBQPath 分类标签文件路径
+ */
+function fSaveFen1Lei4BQ(sFen1Lei4BQML, sBQPath) {
+    if (!rFs.existsSync(sFen1Lei4BQML)) {
+        rFs.mkdirSync(sFen1Lei4BQML);
+    }
+    rFs.writeFileSync(sBQPath, JSON.stringify(oBQData), 'utf8');
+}
+
+/**
+ * 加载标签数据
+ * @string sBQPath 分类标签文件路径
+ */
+function fLoadFen1Lei4BQ(sBQPath) {
+    if (!rFs.existsSync(sBQPath)) {
+        return;
+    }
+    let tsBQData = rFs.readFileSync(sBQPath, 'utf8');
+    oBQData = JSON.parse(tsBQData);
+    let arrBQKey = Object.keys(oBQData);
+    for (let tsBQKey of arrBQKey) {
+        arrBQ1[tsBQKey] = oBQData[tsBQKey].ming2cheng1;
+    }
+}
+
 /**
  * 获取待构造标签列表
+ * @param piBQBSSelect 标签标识
  */
-function fGetWaitBQ(piXuanZhongBQBS) {
-    if (piXuanZhongBQBS === cConfig.iBQBS1) {
+function fGetWaitBQ(piBQBSSelect) {
+    if (piBQBSSelect === cConfig.iBQBS1) {
         return arrBQ1;
-    } else if (piXuanZhongBQBS === cConfig.iBQBS2) {
+    } else if (piBQBSSelect === cConfig.iBQBS2) {
         return arrBQ2;
-    } else if (piXuanZhongBQBS === cConfig.iBQBS3) {
+    } else if (piBQBSSelect === cConfig.iBQBS3) {
         return arrBQ3;
     }
     return {};
 }
 
 module.exports.cConfig = cConfig;
-module.exports.fGetXuanZhongBQBS = fGetXuanZhongBQBS;
-module.exports.fSetXuanZhongBQBS = fSetXuanZhongBQBS;
-module.exports.fGetXuanZhongId = fGetXuanZhongId;
-module.exports.fGetAllXuanZhongId = fGetAllXuanZhongId;
-module.exports.fSetXuanZhongId = fSetXuanZhongId;
-module.exports.fCleanXuanZhongId = fCleanXuanZhongId;
+module.exports.fGetBQBSSelect = fGetBQBSSelect;
+module.exports.fSetBQBSSelect = fSetBQBSSelect;
+module.exports.fGetBQSelectId = fGetBQSelectId;
+module.exports.fSetBQSelectId = fSetBQSelectId;
+module.exports.fCleanBQSelectId = fCleanBQSelectId;
+module.exports.fGetAllBQSelectId = fGetAllBQSelectId;
 module.exports.fXinBQAdd = fXinBQAdd;
-module.exports.fGetWaitBQ = fGetWaitBQ;
 module.exports.fSaveFen1Lei4BQ = fSaveFen1Lei4BQ;
 module.exports.fLoadFen1Lei4BQ = fLoadFen1Lei4BQ;
+module.exports.fGetWaitBQ = fGetWaitBQ;
 

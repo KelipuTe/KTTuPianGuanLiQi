@@ -8,9 +8,8 @@ const cConfig = {
 
 /**
  * 计算图片居中需要的偏移量
- * @param iTPKuan
- * @param iTPGao
- * @returns {{iTPMarginLeft: number, iTPMarginTop: number}}
+ * @int iTPKuan
+ * @int iTPGao
  */
 function fTPJu1Zhong1(iTPKuan, iTPGao) {
     let iTPMarginLeft = 0;

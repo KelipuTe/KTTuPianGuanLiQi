@@ -32,49 +32,37 @@ function fSetCZML(psCZML) {
     sBQML = sCZML + cConfig.oML.sBQ;
 }
 
-/**
- * 检查操作目录是否设置
- * @returns {boolean}
- */
+//检查操作目录是否设置
 function fCheckCZML() {
     return rHelper.fEmptyStr(sCZML);
 }
 
-/**
- * 获取未分类目录
- * @returns {string}
- */
+//获取未分类目录
 function fGetWFLML() {
     return sWFLML;
 }
 
-/**
- * 获取标签目录
- * @returns {string}
- */
+//获取标签目录
 function fGetBQML() {
     return sBQML;
 }
 
-/**
- * 获取分类标签路径
- * @returns {string}
- */
+//获取分类标签文件路径
 function fGetPathFen1Lei4BQ() {
     return sBQML + cConfig.oWJM.sFen1Lei4BQ;
 }
 
 /**
- * 构造标签对应的目录
- * @param iXuanZhongBQBS
- * @param oAllXuanZhongId
- * @param iXinBQId
+ * 构造新标签对应的目录
+ * @int iBQBSSelect 选中的标签级别
+ * @object oAllBQSelectId 所有选中的标签id
+ * @int iXinBQId 新标签id
  */
-function fMakeBQMuLu(iXuanZhongBQBS, oAllXuanZhongId, iXinBQId) {
+function fMakeBQML(iBQBSSelect, oAllBQSelectId, iXinBQId) {
     let tiTag = 1;
     let tsMuLu = sCZML
-    while (tiTag < iXuanZhongBQBS) {
-        tsMuLu += oAllXuanZhongId[tiTag - 1] + '\\';
+    while (tiTag < iBQBSSelect) {
+        tsMuLu += oAllBQSelectId[tiTag - 1] + '\\';
         if (!rFs.existsSync(tsMuLu)) {
             rFs.mkdirSync(tsMuLu);
         }
@@ -88,16 +76,15 @@ function fMakeBQMuLu(iXuanZhongBQBS, oAllXuanZhongId, iXinBQId) {
 }
 
 /**
- * 用当前标签组合出对应目录
- * @param iXuanZhongBQBS
- * @param oAllXuanZhongId
- * @returns {string}
+ * 用当前选中的标签组合出对应目录
+ * @int iBQBSSelect 选中的标签级别
+ * @object oAllBQSelectId 所有选中的标签id
  */
-function fZu3He2BQMuLu(iXuanZhongBQBS, oAllXuanZhongId) {
+function fZu3He2BQML(iBQBSSelect, oAllBQSelectId) {
     let tiTag = 1;
     let tsMuLu = sCZML
-    while (tiTag <= iXuanZhongBQBS) {
-        tsMuLu += oAllXuanZhongId[tiTag - 1] + '\\';
+    while (tiTag <= iBQBSSelect) {
+        tsMuLu += oAllBQSelectId[tiTag - 1] + '\\';
         if (!rFs.existsSync(tsMuLu)) {
             rFs.mkdirSync(tsMuLu);
         }
@@ -111,5 +98,5 @@ module.exports.fCheckCZML = fCheckCZML;
 module.exports.fGetWFLML = fGetWFLML;
 module.exports.fGetBQML = fGetBQML;
 module.exports.fGetPathFen1Lei4BQ = fGetPathFen1Lei4BQ;
-module.exports.fMakeBQMuLu = fMakeBQMuLu;
-module.exports.fZu3He2BQMuLu = fZu3He2BQMuLu;
+module.exports.fMakeBQML = fMakeBQML;
+module.exports.fZu3He2BQML = fZu3He2BQML;

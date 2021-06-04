@@ -104,8 +104,7 @@ function fcCZMLSelect() {
             let sarrTPName = rTu2Pian4.fLoadTP(sWFLML);
             fLoadTPArr(sWFLML, sarrTPName);
             rBiao1Qian1.fLoadFen1Lei4BQ(rMu4Lu4.fGetPathFen1Lei4BQ());
-            fMakeBQArr(rBiao1Qian1.cConfig.iBQBS1, eBQArr1,
-                rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS1));
+            fMakeBQArr(rBiao1Qian1.cConfig.iBQBS1, eBQArr1, rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS1));
         }
     });
 }
@@ -136,9 +135,9 @@ function fLoadTPArr(sWFLML, sarrTPName) {
 //点击，选择图片
 function fcTPItem() {
     let sTPName = this.getAttribute('data-tp0name');
-    rTu2Pian4.fSetTPMing(sTPName);
+    rTu2Pian4.fSetTPName(sTPName);
     let sTPPath = rMu4Lu4.fGetWFLML() + sTPName;
-    rTu2Pian4.fSetTPLuJing(sTPPath);
+    rTu2Pian4.fSetTPPath(sTPPath);
     eTPShow.src = sTPPath;
 }
 
@@ -156,12 +155,10 @@ function fTPOnLoad() {
 
 //图片重命名
 function fTPRename() {
-    let sBQMuLu = rMu4Lu4.fZu3He2BQMuLu(rBiao1Qian1.fGetXuanZhongBQBS(), rBiao1Qian1.fGetAllXuanZhongId());
-    let sXuanZhongId = rBiao1Qian1.fGetXuanZhongId(rBiao1Qian1.fGetXuanZhongBQBS());
-    let sChongMingMing = rTu2Pian4.fGetChong2Ming4Ming4();
-    let sMuBiaoLuJing = sBQMuLu + sXuanZhongId + sChongMingMing;
-    rTu2Pian4.fSetMuBiaoLuJing(sMuBiaoLuJing);
-    eTPTargetPath.value = sMuBiaoLuJing;
+    let sBQMuLu = rMu4Lu4.fZu3He2BQML(rBiao1Qian1.fGetBQBSSelect(), rBiao1Qian1.fGetAllBQSelectId());
+    let sBQId = rBiao1Qian1.fGetBQSelectId(rBiao1Qian1.fGetBQBSSelect());
+    let sTPRename = rTu2Pian4.fGetRename();
+    eTPTargetPath.value = sBQMuLu + sBQId + sTPRename;
     eTPMove.disabled = false;
 }
 
@@ -171,7 +168,7 @@ function fcBQYSwitch() {
         eBQBQYBodyArr[ii].style.display = 'none';
     }
     let iBQBS = this.id.replace('bq0bqy0i', '');
-    rBiao1Qian1.fSetXuanZhongBQBS(parseInt(iBQBS));
+    rBiao1Qian1.fSetBQBSSelect(parseInt(iBQBS));
     eBQBQYBodyArr[iBQBS - 1].style.display = 'block';
 }
 
@@ -181,21 +178,18 @@ function fcNewBQAdd() {
         alert('未选择操作目录');
         return;
     }
-    let iXuanZhongBQBS = rBiao1Qian1.fGetXuanZhongBQBS();
+    let iBQBSSelect = rBiao1Qian1.fGetBQBSSelect();
     let iXinBQId = eNewBQId.value;
-    let sXinBQMing = eNewBQName.value;
-    rBiao1Qian1.fXinBQAdd(iXinBQId, sXinBQMing);
+    let sXinBQName = eNewBQName.value;
+    rBiao1Qian1.fXinBQAdd(iXinBQId, sXinBQName);
     rBiao1Qian1.fSaveFen1Lei4BQ(rMu4Lu4.fGetBQML(), rMu4Lu4.fGetPathFen1Lei4BQ());
-    rMu4Lu4.fMakeBQMuLu(iXuanZhongBQBS, rBiao1Qian1.fGetAllXuanZhongId(), iXinBQId);
-    if (iXuanZhongBQBS === rBiao1Qian1.cConfig.iBQBS1) {
-        fMakeBQArr(iXuanZhongBQBS, eBQArr1,
-            rBiao1Qian1.fGetWaitBQ(iXuanZhongBQBS));
-    } else if (iXuanZhongBQBS === rBiao1Qian1.cConfig.iBQBS2) {
-        fMakeBQArr(iXuanZhongBQBS, eBQArr2,
-            rBiao1Qian1.fGetWaitBQ(iXuanZhongBQBS));
-    } else if (iXuanZhongBQBS === rBiao1Qian1.cConfig.iBQBS3) {
-        fMakeBQArr(iXuanZhongBQBS, eBQArr3,
-            rBiao1Qian1.fGetWaitBQ(iXuanZhongBQBS));
+    rMu4Lu4.fMakeBQML(iBQBSSelect, rBiao1Qian1.fGetAllBQSelectId(), iXinBQId);
+    if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS1) {
+        fMakeBQArr(iBQBSSelect, eBQArr1, rBiao1Qian1.fGetWaitBQ(iBQBSSelect));
+    } else if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS2) {
+        fMakeBQArr(iBQBSSelect, eBQArr2, rBiao1Qian1.fGetWaitBQ(iBQBSSelect));
+    } else if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS3) {
+        fMakeBQArr(iBQBSSelect, eBQArr3, rBiao1Qian1.fGetWaitBQ(iBQBSSelect));
     }
     // 重置输入框
     eNewBQId.value = '';
@@ -204,11 +198,11 @@ function fcNewBQAdd() {
 
 /**
  * 渲染标签列表
- * @param iXuanZhongBQBS
+ * @param iBQBSSelect
  * @param eleBQ
  * @param arrDaiGouZaoBQ
  */
-function fMakeBQArr(iXuanZhongBQBS, eleBQ, arrDaiGouZaoBQ) {
+function fMakeBQArr(iBQBSSelect, eleBQ, arrDaiGouZaoBQ) {
     eleBQ.innerHTML = '';
     for (let kBQ in arrDaiGouZaoBQ) {
         let tempEle = document.createElement('button');
@@ -216,7 +210,7 @@ function fMakeBQArr(iXuanZhongBQBS, eleBQ, arrDaiGouZaoBQ) {
         tempEle.type = 'button';
         tempEle.innerHTML = arrDaiGouZaoBQ[kBQ];
         tempEle.className = 'bq0bq0btn btn0shh';
-        tempEle.setAttribute('data-bqbs', iXuanZhongBQBS);
+        tempEle.setAttribute('data-bqbs', iBQBSSelect);
         // 绑定标签点击事件
         tempEle.onclick = fcFen1Lei4BQ;
         eleBQ.appendChild(tempEle);
@@ -225,13 +219,13 @@ function fMakeBQArr(iXuanZhongBQBS, eleBQ, arrDaiGouZaoBQ) {
 
 //点击，分类标签
 function fcFen1Lei4BQ() {
-    let iXuanZhongBQBS = parseInt(this.getAttribute('data-bqbs'));
-    if (iXuanZhongBQBS === rBiao1Qian1.cConfig.iBQBS1) {
+    let iBQBSSelect = parseInt(this.getAttribute('data-bqbs'));
+    if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS1) {
         //一级标签
-        if (rBiao1Qian1.fGetXuanZhongId(iXuanZhongBQBS) === this.id) {
+        if (rBiao1Qian1.fGetBQSelectId(iBQBSSelect) === this.id) {
             //如果已选中的就是这个标签
             //清空数据
-            rBiao1Qian1.fCleanXuanZhongId(iXuanZhongBQBS);
+            rBiao1Qian1.fCleanBQSelectId(iBQBSSelect);
             eBQArr2.innerHTML = '';
             eBQArr3.innerHTML = '';
 
@@ -242,13 +236,12 @@ function fcFen1Lei4BQ() {
         } else {
             //如果已选中的是其他标签
             //清空数据，然后加载对应标签的数据
-            rBiao1Qian1.fCleanXuanZhongId(iXuanZhongBQBS);
+            rBiao1Qian1.fCleanBQSelectId(iBQBSSelect);
             eBQArr2.innerHTML = '';
             eBQArr3.innerHTML = '';
 
-            rBiao1Qian1.fSetXuanZhongId(iXuanZhongBQBS, this.id);
-            fMakeBQArr(rBiao1Qian1.cConfig.iBQBS2, eBQArr2,
-                rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS2));
+            rBiao1Qian1.fSetBQSelectId(iBQBSSelect, this.id);
+            fMakeBQArr(rBiao1Qian1.cConfig.iBQBS2, eBQArr2, rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS2));
 
             let teleBQList = eBQArr1.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
@@ -259,10 +252,10 @@ function fcFen1Lei4BQ() {
                 }
             }
         }
-    } else if (iXuanZhongBQBS === rBiao1Qian1.cConfig.iBQBS2) {
+    } else if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS2) {
         //二级标签
-        if (rBiao1Qian1.fGetXuanZhongId(iXuanZhongBQBS) === this.id) {
-            rBiao1Qian1.fCleanXuanZhongId(iXuanZhongBQBS);
+        if (rBiao1Qian1.fGetBQSelectId(iBQBSSelect) === this.id) {
+            rBiao1Qian1.fCleanBQSelectId(iBQBSSelect);
             eBQArr3.innerHTML = '';
 
             let teleBQList = eBQArr2.children;
@@ -270,12 +263,11 @@ function fcFen1Lei4BQ() {
                 teleBQList[ii].className = 'bq0bq0btn btn0shh';
             }
         } else {
-            rBiao1Qian1.fCleanXuanZhongId(iXuanZhongBQBS);
+            rBiao1Qian1.fCleanBQSelectId(iBQBSSelect);
             eBQArr3.innerHTML = '';
 
-            rBiao1Qian1.fSetXuanZhongId(iXuanZhongBQBS, this.id)
-            fMakeBQArr(rBiao1Qian1.cConfig.iBQBS3, eBQArr3,
-                rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS3));
+            rBiao1Qian1.fSetBQSelectId(iBQBSSelect, this.id)
+            fMakeBQArr(rBiao1Qian1.cConfig.iBQBS3, eBQArr3, rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS3));
 
             let teleBQList = eBQArr2.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
@@ -286,17 +278,17 @@ function fcFen1Lei4BQ() {
                 }
             }
         }
-    } else if (iXuanZhongBQBS === rBiao1Qian1.cConfig.iBQBS3) {
+    } else if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS3) {
         //三级标签
-        if (rBiao1Qian1.fGetXuanZhongId(iXuanZhongBQBS) === this.id) {
-            rBiao1Qian1.fCleanXuanZhongId(iXuanZhongBQBS);
+        if (rBiao1Qian1.fGetBQSelectId(iBQBSSelect) === this.id) {
+            rBiao1Qian1.fCleanBQSelectId(iBQBSSelect);
 
             let teleBQList = eBQArr3.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
                 teleBQList[ii].className = 'bq0bq0btn btn0shh';
             }
         } else {
-            rBiao1Qian1.fSetXuanZhongId(iXuanZhongBQBS, this.id)
+            rBiao1Qian1.fSetBQSelectId(iBQBSSelect, this.id)
 
             let teleBQList = eBQArr3.children;
             for (let ii = 0; ii < teleBQList.length; ++ii) {
@@ -313,17 +305,15 @@ function fcFen1Lei4BQ() {
 
 //点击，图片移动
 function fcTPMove() {
-    rTu2Pian4.fYiDongTuPian();
+    rTu2Pian4.fTPMove(eTPTargetPath.value);
     //重置图片展示区域和确认移动按钮状态
     eTPShow.src = '';
     eTPMove.disabled = false;
     //重新渲染左侧图片列表
     let sWFLML = rMu4Lu4.fGetWFLML();
-    let sarrTPName = rTu2Pian4.fGetArrTPMing();
+    let sarrTPName = rTu2Pian4.fGetArrTPName();
     if (sarrTPName.length < 1) {
         sarrTPName = rTu2Pian4.fLoadTP(sWFLML);
     }
     fLoadTPArr(sWFLML, sarrTPName);
 }
-
-
