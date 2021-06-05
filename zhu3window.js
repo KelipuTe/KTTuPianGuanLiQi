@@ -37,7 +37,7 @@ window.addEventListener('contextmenu', function (event) {
 /*##dom对象##*/
 
 let eCZMLSelect = {}; //选择操作目录按钮
-let eCZMLPath = {}; //操作目录路径展示
+let eCZMLStr = {}; //操作目录路径展示
 
 let eTPArr = {}; //左侧图片列表
 let eTPShow = {}; //右侧图片展示
@@ -53,7 +53,7 @@ let eNewBQId = {}; //新标签id
 let eNewBQName = {}; //新标签名
 let eNewBQAdd = {}; //添加新标签按钮
 
-let eTPTargetPath = {}; //图片移动目标路径
+let eTPMoveLJ = {}; //图片移动目标路径
 let eTPMove = {}; //图片移动按钮
 
 /*####dom对象####*/
@@ -61,7 +61,7 @@ let eTPMove = {}; //图片移动按钮
 window.onload = function () {
     eCZMLSelect = document.getElementById('ml0czml0select');
     eCZMLSelect.onclick = fcCZMLSelect;
-    eCZMLPath = document.getElementById('ml0czml0path')
+    eCZMLStr = document.getElementById('ml0czml0str')
 
     eTPArr = document.getElementById('tp0arr');
     eTPShow = document.getElementById('tp0show');
@@ -83,7 +83,7 @@ window.onload = function () {
     eNewBQAdd = document.getElementById('bq0new0add');
     eNewBQAdd.onclick = fcNewBQAdd;
 
-    eTPTargetPath = document.getElementById('ml0target0path');
+    eTPMoveLJ = document.getElementById('ml0move0lj');
     eTPMove = document.getElementById('ml0tp0move');
     eTPMove.onclick = fcTPMove;
     eTPMove.disabled = true;
@@ -99,11 +99,11 @@ function fcCZMLSelect() {
             console.warn('未选择操作目录');
         } else {
             rMu4Lu4.fSetCZML(result.filePaths[0]);
-            eCZMLPath.value = result.filePaths[0];
+            eCZMLStr.value = result.filePaths[0];
             let sWFLML = rMu4Lu4.fGetWFLML();
             let sarrTPName = rTu2Pian4.fLoadTP(sWFLML);
             fLoadTPArr(sWFLML, sarrTPName);
-            rBiao1Qian1.fLoadFen1Lei4BQ(rMu4Lu4.fGetPathFen1Lei4BQ());
+            rBiao1Qian1.fLoadFen1Lei4BQ(rMu4Lu4.fGetFen1Lei4BQWJLJ());
             fMakeBQArr(rBiao1Qian1.cConfig.iBQBS1, eBQArr1, rBiao1Qian1.fGetWaitBQ(rBiao1Qian1.cConfig.iBQBS1));
         }
     });
@@ -136,9 +136,9 @@ function fLoadTPArr(sWFLML, sarrTPName) {
 function fcTPItem() {
     let sTPName = this.getAttribute('data-tp0name');
     rTu2Pian4.fSetTPName(sTPName);
-    let sTPPath = rMu4Lu4.fGetWFLML() + sTPName;
-    rTu2Pian4.fSetTPPath(sTPPath);
-    eTPShow.src = sTPPath;
+    let sTPLJ = rMu4Lu4.fGetWFLML() + sTPName;
+    rTu2Pian4.fSetTPLJ(sTPLJ);
+    eTPShow.src = sTPLJ;
 }
 
 //eTPShow的onload事件
@@ -155,10 +155,10 @@ function fTPOnLoad() {
 
 //图片重命名
 function fTPRename() {
-    let sBQMuLu = rMu4Lu4.fZu3He2BQML(rBiao1Qian1.fGetBQBSSelect(), rBiao1Qian1.fGetAllBQSelectId());
+    let sBQMuLu = rMu4Lu4.fGetFen1Lei4BQML(rBiao1Qian1.fGetBQBSSelect(), rBiao1Qian1.fGetAllBQSelectId());
     let sBQId = rBiao1Qian1.fGetBQSelectId(rBiao1Qian1.fGetBQBSSelect());
     let sTPRename = rTu2Pian4.fGetRename();
-    eTPTargetPath.value = sBQMuLu + sBQId + sTPRename;
+    eTPMoveLJ.value = sBQMuLu + sBQId + sTPRename;
     eTPMove.disabled = false;
 }
 
@@ -182,8 +182,8 @@ function fcNewBQAdd() {
     let iXinBQId = eNewBQId.value;
     let sXinBQName = eNewBQName.value;
     let sOldBQId = rBiao1Qian1.fXinBQAdd(iXinBQId, sXinBQName);
-    rBiao1Qian1.fSaveFen1Lei4BQ(rMu4Lu4.fGetBQML(), rMu4Lu4.fGetPathFen1Lei4BQ());
-    rMu4Lu4.fMakeBQML(iBQBSSelect, rBiao1Qian1.fGetAllBQSelectId(), iXinBQId);
+    rBiao1Qian1.fSaveFen1Lei4BQ(rMu4Lu4.fGetBQML(), rMu4Lu4.fGetFen1Lei4BQWJLJ());
+    rMu4Lu4.fMakeFen1Lei4BQML(iBQBSSelect, rBiao1Qian1.fGetAllBQSelectId(), iXinBQId);
     if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS1) {
         fMakeBQArr(iBQBSSelect, eBQArr1, rBiao1Qian1.fGetWaitBQ(iBQBSSelect));
     } else if (iBQBSSelect === rBiao1Qian1.cConfig.iBQBS2) {
@@ -297,7 +297,7 @@ function fRedrawFen1Lei4BQ(iBQBSSelect, sBQId = '') {
 
 //点击，图片移动
 function fcTPMove() {
-    rTu2Pian4.fTPMove(eTPTargetPath.value);
+    rTu2Pian4.fTPMove(eTPMoveLJ.value);
     //重置图片展示区域和确认移动按钮状态
     eTPShow.src = '';
     eTPMove.disabled = false;

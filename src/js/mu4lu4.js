@@ -3,10 +3,9 @@
 const rHelper = require('./helper');
 const rFs = require('fs');
 
-//oML.sWFL--未分类目录；
+//oML.sWFL--未分类目录
 //oML.sBQ--标签目录
-//oWJM.sFen1Lei4BQ--分类标签存储文件名
-//oWJM.sBiao1Ji4BQ--标记标签存储文件名
+//oWJM.sFen1Lei4BQ--分类标签文件名
 const cConfig = {
     oML: {
         sWFL: 'wei4fen1lei4\\',
@@ -14,7 +13,6 @@ const cConfig = {
     },
     oWJM: {
         sFen1Lei4BQ: 'fen1lei4.json',
-        sBiao1Ji4BQ: 'biao1ji4.json',
     }
 };
 
@@ -48,7 +46,7 @@ function fGetBQML() {
 }
 
 //获取分类标签文件路径
-function fGetPathFen1Lei4BQ() {
+function fGetFen1Lei4BQWJLJ() {
     return sBQML + cConfig.oWJM.sFen1Lei4BQ;
 }
 
@@ -58,7 +56,7 @@ function fGetPathFen1Lei4BQ() {
  * @object oAllBQSelectId 所有选中的标签id
  * @int iXinBQId 新标签id
  */
-function fMakeBQML(iBQBSSelect, oAllBQSelectId, iXinBQId) {
+function fMakeFen1Lei4BQML(iBQBSSelect, oAllBQSelectId, iXinBQId) {
     let tiTag = 1;
     let tsMuLu = sCZML
     while (tiTag < iBQBSSelect) {
@@ -80,7 +78,7 @@ function fMakeBQML(iBQBSSelect, oAllBQSelectId, iXinBQId) {
  * @int iBQBSSelect 选中的标签级别
  * @object oAllBQSelectId 所有选中的标签id
  */
-function fZu3He2BQML(iBQBSSelect, oAllBQSelectId) {
+function fGetFen1Lei4BQML(iBQBSSelect, oAllBQSelectId) {
     let tiTag = 1;
     let tsMuLu = sCZML
     while (tiTag <= iBQBSSelect) {
@@ -97,6 +95,7 @@ module.exports.fSetCZML = fSetCZML;
 module.exports.fCheckCZML = fCheckCZML;
 module.exports.fGetWFLML = fGetWFLML;
 module.exports.fGetBQML = fGetBQML;
-module.exports.fGetPathFen1Lei4BQ = fGetPathFen1Lei4BQ;
-module.exports.fMakeBQML = fMakeBQML;
-module.exports.fZu3He2BQML = fZu3He2BQML;
+
+module.exports.fGetFen1Lei4BQWJLJ = fGetFen1Lei4BQWJLJ;
+module.exports.fMakeFen1Lei4BQML = fMakeFen1Lei4BQML;
+module.exports.fGetFen1Lei4BQML = fGetFen1Lei4BQML;

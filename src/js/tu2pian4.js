@@ -10,7 +10,7 @@ const cConfig = {
 
 let sarrTPName = []; //图片名列表
 let sTPName = ''; //图片名
-let sTPPath = ''; //图片路径
+let sTPLJ = ''; //图片路径
 let iTPKuan = 0; //宽
 let iTPGao = 0; //高
 let sTime = ''; //时间标识
@@ -68,8 +68,8 @@ function fSetTPKuanGao(piTPKuan, piTPGao) {
  * 设置图片原始路径
  * @string pTPPath
  */
-function fSetTPPath(pTPPath) {
-    sTPPath = pTPPath;
+function fSetTPLJ(psTPLJ) {
+    sTPLJ = psTPLJ;
 }
 
 //图片重命名
@@ -96,15 +96,15 @@ function fGetRename() {
 
 /**
  * 移动图片
- * @string sTargetPath 目标路径
+ * @string sTargetLJ 目标路径
  */
-function fTPMove(sTargetPath) {
-    if (rHelper.fEmpty(sTPPath) || rHelper.fEmpty(sTargetPath)) {
+function fTPMove(sTargetLJ) {
+    if (rHelper.fEmpty(sTPLJ) || rHelper.fEmpty(sTargetLJ)) {
         alert('缺少图片路径参数');
         return;
     }
     //移动图片
-    rFs.renameSync(sTPPath, sTargetPath);
+    rFs.renameSync(sTPLJ, sTargetLJ);
     //从列表移除图片
     let iIndex = sarrTPName.indexOf(sTPName);
     if (iIndex !== -1) {
@@ -114,8 +114,10 @@ function fTPMove(sTargetPath) {
 
 module.exports.fLoadTP = fLoadTP;
 module.exports.fGetArrTPName = fGetArrTPName;
+
 module.exports.fSetTPName = fSetTPName;
 module.exports.fSetTPKuanGao = fSetTPKuanGao;
-module.exports.fSetTPPath = fSetTPPath;
+module.exports.fSetTPLJ = fSetTPLJ;
+
 module.exports.fGetRename = fGetRename;
 module.exports.fTPMove = fTPMove;
