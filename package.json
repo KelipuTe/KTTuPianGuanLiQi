@@ -5,11 +5,13 @@
   "main": "zhu3process.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "package":"electron-packager . tu2pian4guan3li3qi4 --platform=win32 --arch=x64 --out=./out --app-version=1.0.0 --overwrite --ignore=.idea --ignore=node_modules"
   },
   "author": "",
-  "license": "ISC",
+  "license": "",
   "devDependencies": {
-    "electron": "^10.1.0"
+    "electron": "^10.1.0",
+    "electron-packager": "^15.2.0"
   }
 }
