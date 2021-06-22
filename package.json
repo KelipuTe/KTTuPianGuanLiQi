@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "package":"electron-packager . tu2pian4guan3li3qi4 --platform=win32 --arch=x64 --out=./out --app-version=1.0.0 --overwrite --ignore=.idea --ignore=node_modules"
+    "package":"electron-packager . tu2pian4guan3li3qi4 --platform=win32 --arch=x64 --out=../electron-out --asar --app-version=1.0.0 --overwrite --ignore=.idea --ignore=node_modules"
   },
   "author": "",
   "license": "",

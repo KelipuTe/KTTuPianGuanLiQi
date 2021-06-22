@@ -124,6 +124,7 @@ function fXinBQAdd(sXinBQId, sXinBQName) {
         alert('标签数据错误');
         return '';
     }
+    sXinBQId = sXinBQId.toLowerCase();
     let sOldBQId = ''; //用于判断是新标签还是老标签
     //判断现在选中的是哪一级的标签页
     if (iBQBSSelect === cConfig.iBQBS1) {
