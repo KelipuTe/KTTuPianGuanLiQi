@@ -1,38 +1,38 @@
 /*##颜色##*/
 
 .t0yan2se4 {
-    background-color: #70f3ff; /*蔚蓝*/
-    background-color: #3b2e7e; /*藏蓝*/
-    background-color: #e9f1f6; /*霜白*/
-    background-color: #ffa400; /*橙黄*/
-    background-color: #ffcc88; /*橙黄加白*/
-    background-color: #2edfa3; /*玉色*/
-    background-color: #f08080; /*珊瑚红*/
-    background-color: #f0a0a0; /*珊瑚红加白*/
-    background-color: #8d4bbb; /*紫色*/
-    background-color: #8d87f7; /*紫色加白*/
+  background-color: #70f3ff; /*蔚蓝*/
+  background-color: #3b2e7e; /*藏蓝*/
+  background-color: #e9f1f6; /*霜白*/
+  background-color: #ffa400; /*橙黄*/
+  background-color: #ffcc88; /*橙黄加白*/
+  background-color: #2edfa3; /*玉色*/
+  background-color: #f08080; /*珊瑚红*/
+  background-color: #f0a0a0; /*珊瑚红加白*/
+  background-color: #8d4bbb; /*紫色*/
+  background-color: #8d87f7; /*紫色加白*/
 }
 
 .btn0ch {
-    background-color: #ffa400;
+  background-color: #ffa400;
 }
 
 .btn0ch:hover {
-    background-color: #ffcc88;
+  background-color: #ffcc88;
 }
 
 .btn0shh {
-    background-color: #f08080;
+  background-color: #f08080;
 }
 
 .btn0shh:hover {
-    background-color: #f0a0a0;
+  background-color: #f0a0a0;
 }
 
 .btn0zi3 {
-    background-color: #8d4bbb;
+  background-color: #8d4bbb;
 }
 
 .btn0zi3:hover {
-    background-color: #8d87f7;
+  background-color: #8d87f7;
 }
