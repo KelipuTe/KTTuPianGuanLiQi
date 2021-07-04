@@ -4,90 +4,92 @@ const rFs = require('fs');
 
 const rJiao4Yan4 = require('../fu3zhu4/jiao4yan4');
 
-//iSArrTPNameLen--图片名列表数量
-//iTPShowKuanMax,iTPShowGaoMax--图片展示区域最大宽高
+//iSArrImageNameLen--图片名列表数量
+//iImageShowKuanMax--图片展示区域最大宽度
+//iImageShowGaoMax--图片展示区域最大高度
 const cConfig = {
-  iSArrTPNameLen: 50,
-  iTPShowKuanMax: 900,
-  iTPShowGaoMax: 800,
+  iSArrImageNameLen: 50,
+  iImageShowKuanMax: 900,
+  iImageShowGaoMax: 850,
 };
 
-let sarrTPName = []; //图片名列表
-let sTPName = ''; //图片名
-let sTPLJ = ''; //图片路径
-let iTPKuan = 0; //图片原始宽度
-let iTPGao = 0; //图片原始高度
+let sarrImageName = []; //图片名列表
+
+let sImageName = ''; //图片名
+let sImageFilePath = ''; //图片路径
+let iImageKuan = 0; //图片原始宽度
+let iImageGao = 0; //图片原始高度
+
 let sTime = ''; //时间标识
-let sTPRename = ''; //重命名
+let sImageNewName = ''; //重命名
+let sImageNewFilePath = ''; //重命名
 
 /**
- * 加载图片
- * @string sTPML 图片目录
+ * @string sImageMu4Lu4 图片目录
  */
-function fLoadTP(sTPML) {
-  if (!rFs.existsSync(sTPML)) {
+function fLoadImage(sImageMu4Lu4) {
+  if (!rFs.existsSync(sImageMu4Lu4)) {
     return [];
   }
-  sarrTPName = [];
+  sarrImageName = [];
   //同步读取目录下的文件
-  let sarrFileName = rFs.readdirSync(sTPML);
+  let sarrFileName = rFs.readdirSync(sImageMu4Lu4);
   let ii = 1;
-  for (let sWJM of sarrFileName) {
-    if (ii > cConfig.iSArrTPNameLen) {
+  for (let sFileName of sarrFileName) {
+    if (ii > cConfig.iSArrImageNameLen) {
       break;
     } else {
-      sarrTPName.push(sWJM);
+      sarrImageName.push(sFileName);
       ++ii;
     }
   }
-  return sarrTPName;
 }
 
-module.exports.fLoadTP = fLoadTP;
+module.exports.fLoadImage = fLoadImage;
 
 //获取图片名列表
-function fGetSArrTPName() {
-  return sarrTPName;
+function fGetSArrImageName() {
+  return sarrImageName;
 }
 
-module.exports.fGetSArrTPName = fGetSArrTPName;
+module.exports.fGetSArrImageName = fGetSArrImageName;
 
 /**
  * 设置图片名
- * @string psTPMing
+ * @string psImageMing
  */
-function fSetTPName(psTPMing) {
-  sTPName = psTPMing;
+function fSetImageName(psName) {
+  sImageName = psName;
 }
 
-module.exports.fSetTPName = fSetTPName;
+module.exports.fSetImageName = fSetImageName;
 
 /**
  * 设置图片原始路径
- * @string pTPPath
+ * @string psPath
  */
-function fSetTPLJ(psTPLJ) {
-  sTPLJ = psTPLJ;
+function fSetImageFilePath(psPath) {
+  sImageFilePath = psPath;
 }
 
-module.exports.fSetTPLJ = fSetTPLJ;
+module.exports.fSetImageFilePath = fSetImageFilePath;
 
 /**
  * 设置图片原始宽高
- * @int piTPKuan
- * @int piTPGao
+ * @int piImageKuan
+ * @int piImageGao
  */
-function fSetTPKuanGao(piTPKuan, piTPGao) {
-  iTPKuan = piTPKuan;
-  iTPGao = piTPGao;
+function fSetImageKuanGao(piImageKuan, piImageGao) {
+  iImageKuan = piImageKuan;
+  iImageGao = piImageGao;
 }
 
-module.exports.fSetTPKuanGao = fSetTPKuanGao;
+module.exports.fSetImageKuanGao = fSetImageKuanGao;
 
 //图片重命名
-function fGetRename() {
-  let arrTPName = sTPName.split('.');
-  let sTPHou4Zhui4 = arrTPName[arrTPName.length - 1];
+function fGetRename(sTagId) {
+  let arrImageName = sImageName.split('.');
+  let sImageHou4Zhui4 = arrImageName[arrImageName.length - 1];
   //构造时间字符串
   let oDate = new Date();
   sTime = String(oDate.getFullYear());
@@ -101,67 +103,87 @@ function fGetRename() {
   sTime += (tiTime < 10) ? '0' + tiTime : String(tiTime);
   tiTime = oDate.getSeconds();
   sTime += (tiTime < 10) ? '0' + tiTime : String(tiTime);
-  sTPRename = '-' + iTPKuan + '-' + iTPGao + '-' + sTime + '.' + sTPHou4Zhui4;
-
-  return sTPRename
+  sImageNewName = sTagId + '-' + (iImageKuan * iImageGao) + '-' + sTime + '.' + sImageHou4Zhui4;
 }
 
 module.exports.fGetRename = fGetRename;
+
+function fGetNewName(){
+  return sImageNewName;
+}
+
+module.exports.fGetNewName = fGetNewName;
+
+function setImageNewFilePath(sPath) {
+  sImageNewFilePath=sPath;
+}
+
+module.exports.setImageNewFilePath = setImageNewFilePath;
 
 /**
  * 移动图片
  * @string sTargetLJ 目标路径
  */
-function fTPMove(sTargetLJ) {
-  if (rHelper.fEmpty(sTPLJ) || rHelper.fEmpty(sTargetLJ)) {
+function fImageMove() {
+  if (rJiao4Yan4.fEmptyStr(sImageFilePath) || rJiao4Yan4.fEmptyStr(sImageNewFilePath)) {
     alert('缺少图片路径参数');
     return;
   }
-  //移动图片
-  rFs.renameSync(sTPLJ, sTargetLJ);
-  //从列表移除图片
-  let iIndex = sarrTPName.indexOf(sTPName);
-  if (iIndex !== -1) {
-    sarrTPName.splice(iIndex, 1);
+  rFs.renameSync(sImageFilePath, sImageNewFilePath);
+  let iIndex = sarrImageName.indexOf(sImageName);
+  if (iIndex >= 0) {
+    sarrImageName.splice(iIndex, 1);
   }
 }
 
-module.exports.fTPMove = fTPMove;
+module.exports.fImageMove = fImageMove;
+
+function fClearImageItemData(){
+  sImageName = '';
+  sImageFilePath = '';
+  iImageKuan = 0;
+  iImageGao = 0;
+  sTime = '';
+  sImageNewName = '';
+  sImageNewFilePath = '';
+}
+
+module.exports.fClearImageItemData = fClearImageItemData;
 
 /**
  * 计算图片居中需要的偏移量
- * @int iTPKuan
- * @int iTPGao
+ * @int iImageKuan
+ * @int iImageGao
  */
-function fTPCenter(iTPKuan, iTPGao) {
-  let iTPMarginLeft = 0;
-  let iTPMarginTop = 0;
-  if (iTPKuan <= cConfig.iTPShowKuanMax && iTPGao <= cConfig.iTPShowGaoMax) {
+function fImageCenter(iImageKuan, iImageGao) {
+  let iImageMarginLeft = 0;
+  let iImageMarginTop = 0;
+  if (iImageKuan <= cConfig.iImageShowKuanMax && iImageGao <= cConfig.iImageShowGaoMax) {
     // 宽高都小于限制，直接计算偏移量
-    iTPMarginLeft = Math.round((cConfig.iTPShowKuanMax - iTPKuan) / 2 * 100) / 100;
-    iTPMarginTop = Math.round((cConfig.iTPShowGaoMax - iTPGao) / 2 * 100) / 100;
-  } else if (iTPKuan <= cConfig.iTPShowKuanMax && iTPGao > cConfig.iTPShowGaoMax) {
+    iImageMarginLeft = Math.round((cConfig.iImageShowKuanMax - iImageKuan) / 2 * 100) / 100;
+    iImageMarginTop = Math.round((cConfig.iImageShowGaoMax - iImageGao) / 2 * 100) / 100;
+  } else if (iImageKuan <= cConfig.iImageShowKuanMax && iImageGao > cConfig.iImageShowGaoMax) {
     // 只有宽度超过限制，单独计算高度偏移量
-    iTPKuan = Math.round(iTPKuan * (cConfig.iTPShowGaoMax / iTPGao));
-    iTPMarginLeft = Math.round((cConfig.iTPShowKuanMax - iTPKuan) / 2 * 100) / 100;
-  } else if (iTPKuan > cConfig.iTPShowKuanMax && iTPGao <= cConfig.iTPShowGaoMax) {
+    iImageKuan = Math.round(iImageKuan * (cConfig.iImageShowGaoMax / iImageGao));
+    iImageMarginLeft = Math.round((cConfig.iImageShowKuanMax - iImageKuan) / 2 * 100) / 100;
+  } else if (iImageKuan > cConfig.iImageShowKuanMax && iImageGao <= cConfig.iImageShowGaoMax) {
     // 只有高度超过限制，单独计算宽度偏移量
-    iTPGao = Math.round(iTPGao * (cConfig.iTPShowKuanMax / iTPKuan));
-    iTPMarginTop = Math.round((cConfig.iTPShowGaoMax - iTPGao) / 2 * 100) / 100;
-  } else if (iTPKuan > cConfig.iTPShowKuanMax && iTPGao > cConfig.iTPShowGaoMax) {
+    iImageGao = Math.round(iImageGao * (cConfig.iImageShowKuanMax / iImageKuan));
+    iImageMarginTop = Math.round((cConfig.iImageShowGaoMax - iImageGao) / 2 * 100) / 100;
+  } else if (iImageKuan > cConfig.iImageShowKuanMax && iImageGao > cConfig.iImageShowGaoMax) {
     // 只有宽高都超过限制，判断哪个超的更多，需要同比压缩
-    if ((iTPKuan / cConfig.iTPShowKuanMax) >= (iTPGao / cConfig.iTPShowGaoMax)) {
-      iTPGao = Math.round(iTPGao * (cConfig.iTPShowKuanMax / iTPKuan));
-      iTPMarginTop = Math.round((cConfig.iTPShowGaoMax - iTPGao) / 2 * 100) / 100;
+    if ((iImageKuan / cConfig.iImageShowKuanMax) >= (iImageGao / cConfig.iImageShowGaoMax)) {
+      iImageGao = Math.round(iImageGao * (cConfig.iImageShowKuanMax / iImageKuan));
+      iImageMarginTop = Math.round((cConfig.iImageShowGaoMax - iImageGao) / 2 * 100) / 100;
     } else {
-      iTPKuan = Math.round(iTPKuan * (cConfig.iTPShowGaoMax / iTPGao));
-      iTPMarginLeft = Math.round((cConfig.iTPShowKuanMax - iTPKuan) / 2 * 100) / 100;
+      iImageKuan = Math.round(iImageKuan * (cConfig.iImageShowGaoMax / iImageGao));
+      iImageMarginLeft = Math.round((cConfig.iImageShowKuanMax - iImageKuan) / 2 * 100) / 100;
     }
   }
   return {
-    'iTPMarginTop': iTPMarginTop,
-    'iTPMarginLeft': iTPMarginLeft
+    'iImageMarginTop': iImageMarginTop,
+    'iImageMarginLeft': iImageMarginLeft
   };
 }
 
-module.exports.fTPCenter = fTPCenter;
+module.exports.fImageCenter = fImageCenter;

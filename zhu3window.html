@@ -11,37 +11,53 @@
 <body>
 <div class="zhu3window">
   <div id="ml0select">
-    <button id="ml0select0btn" class="ml0select0btn btn0ch">选择目录</button>
+    <button id="ml0select0btn" class="ml0select0btn btn0cheng2hong2">选择目录</button>
   </div>
-  <div id="tp0cao1zuo4" style="display: none">
+  <div id="image0cao1zuo4" style="display: none">
     <div class="tag0switch">
       <div>
-        <button id="tag0switch0btn" class="tag0switch0btn btn0ch">切换为图片检索</button>
+        <button id="tag0switch0btn" class="tag0switch0btn btn0cheng2hong2">切换为图片检索</button>
       </div>
-      <div id="tp0select" class="tp0select" style="display: none">
-        <input id="tag0query1" class="tag0query" type="text"
-               placeholder="标签ID或标签名称" aria-label="标签ID或标签名称"/>
-        <button id="tag0query0btn1" class="tag0query0btn btn0ch">搜索</button>
+      <div id="image0query" style="display: none">
+        <div class="tag0query">
+          <input id="tag0query1" class="tag0query0input" type="text"
+                 placeholder="标签ID或标签名称" aria-label="标签ID或标签名称"/>
+          <button id="tag0query0btn1" class="tag0query0btn btn0lv4">搜索</button>
+        </div>
         <div id="tag0arr1" class="tag0arr"></div>
       </div>
-      <div id="tp0tag" class="tp0tag">
-        <input id="tag0query2" class="tag0query" type="text"
-               placeholder="标签ID或标签名称" aria-label="标签ID或标签名称"/>
-        <button id="tag0query0btn2" class="tag0query0btn btn0ch">搜索</button>
+      <div id="image0tag">
+        <div class="tag0query">
+          <input id="tag0query2" class="tag0query0input" type="text"
+                 placeholder="标签ID或标签名称" aria-label="标签ID或标签名称"/>
+          <button id="tag0query0btn2" class="tag0query0btn btn0lv4">搜索</button>
+        </div>
         <div id="tag0arr2" class="tag0arr"></div>
-        <div id="tag0add" class="tag0add">
-          <input id="tag0add0id" class="tag0query" type="text"
+        <div id="tag0add">
+          <input id="tag0add0id" class="tag0add0input" type="text"
                  placeholder="标签ID" aria-label="标签ID"/>
-          <input id="tag0add0name" class="tag0query" type="text"
+          <input id="tag0add0name" class="tag0add0input" type="text"
                  placeholder="标签名称" aria-label="标签名称"/>
-          <button id="tag0add0btn1" class="tag0add0btn btn0ch">添加分类标签</button>
-          <button id="tag0add0btn2" class="tag0add0btn btn0ch">添加标记标签</button>
+          <button id="tag0add0btn1" class="tag0add0btn btn0hong2">添加分类标签</button>
+          <button id="tag0add0btn2" class="tag0add0btn btn0hong2">添加标记标签</button>
         </div>
       </div>
     </div>
-    <div id="tp0arr" class="tp0arr"></div>
-    <div class="tp0show">
-      <img id="tp0show" src="" alt="">
+    <div class="image0switch">
+      <div id="image0arr" class="image0arr"></div>
+      <div>
+        <button id="image0move0btn1" class="image0move0btn btn0hong2">移动并标记图片</button>
+        <button id="image0move0btn2" class="image0move0btn btn0hong2">更新图片标记</button>
+      </div>
+    </div>
+    <div class="image0show">
+      <div class="image0show0image">
+        <img id="image0show" src="" alt="">
+      </div>
+      <div>
+        <input id="image0move0path" class="image0move0path" type="text"
+               placeholder="图片移动路径" aria-label="图片移动路径"/>
+      </div>
     </div>
   </div>
 </div>

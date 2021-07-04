@@ -3,7 +3,7 @@
 const rFs = require('fs');
 
 const rJiao4Yan4 = require('../fu3zhu4/jiao4yan4');
-const rPai2Xu4 = require('../fu3zhu4/pai2xu4');
+const rJi2He2 = require('../fu3zhu4/ji2he2');
 
 const cConfig = {
   mapTagType: {
@@ -15,27 +15,16 @@ const cConfig = {
 module.exports.cConfig = cConfig;
 
 let mapTagData = {}; //标签数据
+let arrImageTagData=[];
+
 let sFen1Lei4TagId = '';
 let arrBiao1Ji4TagId = [];
 
-function setSelectedTag(sTagId, iTagType) {
-  if (iTagType === cConfig.mapTagType.fen1lei4) {
-
-  } else if (iTagType === cConfig.mapTagType.biao1ji4) {
-
-  }
+function fGetTagData() {
+  return mapTagData;
 }
 
-module.exports.setSelectedTag = setSelectedTag;
-
-function getSelectedTag() {
-  return {
-    sFen1Lei4TagId: sFen1Lei4TagId,
-    arrBiao1Ji4TagId: arrBiao1Ji4TagId
-  }
-}
-
-module.exports.getSelectedTag = getSelectedTag;
+module.exports.fGetTagData = fGetTagData;
 
 function fAddTag(sTagId, sTagName, iTagType) {
   if (rJiao4Yan4.fEmpty(sTagId) || rJiao4Yan4.fEmpty(sTagName) || rJiao4Yan4.fEmptyNum(iTagType)) {
@@ -48,7 +37,7 @@ function fAddTag(sTagId, sTagName, iTagType) {
     tag0name: sTagName,
     tag0type: iTagType,
   }
-  mapTagData = rPai2Xu4.fSortMapByKey(mapTagData);
+  mapTagData = rJi2He2.fSortMapByKey(mapTagData);
   return mapTagData;
 }
 
@@ -84,6 +73,40 @@ function fLoadTagData(sTagFilePath) {
 
 module.exports.fLoadTagData = fLoadTagData;
 
+function fSetSelectedTag(sTagId, iTagType) {
+  iTagType = parseInt(iTagType);
+  if (iTagType === cConfig.mapTagType.fen1lei4) {
+    sFen1Lei4TagId = sTagId;
+  } else if (iTagType === cConfig.mapTagType.biao1ji4) {
+    arrBiao1Ji4TagId.push(sTagId);
+  }
+}
+
+module.exports.fSetSelectedTag = fSetSelectedTag;
+
+function fDelSelectedTag(sTagId, iTagType) {
+  iTagType = parseInt(iTagType);
+  if (iTagType === cConfig.mapTagType.fen1lei4) {
+    sFen1Lei4TagId = '';
+  } else if (iTagType === cConfig.mapTagType.biao1ji4) {
+    let iIndex = arrBiao1Ji4TagId.indexOf(sTagId);
+    if (iIndex >= 0) {
+      arrBiao1Ji4TagId.splice(iIndex, 1);
+    }
+  }
+}
+
+module.exports.fDelSelectedTag = fDelSelectedTag;
+
+function fGetSelectedTag() {
+  return {
+    sFen1Lei4TagId: sFen1Lei4TagId,
+    arrBiao1Ji4TagId: arrBiao1Ji4TagId
+  }
+}
+
+module.exports.fGetSelectedTag = fGetSelectedTag;
+
 function fEncodeTagEleId(sTagId) {
   return 'tag0' + sTagId;
 }
@@ -96,3 +119,55 @@ function fDecodeTagEleId(sTagId) {
 
 module.exports.fDecodeTagEleId = fDecodeTagEleId;
 
+function fGetTagBtnClass(sTagId, iTagType) {
+  let sClassName = '';
+  iTagType = parseInt(iTagType)
+  if (iTagType === cConfig.mapTagType.fen1lei4) {
+    if (!rJiao4Yan4.fEmptyStr(sFen1Lei4TagId) && sTagId === sFen1Lei4TagId) {
+      sClassName = 'btn0tag btn0lv4';
+    } else {
+      sClassName = 'btn0tag btn0hong2';
+    }
+  }
+  if (iTagType === cConfig.mapTagType.biao1ji4) {
+    if (!rJiao4Yan4.fEmpty(arrBiao1Ji4TagId) && arrBiao1Ji4TagId.indexOf(sTagId) >= 0) {
+      sClassName = 'btn0tag btn0huang2';
+    } else {
+      sClassName = 'btn0tag btn0zi3';
+    }
+  }
+  return sClassName;
+}
+
+module.exports.fGetTagBtnClass = fGetTagBtnClass;
+
+function fCheckTagSelected(sTagId,iTagType){
+  iTagType = parseInt(iTagType);
+  if (iTagType === cConfig.mapTagType.fen1lei4) {
+    return sTagId===sFen1Lei4TagId;
+  } else if (iTagType === cConfig.mapTagType.biao1ji4) {
+    return arrBiao1Ji4TagId.indexOf(sTagId)>=0
+  }
+}
+
+module.exports.fCheckTagSelected = fCheckTagSelected;
+
+function fCheckImageCanMove(){
+  return !rJiao4Yan4.fEmptyStr(sFen1Lei4TagId) && arrBiao1Ji4TagId.length>0
+}
+
+module.exports.fCheckImageCanMove = fCheckImageCanMove;
+
+function fSaveImageTagData(sBiao1Ji4FilePath,sNewName,sFen1Lei4Path){
+  let sImageNewFilePath = sFen1Lei4Path + sNewName;
+  let oData = {
+    'image0name':sNewName,
+    'image0file0path':sImageNewFilePath,
+    'fen1lei4tag':sFen1Lei4TagId,
+    'biao1ji4tag':arrBiao1Ji4TagId,
+  }
+  arrImageTagData.push(oData);
+  rFs.writeFileSync(sBiao1Ji4FilePath, JSON.stringify(arrImageTagData), 'utf8');
+}
+
+module.exports.fSaveImageTagData = fSaveImageTagData;

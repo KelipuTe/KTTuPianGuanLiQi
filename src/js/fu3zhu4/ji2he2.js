@@ -1,4 +1,4 @@
-/*辅助模块--排序*/
+/*辅助模块--集合*/
 
 function fSortMapByKey(pmap) {
   let mapNew = {};

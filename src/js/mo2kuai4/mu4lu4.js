@@ -15,6 +15,7 @@ const cConfig = {
   },
   mapFileName: {
     sBiao1Qian1: 'biao1qian1.json',
+    sBiao1ji4: 'biao1ji4.json',
   }
 };
 
@@ -61,47 +62,22 @@ function fGetTagFilePath() {
 
 module.exports.fGetTagFilePath = fGetTagFilePath;
 
-/**
- * 构造新标签对应的目录
- * @int iBQBSSelect 选中的标签级别
- * @object oAllBQSelectId 所有选中的标签id
- * @int iXinBQId 新标签id
- */
-function fMakeFen1Lei4BQML(iBQBSSelect, oAllBQSelectId, iXinBQId) {
-  let tiTag = 1;
-  let tsMuLu = sCZML
-  while (tiTag < iBQBSSelect) {
-    tsMuLu += oAllBQSelectId[tiTag - 1] + '\\';
-    if (!rFs.existsSync(tsMuLu)) {
-      rFs.mkdirSync(tsMuLu);
-    }
-    ++tiTag;
-  }
-  tsMuLu += iXinBQId + '\\';
-  if (!rFs.existsSync(tsMuLu)) {
-    rFs.mkdirSync(tsMuLu);
-  }
-  return tsMuLu;
+function fMakeFen1Lei4Mu4Lu4(sFen1Lei4TagId){
+  return sMu4Lu4 + sFen1Lei4TagId + '\\';
 }
 
-module.exports.fMakeFen1Lei4BQML = fMakeFen1Lei4BQML;
+module.exports.fMakeFen1Lei4Mu4Lu4 = fMakeFen1Lei4Mu4Lu4;
 
-/**
- * 用当前选中的标签组合出对应目录
- * @int iBQBSSelect 选中的标签级别
- * @object oAllBQSelectId 所有选中的标签id
- */
-function fGetFen1Lei4BQML(iBQBSSelect, oAllBQSelectId) {
-  let tiTag = 1;
-  let tsMuLu = sCZML
-  while (tiTag <= iBQBSSelect) {
-    tsMuLu += oAllBQSelectId[tiTag - 1] + '\\';
-    if (!rFs.existsSync(tsMuLu)) {
-      rFs.mkdirSync(tsMuLu);
-    }
-    ++tiTag;
+function fCheckFen1Lei4Mu4Lu4(sFen1Lei4Path) {
+  if (!rFs.existsSync(sFen1Lei4Path)) {
+    rFs.mkdirSync(sFen1Lei4Path);
   }
-  return tsMuLu;
 }
 
-module.exports.fGetFen1Lei4BQML = fGetFen1Lei4BQML;
+module.exports.fCheckFen1Lei4Mu4Lu4 = fCheckFen1Lei4Mu4Lu4;
+
+function fGetBiao1Ji4FilePath(){
+  return sTagMu4Lu4 + cConfig.mapFileName.sBiao1ji4;
+}
+
+module.exports.fGetBiao1Ji4FilePath = fGetBiao1Ji4FilePath;
