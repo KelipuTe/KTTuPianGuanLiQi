@@ -2,8 +2,6 @@
 
 const rFs = require('fs');
 
-const rJiao4Yan4 = require('../fu3zhu4/jiao4yan4');
-
 //mapMu4Lu4.sWFL--未分类目录
 //mapMu4Lu4.sBiao1Qian1--标签目录
 //mapFileName.sFen1Lei4Tag--分类标签文件名
@@ -15,7 +13,7 @@ const cConfig = {
   },
   mapFileName: {
     sBiao1Qian1: 'biao1qian1.json',
-    sBiao1ji4: 'biao1ji4.json',
+    sBiao1Ji4: 'biao1ji4.json',
   }
 };
 
@@ -23,61 +21,54 @@ let sMu4Lu4 = ''; //目录
 let sWFLMu4Lu4 = ''; //未分类目录
 let sTagMu4Lu4 = ''; //标签目录
 
-/**
- * @string psMu4Lu4 目录
- */
-function fSetMu4Lu4(psMu4Lu4) {
+//设置目录全路径
+function fMu4Lu4Set(psMu4Lu4) {
   sMu4Lu4 = psMu4Lu4 + '\\';
   sWFLMu4Lu4 = sMu4Lu4 + cConfig.mapMu4Lu4.sWFL;
   sTagMu4Lu4 = sMu4Lu4 + cConfig.mapMu4Lu4.sBiao1Qian1;
 }
 
-module.exports.fSetMu4Lu4 = fSetMu4Lu4;
+module.exports.fMu4Lu4Set = fMu4Lu4Set;
 
-//检查目录是否设置
-function fIsSetMu4Lu4() {
-  return rJiao4Yan4.fEmptyStr(sMu4Lu4);
-}
-
-module.exports.fIsSetMu4Lu4 = fIsSetMu4Lu4;
-
-//获取未分类目录
-function fGetWFLMu4Lu4() {
+//获取未分类目录全路径
+function fWFLMu4Lu4Get() {
   return sWFLMu4Lu4;
 }
 
-module.exports.fGetWFLMu4Lu4 = fGetWFLMu4Lu4;
+module.exports.fWFLMu4Lu4Get = fWFLMu4Lu4Get;
 
-//获取标签目录
-function fGetTagMu4Lu4() {
+//获取标签目录全路径
+function fTagMu4Lu4Get() {
   return sTagMu4Lu4;
 }
 
-module.exports.fGetTagMu4Lu4 = fGetTagMu4Lu4;
+module.exports.fTagMu4Lu4Get = fTagMu4Lu4Get;
 
-//获取分类标签文件路径
-function fGetTagFilePath() {
+//获取分类标签文件全路径
+function fTagFilePathGet() {
   return sTagMu4Lu4 + cConfig.mapFileName.sBiao1Qian1;
 }
 
-module.exports.fGetTagFilePath = fGetTagFilePath;
+module.exports.fTagFilePathGet = fTagFilePathGet;
 
-function fMakeFen1Lei4Mu4Lu4(sFen1Lei4TagId){
-  return sMu4Lu4 + sFen1Lei4TagId + '\\';
+//获取标记数据文件全路径
+function fBiao1Ji4FilePathGet(){
+  return sTagMu4Lu4 + cConfig.mapFileName.sBiao1Ji4;
 }
 
-module.exports.fMakeFen1Lei4Mu4Lu4 = fMakeFen1Lei4Mu4Lu4;
+module.exports.fBiao1Ji4FilePathGet = fBiao1Ji4FilePathGet;
 
-function fCheckFen1Lei4Mu4Lu4(sFen1Lei4Path) {
+//获取分类标签目录全路径
+function fFen1Lei4Mu4Lu4Get(sTagId){
+  return sMu4Lu4 + sTagId + '\\';
+}
+module.exports.fFen1Lei4Mu4Lu4Get = fFen1Lei4Mu4Lu4Get;
+
+//校验分类目录是否创建
+function fFen1Lei4Mu4Lu4Check(sFen1Lei4Path) {
   if (!rFs.existsSync(sFen1Lei4Path)) {
     rFs.mkdirSync(sFen1Lei4Path);
   }
 }
 
-module.exports.fCheckFen1Lei4Mu4Lu4 = fCheckFen1Lei4Mu4Lu4;
-
-function fGetBiao1Ji4FilePath(){
-  return sTagMu4Lu4 + cConfig.mapFileName.sBiao1ji4;
-}
-
-module.exports.fGetBiao1Ji4FilePath = fGetBiao1Ji4FilePath;
+module.exports.fFen1Lei4Mu4Lu4Check = fFen1Lei4Mu4Lu4Check;

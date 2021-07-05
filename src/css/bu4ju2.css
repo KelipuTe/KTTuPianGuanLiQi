@@ -9,8 +9,8 @@
   background-color: #e9f1f6;
 }
 
-/*标签切换*/
-.tag0switch {
+/*左侧标签*/
+.tag0choose {
   display: inline-block;
   vertical-align: top;
   width: 350px;
@@ -19,17 +19,17 @@
 
 .tag0query {
   width: 100%;
-  height: 25px;
+  height: 30px;
 }
 
 .tag0arr {
   width: 100%;
-  height: 725px;
+  height: 760px;
   overflow-y: scroll;
 }
 
-/*图片切换*/
-.image0switch {
+/*中间图片选择*/
+.image0choose {
   display: inline-block;
   vertical-align: top;
   width: 350px;
@@ -42,7 +42,7 @@
   overflow-y: scroll;
 }
 
-/*图片展示*/
+/*右侧图片展示*/
 .image0show {
   display: inline-block;
   vertical-align: top;

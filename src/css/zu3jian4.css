@@ -1,6 +1,6 @@
 /*##组件##*/
 
-/*标签*/
+/*选择目录*/
 .ml0select0btn {
   margin-top: 405px;
   margin-left: 640px;
@@ -11,27 +11,27 @@
   font-size: 20px;
 }
 
-/*切换按钮*/
-.tag0switch0btn {
-  width: 100%;
-  height: 50px;
-  border: 0;
-  text-align: center;
-  font-size: 20px;
-}
-
+/*左侧标签*/
 .tag0query0input {
   vertical-align: middle;
   padding: 0;
-  width: 300px;
-  height: 25px;
-  border: 0;
+  width: 298px;
+  height: 28px;
+  border: 1px solid;
   font-size: 12px;
 }
 
 .tag0query0btn {
   vertical-align: middle;
   width: 50px;
+  height: 30px;
+  border: 0;
+  text-align: center;
+  font-size: 12px;
+}
+
+.tag0arr0btn{
+  margin:2px;
   height: 25px;
   border: 0;
   text-align: center;
@@ -40,27 +40,26 @@
 
 .tag0add0input {
   padding: 0;
-  width: 100%;
-  height: 25px;
-  border: 0;
+  width: 348px;
+  height: 28px;
+  border: 1px solid;
   font-size: 12px;
 }
 
-.tag0add0btn {
-  width: 50%;
-  height: 50px;
-  border: 0;
-  text-align: center;
-  font-size: 12px;
-}
-
-/*添加按钮*/
 .tag0add0btn {
   width: 50%;
   height: 50px;
   border: 0;
   text-align: center;
   font-size: 20px;
+}
+
+/*中间图片选择*/
+.image0item {
+  display: inline-block;
+  max-width: 100px;
+  max-height: 100px;
+  margin: 20px 0 0 20px
 }
 
 .image0move0btn {
@@ -71,14 +70,7 @@
   font-size: 20px;
 }
 
-/*图片列表*/
-.image0item {
-  display: inline-block;
-  max-width: 100px;
-  max-height: 100px;
-  margin: 20px 0 0 20px
-}
-
+/*右侧图片展示*/
 .image0move0path{
   padding: 0;
   width: 100%;
