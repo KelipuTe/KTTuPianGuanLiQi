@@ -17,6 +17,15 @@
   height: 900px;
 }
 
+.tag0query0arr {
+  position: absolute;
+  z-index: 100;
+  width: 350px;
+  height: 350px;
+  background-color: #758a99;
+  overflow-y: scroll;
+}
+
 .tag0query {
   width: 100%;
   height: 30px;
@@ -51,7 +60,7 @@
   background-color: #758a99;
 }
 
-.image0show0image{
+.image0show0image {
   width: 100%;
   height: 850px;
 }

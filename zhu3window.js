@@ -42,6 +42,10 @@ let eMu4Lu4SelectBtn = {}; //选择目录按钮
 
 let eImageBiao1Ji4 = {}; //图片标记界面
 
+let eTagQueryStr = {}; //标签查询输入
+let eTagQueryBtn = {}; //标签查询按钮
+let eTagQueryArr = {}; //标签查询列表
+
 let eTagArr = {}; //标签列表
 let eTagAddId = {}; //标签id输入
 let eTagAddName = {}; //标签名称输入
@@ -59,10 +63,18 @@ let eImageMovePath = {}; //移动图片的全路径
 
 window.onload = function () {
   eMu4Lu4Select = document.getElementById('ml0select');
+  eMu4Lu4Select.style.display = 'block';
   eMu4Lu4SelectBtn = document.getElementById('ml0select0btn');
   eMu4Lu4SelectBtn.onclick = fcMu4Lu4Select;
 
   eImageBiao1Ji4 = document.getElementById('image0biao1ji4');
+  eImageBiao1Ji4.style.display = 'none';
+
+  eTagQueryStr = document.getElementById('tag0query0str');
+  eTagQueryBtn = document.getElementById('tag0query0btn');
+  eTagQueryBtn.onclick = fcTagQuery;
+  eTagQueryArr = document.getElementById('tag0query0arr');
+  eTagQueryArr.style.display = 'none';
 
   eTagArr = document.getElementById('tag0arr');
   eTagAddId = document.getElementById('tag0add0id');
@@ -103,6 +115,60 @@ function fcMu4Lu4Select() {
   });
 }
 
+//查询标签
+function fcTagQuery() {
+  let tMapTagData = rBiao1Qian1.fTagQuery(eTagQueryStr.value);
+  if (!rJiao4Yan4.fEmptyObj(tMapTagData)) {
+    fDrawQueryTagArr(tMapTagData);
+    eTagQueryArr.style.display = 'block';
+  } else {
+    eTagQueryArr.innerHTML = '';
+    eTagQueryArr.style.display = 'none';
+  }
+}
+
+//渲染查询标签列表
+function fDrawQueryTagArr(mapTagData) {
+  eTagQueryArr.innerHTML = '';
+  let arrTagId = Object.keys(mapTagData);
+  for (let tsTagId of arrTagId) {
+    let iTagType = mapTagData[tsTagId].tag0type;
+    let tEle = document.createElement('button');
+    tEle.id = rBiao1Qian1.fTagQueryEleIdEncode(tsTagId);
+    tEle.type = 'button';
+    tEle.innerHTML = mapTagData[tsTagId].tag0name;
+    tEle.className = rBiao1Ji4.fTagBtnClassGet(tsTagId, iTagType);
+    tEle.setAttribute('data0tag0type', iTagType);
+    tEle.onclick = fcTagQueryBtn;
+    eTagQueryArr.appendChild(tEle);
+  }
+}
+
+//点击查询标签
+function fcTagQueryBtn() {
+  let sTagId = rBiao1Qian1.fTagQueryEleIdDecode(this.id);
+  let sTagType = this.getAttribute('data0tag0type');
+  if (rBiao1Ji4.fSelectedTagIsSet(sTagId, sTagType)) {
+    rBiao1Ji4.fSelectedTagDel(sTagId, sTagType);
+  } else {
+    rBiao1Ji4.fSelectedTagSet(sTagId, sTagType);
+  }
+  this.className = rBiao1Ji4.fTagBtnClassGet(sTagId, sTagType);
+  let tEleArr = eTagArr.children;
+  //标签列表也要变
+  console.log(this.id);
+  console.log(sTagId);
+  for (let ii = 0; ii < tEleArr.length; ++ii) {
+    let tsTagId = rBiao1Qian1.fTagEleIdDecode(tEleArr[ii].id);
+    console.log(tsTagId);
+    if (tsTagId === sTagId) {
+      let tsTagType = this.getAttribute('data0tag0type');
+      tEleArr[ii].className = rBiao1Ji4.fTagBtnClassGet(tsTagId, tsTagType);
+    }
+  }
+  fImageRename();
+}
+
 function fcTagAddBtn1() {
   fcTagAddBtn(rBiao1Ji4.cConfig.mapTagType.fen1lei4);
 }
@@ -132,13 +198,13 @@ function fDrawTagArr(mapTagData) {
     tEle.innerHTML = mapTagData[tsTagId].tag0name;
     tEle.className = rBiao1Ji4.fTagBtnClassGet(tsTagId, iTagType);
     tEle.setAttribute('data0tag0type', iTagType);
-    tEle.onclick = fcBiao1Qian1;
+    tEle.onclick = fcTagBtn;
     eTagArr.appendChild(tEle);
   }
 }
 
 //点击标签
-function fcBiao1Qian1() {
+function fcTagBtn() {
   let sTagId = rBiao1Qian1.fTagEleIdDecode(this.id);
   let sTagType = this.getAttribute('data0tag0type');
   if (rBiao1Ji4.fSelectedTagIsSet(sTagId, sTagType)) {
@@ -203,7 +269,7 @@ function fImageRename() {
 function fcImageMoveAndTag() {
   let sFen1Lei4Path = rMu4Lu4.fFen1Lei4Mu4Lu4Get(rBiao1Ji4.fSelectedTagGet(rBiao1Ji4.cConfig.mapTagType.fen1lei4));
   rMu4Lu4.fFen1Lei4Mu4Lu4Check(sFen1Lei4Path);
-  rBiao1Ji4.fBiao1Ji4DataSave(rMu4Lu4.fBiao1Ji4FilePathGet(),rTu2Pian4Item.fNewNameGet(),sFen1Lei4Path)
+  rBiao1Ji4.fBiao1Ji4DataSave(rMu4Lu4.fBiao1Ji4FilePathGet(), rTu2Pian4Item.fNewNameGet(), sFen1Lei4Path)
   rTu2Pian4Item.fImageMove();
   rTu2Pian4Arr.fImageItemDel(rTu2Pian4Item.fImageNameGet());
   rBiao1Ji4.fBiao1Ji4DataClear();

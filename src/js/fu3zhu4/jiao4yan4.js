@@ -24,3 +24,9 @@ function fEmptyNum(op) {
 }
 
 module.exports.fEmptyStr = fEmptyStr;
+
+function fEmptyObj(op) {
+  return JSON.stringify(op) === '{}';
+}
+
+module.exports.fEmptyObj = fEmptyObj;

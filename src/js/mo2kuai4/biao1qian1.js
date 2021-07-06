@@ -49,10 +49,6 @@ function fTagDataLoad(sFilePath) {
   }
   let tjsonTagData = rFs.readFileSync(sFilePath, 'utf8');
   mapTagData = JSON.parse(tjsonTagData);
-  let arrKey = Object.keys(mapTagData);
-  for (let tsKey of arrKey) {
-    arrKey[tsKey] = mapTagData[tsKey].tag0name;
-  }
 }
 
 module.exports.fTagDataLoad = fTagDataLoad;
@@ -70,3 +66,34 @@ function fTagEleIdDecode(sTagId) {
 }
 
 module.exports.fTagEleIdDecode = fTagEleIdDecode;
+
+//查询标签
+function fTagQuery(sTagStr) {
+  let tMapTagData = {};
+  if (rJiao4Yan4.fEmptyStr(sTagStr)) {
+    return tMapTagData;
+  }
+  let arrKey = Object.keys(mapTagData);
+  for (let tsKey of arrKey) {
+    if (tsKey.search(sTagStr) >= 0 || mapTagData[tsKey].tag0name.search(sTagStr) >= 0) {
+      tMapTagData[tsKey] = mapTagData[tsKey];
+    }
+  }
+  return tMapTagData;
+}
+
+module.exports.fTagQuery = fTagQuery;
+
+//格式化标签按钮的id
+function fTagQueryEleIdEncode(sTagId) {
+  return 'tag0query0' + sTagId;
+}
+
+module.exports.fTagQueryEleIdEncode = fTagQueryEleIdEncode;
+
+//逆格式化标签按钮的id
+function fTagQueryEleIdDecode(sTagId) {
+  return sTagId.replace('tag0query0', '');
+}
+
+module.exports.fTagQueryEleIdDecode = fTagQueryEleIdDecode;
